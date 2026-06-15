@@ -3,824 +3,1601 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análise de Desempenho IA</title>
+<title>Potencial Sports — Análise de Desempenho IA</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --verde:#0D6E3F;--verde-m:#1A9E5C;--verde-claro:#E8F5EE;--verde-neon:#00C96B;
-  --bg:#F7F8F6;--card:#fff;--border:#E2E8E4;--border-m:#C8D8CC;
-  --txt:#1A2E20;--txt2:#4A6355;--txt3:#8AA898;
-  --azul:#1A5FA5;--azul-bg:#EBF3FD;
-  --amber:#7A4F00;--amber-bg:#FEF3DC;
-  --danger:#A0230A;--danger-bg:#FEF0ED;
-  --r:10px;--r-lg:14px
-}
-@media(prefers-color-scheme:dark){
-  :root{--bg:#111814;--card:#1A2420;--border:#2A3A30;--border-m:#3A5040;--txt:#E8F2EC;--txt2:#8AB49A;--txt3:#4A6A54;--verde-claro:#0D2A18;--azul-bg:#0A1E3A;--amber-bg:#2A1C00;--danger-bg:#2A0A06}
-}
-body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap');
 
-.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+  :root {
+    --verde: #00C853;
+    --verde-escuro: #00952e;
+    --verde-dim: #00C85322;
+    --preto: #0A0A0A;
+    --cinza-900: #111111;
+    --cinza-800: #1A1A1A;
+    --cinza-700: #252525;
+    --cinza-600: #333333;
+    --cinza-400: #666666;
+    --cinza-200: #AAAAAA;
+    --cinza-100: #DDDDDD;
+    --branco: #F5F5F5;
+    --erro: #FF4444;
+    --aviso: #FFB300;
+  }
 
-.sidebar{background:var(--card);border-right:1px solid var(--border);padding:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
-.logo{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
-.logo-name{font-size:15px;font-weight:600;color:var(--txt);display:flex;align-items:center;gap:8px}
-.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--verde-neon)}
-.logo-sub{font-size:11px;color:var(--txt3);margin-top:3px}
-nav{padding:12px 8px;flex:1}
-.nav-group{font-size:10px;color:var(--txt3);letter-spacing:.07em;text-transform:uppercase;padding:10px 8px 4px;margin-top:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r);font-size:13px;color:var(--txt2);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .12s}
-.nav-item:hover{background:var(--bg)}
-.nav-item.active{background:var(--verde-claro);color:var(--verde);font-weight:500}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.nav-badge{margin-left:auto;font-size:10px;background:var(--azul-bg);color:var(--azul);padding:2px 7px;border-radius:20px;font-weight:500}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.sidebar-bottom{padding:12px 8px;border-top:1px solid var(--border)}
-.ai-tip{background:var(--verde-claro);border-radius:var(--r);padding:10px 12px}
-.ai-tip-title{font-size:12px;font-weight:500;color:var(--verde);margin-bottom:3px}
-.ai-tip-txt{font-size:11px;color:var(--txt2);line-height:1.5}
+  body {
+    background: var(--preto);
+    color: var(--branco);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
 
-.main{display:flex;flex-direction:column}
-.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.page-info h1{font-size:16px;font-weight:600;color:var(--txt)}
-.page-info p{font-size:12px;color:var(--txt3);margin-top:2px}
-.topbar-actions{display:flex;gap:8px}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r);font-size:13px;font-weight:500;border:1px solid var(--border-m);background:var(--card);color:var(--txt);cursor:pointer;transition:all .12s;text-decoration:none}
-.btn:hover{background:var(--bg)}
-.btn-green{background:var(--verde-neon);color:#fff;border-color:var(--verde-neon)}
-.btn-green:hover{background:#00b85f;border-color:#00b85f}
-.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  /* HEADER */
+  header {
+    background: var(--cinza-900);
+    border-bottom: 1px solid var(--cinza-700);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-.content{padding:24px;flex:1}
-.section{display:none}
-.section.active{display:block}
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+    color: var(--branco);
+  }
 
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px}
-.form-card-title{font-size:13px;font-weight:600;color:var(--txt);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.form-card-title svg{width:16px;height:16px;stroke:var(--verde);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.field{display:flex;flex-direction:column;gap:5px}
-.field.span2{grid-column:span 2}
-.field.span3{grid-column:span 3}
-label{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
-input,select,textarea{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--txt);background:var(--bg);font-family:inherit;transition:border .12s;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--verde-m)}
-textarea{resize:vertical;min-height:80px}
-.range-wrap{display:flex;align-items:center;gap:10px}
-.range-wrap input[type=range]{flex:1;accent-color:var(--verde-neon)}
-.range-val{font-size:13px;font-weight:600;color:var(--verde);min-width:30px;text-align:right}
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--verde);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--preto);
+  }
 
-.periodo-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-.periodo-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border-m);background:var(--card);font-size:12px;color:var(--txt2);cursor:pointer;transition:all .12s}
-.periodo-btn.active{background:var(--verde-neon);color:#fff;border-color:var(--verde-neon)}
+  .logo span { color: var(--verde); }
 
-.metrics-section{margin-bottom:12px}
-.metrics-section-title{font-size:11px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;padding:8px 0 4px;border-bottom:1px solid var(--border)}
-.metrics-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.metric-field{display:flex;flex-direction:column;gap:4px}
-.metric-label{font-size:11px;color:var(--txt2)}
-.metric-input{padding:6px 9px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--txt);background:var(--bg);text-align:center;font-family:'Courier New',monospace;font-weight:500}
-.metric-input:focus{border-color:var(--verde-m);outline:none}
+  .badge-version {
+    font-size: 10px;
+    background: var(--cinza-700);
+    color: var(--cinza-200);
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
 
-.output-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:var(--txt);white-space:pre-wrap;word-break:break-word;min-height:200px;max-height:400px;overflow-y:auto}
-.output-empty{text-align:center;padding:40px 20px;color:var(--txt3);font-family:-apple-system,sans-serif}
-.output-empty svg{width:32px;height:32px;stroke:var(--border-m);fill:none;stroke-width:1.5;margin:0 auto 10px;display:block}
+  /* TABS PRINCIPAIS */
+  .main-tabs {
+    display: flex;
+    background: var(--cinza-900);
+    border-bottom: 1px solid var(--cinza-700);
+    padding: 0 24px;
+    gap: 4px;
+  }
 
-.copy-success{display:none;background:var(--verde-claro);color:var(--verde);padding:10px 14px;border-radius:var(--r);font-size:13px;font-weight:500;margin-top:10px;text-align:center}
+  .main-tab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cinza-400);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
 
-.info-banner{background:var(--azul-bg);border:1px solid #B5D4F4;border-radius:var(--r);padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--azul);display:flex;gap:10px;align-items:flex-start}
-.info-banner svg{width:16px;height:16px;stroke:var(--azul);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px}
+  .main-tab:hover { color: var(--cinza-100); }
 
-.score-display{display:flex;align-items:center;gap:16px;background:var(--verde-claro);border-radius:var(--r);padding:14px 16px;margin-top:12px}
-.score-num{font-size:36px;font-weight:700;color:var(--verde);font-family:'Courier New',monospace}
-.score-label{font-size:12px;color:var(--txt2)}
-.score-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.score-bar-fill{height:100%;background:var(--verde-neon);border-radius:4px;transition:width .3s}
+  .main-tab.active {
+    color: var(--verde);
+    border-bottom-color: var(--verde);
+  }
 
-.formation-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.pos-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center}
-.pos-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;margin-bottom:6px}
-.pos-gk{background:#FEF0ED;color:#A0230A}
-.pos-def{background:#EBF3FD;color:#1A5FA5}
-.pos-mid{background:var(--verde-claro);color:var(--verde)}
-.pos-att{background:var(--amber-bg);color:var(--amber)}
-.pos-name{font-size:12px;color:var(--txt);font-weight:500}
-.pos-input{font-size:11px;padding:4px 7px;margin-top:4px}
+  .tab-icon { font-size: 15px; }
 
-.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:20px}
-.step{display:flex;align-items:center;gap:8px}
-.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
-.step-num.done{background:var(--verde-neon);color:#fff}
-.step-num.active{background:var(--verde);color:#fff}
-.step-num.todo{background:var(--border);color:var(--txt3)}
-.step-label{font-size:12px;color:var(--txt2)}
-.step-sep{flex:1;height:1px;background:var(--border);margin:0 8px;min-width:20px}
+  /* LAYOUT */
+  .app-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 109px);
+  }
 
-@media(max-width:768px){
-  .app{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .form-grid,.form-grid-3,.metrics-grid,.formation-grid{grid-template-columns:1fr 1fr}
-  .field.span2,.field.span3{grid-column:span 2}
-}
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--cinza-900);
+    border-right: 1px solid var(--cinza-700);
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 0 16px;
+    margin-bottom: 24px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--cinza-400);
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+
+  .sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    color: var(--cinza-200);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    margin-bottom: 2px;
+  }
+
+  .sidebar-btn:hover { background: var(--cinza-700); color: var(--branco); }
+
+  .sidebar-btn.active {
+    background: var(--verde-dim);
+    color: var(--verde);
+    font-weight: 500;
+  }
+
+  .sidebar-btn .s-icon { font-size: 14px; width: 20px; text-align: center; }
+
+  /* CONTEÚDO PRINCIPAL */
+  .main-content {
+    padding: 28px 32px;
+    overflow-y: auto;
+    max-height: calc(100vh - 109px);
+  }
+
+  .page-header {
+    margin-bottom: 28px;
+  }
+
+  .page-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 4px;
+  }
+
+  .page-subtitle {
+    color: var(--cinza-400);
+    font-size: 13px;
+  }
+
+  /* GRID DE FORMULÁRIO */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .form-full { grid-column: 1 / -1; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--cinza-200);
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--cinza-800);
+    border: 1px solid var(--cinza-600);
+    border-radius: 8px;
+    color: var(--branco);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--verde);
+  }
+
+  .form-select option { background: var(--cinza-800); }
+
+  .form-textarea { resize: vertical; min-height: 90px; }
+
+  /* SEÇÃO */
+  .section-block {
+    background: var(--cinza-800);
+    border: 1px solid var(--cinza-700);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--verde);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* SLIDER SCORE */
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .score-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--verde);
+    min-width: 52px;
+  }
+
+  input[type=range] {
+    flex: 1;
+    accent-color: var(--verde);
+    height: 4px;
+  }
+
+  /* BOTÕES */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--verde);
+    color: var(--preto);
+  }
+  .btn-primary:hover { background: var(--verde-escuro); color: #fff; }
+
+  .btn-secondary {
+    background: var(--cinza-700);
+    color: var(--branco);
+  }
+  .btn-secondary:hover { background: var(--cinza-600); }
+
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--cinza-600);
+    color: var(--cinza-200);
+  }
+  .btn-ghost:hover { border-color: var(--cinza-200); color: var(--branco); }
+
+  /* OUTPUT */
+  .output-box {
+    background: var(--cinza-900);
+    border: 1px solid var(--cinza-600);
+    border-radius: 10px;
+    padding: 18px;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 12px;
+    color: var(--cinza-100);
+    white-space: pre-wrap;
+    line-height: 1.7;
+    min-height: 120px;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+
+  .output-empty {
+    color: var(--cinza-400);
+    font-style: italic;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* HOW TO BOX */
+  .howto {
+    background: var(--verde-dim);
+    border: 1px solid var(--verde);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .howto-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .howto-num {
+    background: var(--verde);
+    color: var(--preto);
+    font-weight: 700;
+    font-size: 11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .howto-text { font-size: 12px; color: var(--branco); line-height: 1.5; }
+
+  /* IA EMBUTIDA */
+  .ia-box {
+    background: var(--cinza-900);
+    border: 1px solid var(--verde);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .ia-box-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--verde);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ia-result {
+    background: var(--cinza-800);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    color: var(--cinza-100);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    min-height: 80px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .ia-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--verde);
+    font-size: 13px;
+  }
+
+  .dot-pulse { display: flex; gap: 4px; }
+  .dot-pulse span {
+    width: 6px; height: 6px;
+    background: var(--verde);
+    border-radius: 50%;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+  .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--verde);
+    color: var(--preto);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* FORMAÇÃO */
+  .formacao-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .formacao-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--cinza-600);
+    background: var(--cinza-700);
+    color: var(--cinza-200);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+
+  .formacao-chip.sel {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--preto);
+    font-weight: 600;
+  }
+
+  /* PERÍODO CHIPS */
+  .periodo-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .periodo-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--cinza-600);
+    background: var(--cinza-700);
+    color: var(--cinza-200);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .periodo-chip.sel {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: var(--preto);
+    font-weight: 600;
+  }
+
+  /* PERFIL CHIPS */
+  .perfil-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .perfil-chip {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--cinza-600);
+    background: none;
+    color: var(--cinza-200);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .perfil-chip.sel {
+    border-color: var(--verde);
+    color: var(--verde);
+    background: var(--verde-dim);
+    font-weight: 600;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--cinza-700);
+    margin: 24px 0;
+  }
+
+  /* ESCALA DE RISCO */
+  .risco-bar {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .risco-item {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .risco-item.baixo { background: #00C85322; color: var(--verde); }
+  .risco-item.medio { background: #FFB30022; color: var(--aviso); }
+  .risco-item.alto  { background: #FF444422; color: var(--erro); }
+  .risco-item.sel-baixo { border-color: var(--verde); }
+  .risco-item.sel-medio { border-color: var(--aviso); }
+  .risco-item.sel-alto  { border-color: var(--erro); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .app-body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main-content { padding: 16px; }
+    .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
+<header>
   <div class="logo">
-    <div class="logo-name"><div class="logo-dot"></div>Análise de Desempenho</div>
-    <div class="logo-sub">Ferramenta de análise com IA</div>
+    <div class="logo-mark">P</div>
+    Potencial <span>Sports</span>
+    <span class="badge-version">v1.2</span>
   </div>
-  <nav>
-    <div class="nav-group">Módulos</div>
-    <button class="nav-item active" onclick="go('atleta',this)">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Atleta individual
-    </button>
-    <button class="nav-item" onclick="go('clube',this)">
-      <svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><path d="M10 21v-6h4v6"/></svg>
-      Clube / Time
-    </button>
-    <button class="nav-item" onclick="go('tatica',this)">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><path d="M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>
-      Análise tática
-    </button>
-    <button class="nav-item" onclick="go('posjogo',this)">
-      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/><path d="M15 15l5 5m-5 0l5-5"/></svg>
-      Pós-jogo
-      <span class="nav-badge">+</span>
-    </button>
-    <div class="nav-group">Resultado</div>
-    <button class="nav-item" onclick="go('saida',this)">
-      <svg viewBox="0 0 24 24"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="M14 3l5 5-9 9H5v-5l9-9z"/></svg>
-      Gerar para IA
-      <span class="nav-badge">↗</span>
-    </button>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="ai-tip">
-      <div class="ai-tip-title">Como funciona</div>
-      <div class="ai-tip-txt">Preencha os dados, clique em "Gerar para IA" e copie o texto. Cole no Claude para receber a análise completa.</div>
-    </div>
-  </div>
-</aside>
+  <div style="font-size:11px;color:var(--cinza-400);">potencialsports.com.br</div>
+</header>
 
-<!-- MAIN -->
-<div class="main">
-  <div class="topbar">
-    <div class="page-info">
-      <h1 id="page-title">Atleta individual</h1>
-      <p id="page-sub">Ficha completa e métricas de desempenho</p>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn" onclick="limpar()">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
-        Limpar
-      </button>
-      <button class="btn btn-green" onclick="go('saida',document.querySelector('.nav-item:last-of-type'))">
-        <svg viewBox="0 0 24 24"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="M14 3l5 5-9 9H5v-5l9-9z"/></svg>
-        Gerar para IA
-      </button>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- ATLETA -->
-    <div class="section active" id="sec-atleta">
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          Dados pessoais
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Nome completo</label><input id="a-nome" placeholder="Ex: Luis Eduardo Santos"/></div>
-          <div class="field"><label>Data de nascimento</label><input id="a-nasc" type="date"/></div>
-          <div class="field"><label>Posição principal</label>
-            <select id="a-pos">
-              <option value="">Selecione...</option>
-              <option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option>
-              <option>Lateral esquerdo</option><option>Volante</option><option>Meia central</option>
-              <option>Meia-atacante</option><option>Ponta direita</option><option>Ponta esquerda</option>
-              <option>Centroavante</option>
-            </select>
-          </div>
-          <div class="field"><label>Pé dominante</label>
-            <select id="a-pe"><option value="">Selecione...</option><option>Direito</option><option>Esquerdo</option><option>Ambidestro</option></select>
-          </div>
-          <div class="field"><label>Clube atual</label><input id="a-clube" placeholder="Nome do clube"/></div>
-          <div class="field"><label>Categoria</label>
-            <select id="a-cat"><option value="">Selecione...</option><option>Profissional</option><option>Sub-23</option><option>Sub-20</option><option>Sub-17</option><option>Sub-15</option></select>
-          </div>
-          <div class="field"><label>Altura (cm)</label><input id="a-alt" type="number" placeholder="Ex: 178"/></div>
-          <div class="field"><label>Peso (kg)</label><input id="a-peso" type="number" placeholder="Ex: 72"/></div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-          Período de análise
-        </div>
-        <div class="periodo-bar">
-          <button class="periodo-btn active" onclick="setPeriodo(this,'Semana')">Semana</button>
-          <button class="periodo-btn" onclick="setPeriodo(this,'Mês')">Mês</button>
-          <button class="periodo-btn" onclick="setPeriodo(this,'Trimestre')">Trimestre</button>
-          <button class="periodo-btn" onclick="setPeriodo(this,'Semestre')">Semestre</button>
-          <button class="periodo-btn" onclick="setPeriodo(this,'Ano')">Ano</button>
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Número do período</label><input id="a-periodo-num" placeholder="Ex: 1, 2, 3..." type="number" value="1" min="1"/></div>
-          <div class="field"><label>Partidas disputadas</label><input id="a-jogos" type="number" placeholder="Qtd de jogos no período"/></div>
-          <div class="field"><label>Minutos jogados</label><input id="a-min" type="number" placeholder="Total de minutos"/></div>
-          <div class="field"><label>Contexto (competição, fase)</label><input id="a-contexto" placeholder="Ex: Paulistão, fase de grupos"/></div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
-          Métricas técnicas
-        </div>
-        <div class="metrics-grid">
-          <div class="metric-field"><div class="metric-label">Gols</div><input class="metric-input" id="m-gols" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Assistências</div><input class="metric-input" id="m-ast" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">xG</div><input class="metric-input" id="m-xg" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Passes certos (%)</div><input class="metric-input" id="m-passe" type="number" placeholder="0" min="0" max="100"/></div>
-          <div class="metric-field"><div class="metric-label">Passes progressivos</div><input class="metric-input" id="m-pass-prog" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Passes chave</div><input class="metric-input" id="m-pass-chave" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Dribles completados</div><input class="metric-input" id="m-drib" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Dribles tentados</div><input class="metric-input" id="m-drib-tent" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Finalizações totais</div><input class="metric-input" id="m-fin" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Finalizações no alvo</div><input class="metric-input" id="m-fin-alvo" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Chances criadas</div><input class="metric-input" id="m-chances" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Cruzamentos certos (%)</div><input class="metric-input" id="m-cruz" type="number" placeholder="0" min="0" max="100"/></div>
-        </div>
-        <div class="metrics-section-title">Duelos e defesa</div>
-        <div class="metrics-grid">
-          <div class="metric-field"><div class="metric-label">Duelos ganhos (%)</div><input class="metric-input" id="m-duel" type="number" placeholder="0" min="0" max="100"/></div>
-          <div class="metric-field"><div class="metric-label">Duelos aéreos (%)</div><input class="metric-input" id="m-aer" type="number" placeholder="0" min="0" max="100"/></div>
-          <div class="metric-field"><div class="metric-label">Interceptações</div><input class="metric-input" id="m-int" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Cortes / Afastamentos</div><input class="metric-input" id="m-cortes" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Recuperações de bola</div><input class="metric-input" id="m-rec" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Faltas cometidas</div><input class="metric-input" id="m-faltas" type="number" placeholder="0"/></div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Métricas físicas (GPS)
-        </div>
-        <div class="metrics-grid">
-          <div class="metric-field"><div class="metric-label">Distância total (km)</div><input class="metric-input" id="f-dist" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Dist. alta intens. (km)</div><input class="metric-input" id="f-hai" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Dist. sprint (km)</div><input class="metric-input" id="f-sprint-d" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Número de sprints</div><input class="metric-input" id="f-sprints" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Vel. máxima (km/h)</div><input class="metric-input" id="f-vmax" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Acelerações</div><input class="metric-input" id="f-acel" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Desacelerações</div><input class="metric-input" id="f-desacel" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Carga treino (PSE)</div><input class="metric-input" id="f-pse" type="number" placeholder="0" min="1" max="10"/></div>
-          <div class="metric-field"><div class="metric-label">FC média (% FC máx)</div><input class="metric-input" id="f-fc" type="number" placeholder="0" min="0" max="100"/></div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/></svg>
-          Observações do analista
-        </div>
-        <div class="field">
-          <label>Observações gerais, contexto, pontos notados em vídeo</label>
-          <textarea id="a-obs" rows="4" placeholder="Descreva comportamentos observados em vídeo, situações táticas específicas, atitude em campo, interação com companheiros..."></textarea>
-        </div>
-        <div class="form-grid" style="margin-top:12px">
-          <div class="field">
-            <label>Score estimado pelo analista (0–100)</label>
-            <div class="range-wrap">
-              <input type="range" id="a-score" min="0" max="100" value="70" step="1" oninput="document.getElementById('score-val').textContent=this.value;document.getElementById('score-bar').style.width=this.value+'%'"/>
-              <span class="range-val" id="score-val">70</span>
-            </div>
-            <div class="score-display">
-              <div class="score-num" id="score-display-num">70</div>
-              <div style="flex:1">
-                <div class="score-label">Score geral do período</div>
-                <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar" style="width:70%"></div></div>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Cartões</label>
-            <div class="form-grid" style="gap:8px">
-              <div class="field"><label>Amarelos</label><input id="a-amarelo" type="number" placeholder="0" min="0"/></div>
-              <div class="field"><label>Vermelhos</label><input id="a-vermelho" type="number" placeholder="0" min="0"/></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CLUBE -->
-    <div class="section" id="sec-clube">
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><path d="M10 21v-6h4v6"/></svg>
-          Identificação do clube
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Nome do clube</label><input id="c-nome" placeholder="Ex: Sport Club do Recife"/></div>
-          <div class="field"><label>Categoria</label>
-            <select id="c-cat"><option value="">Selecione...</option><option>Profissional</option><option>Sub-23</option><option>Sub-20</option><option>Sub-17</option><option>Sub-15</option></select>
-          </div>
-          <div class="field"><label>Competição</label><input id="c-comp" placeholder="Ex: Brasileirão Série A"/></div>
-          <div class="field"><label>Fase / Rodada</label><input id="c-fase" placeholder="Ex: Rodada 10"/></div>
-          <div class="field"><label>Treinador</label><input id="c-treinador" placeholder="Nome do treinador"/></div>
-          <div class="field"><label>Formação principal</label>
-            <select id="c-form">
-              <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option>
-              <option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option><option>4-3-2-1</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Escalação por posição
-        </div>
-        <div class="formation-grid">
-          <div class="pos-card"><span class="pos-badge pos-gk">GK</span><div class="pos-name">Goleiro</div><input class="pos-input" id="p-gk" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-def">DEF</span><div class="pos-name">Zagueiro 1</div><input class="pos-input" id="p-z1" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-def">DEF</span><div class="pos-name">Zagueiro 2</div><input class="pos-input" id="p-z2" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-def">DEF</span><div class="pos-name">Lateral Dir.</div><input class="pos-input" id="p-ld" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-def">DEF</span><div class="pos-name">Lateral Esq.</div><input class="pos-input" id="p-le" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-mid">MID</span><div class="pos-name">Volante 1</div><input class="pos-input" id="p-v1" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-mid">MID</span><div class="pos-name">Volante 2</div><input class="pos-input" id="p-v2" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-mid">MID</span><div class="pos-name">Meia</div><input class="pos-input" id="p-me" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-att">ATK</span><div class="pos-name">Ponta Dir.</div><input class="pos-input" id="p-pd" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-att">ATK</span><div class="pos-name">Ponta Esq.</div><input class="pos-input" id="p-pe" placeholder="Nome"/></div>
-          <div class="pos-card"><span class="pos-badge pos-att">ATK</span><div class="pos-name">Centroavante</div><input class="pos-input" id="p-ca" placeholder="Nome"/></div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
-          Métricas coletivas do time
-        </div>
-        <div class="metrics-grid">
-          <div class="metric-field"><div class="metric-label">Posse de bola (%)</div><input class="metric-input" id="t-posse" type="number" placeholder="0" min="0" max="100"/></div>
-          <div class="metric-field"><div class="metric-label">PPDA</div><input class="metric-input" id="t-ppda" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">xG / jogo</div><input class="metric-input" id="t-xg" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">xGA / jogo</div><input class="metric-input" id="t-xga" type="number" placeholder="0.0" step="0.1"/></div>
-          <div class="metric-field"><div class="metric-label">Gols marcados</div><input class="metric-input" id="t-gols" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Gols sofridos</div><input class="metric-input" id="t-gc" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Precisão passes (%)</div><input class="metric-input" id="t-passe" type="number" placeholder="0" min="0" max="100"/></div>
-          <div class="metric-field"><div class="metric-label">Chutes / jogo</div><input class="metric-input" id="t-chutes" type="number" placeholder="0"/></div>
-          <div class="metric-field"><div class="metric-label">Duelos ganhos (%)</div><input class="metric-input" id="t-duel" type="number" placeholder="0" min="0" max="100"/></div>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label>Observações táticas gerais do time</label>
-          <textarea id="c-obs" rows="3" placeholder="Pontos táticos observados, padrões de jogo, comportamentos coletivos..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- TÁTICA -->
-    <div class="section" id="sec-tatica">
-      <div class="info-banner">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>
-        Preencha os dados do adversário. O texto gerado serve para pedir ao Claude uma análise completa com forças, vulnerabilidades e recomendações táticas para o confronto.
-      </div>
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Dados do adversário
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Nome do adversário</label><input id="adv-nome" placeholder="Nome do clube"/></div>
-          <div class="field"><label>Formação do adversário</label>
-            <select id="adv-form">
-              <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option>
-              <option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option>
-            </select>
-          </div>
-          <div class="field"><label>Data do confronto</label><input id="adv-data" type="date"/></div>
-          <div class="field"><label>Local</label>
-            <select id="adv-local"><option>Casa</option><option>Fora</option><option>Neutro</option></select>
-          </div>
-          <div class="field"><label>Competição / Fase</label><input id="adv-comp" placeholder="Ex: Brasileirão, Rd 12"/></div>
-          <div class="field"><label>Estilo de jogo do adversário</label>
-            <select id="adv-estilo">
-              <option value="">Selecione...</option>
-              <option>Posse e construção baixa</option><option>Jogo direto / longo</option>
-              <option>Contra-ataque</option><option>Pressing alto</option><option>Bloco baixo</option>
-              <option>Jogo pelas beiradas</option><option>Jogo pelo meio</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          Jogadores-chave do adversário
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Jogador perigoso 1</label><input id="adv-j1" placeholder="Nome e posição"/></div>
-          <div class="field"><label>Jogador perigoso 2</label><input id="adv-j2" placeholder="Nome e posição"/></div>
-          <div class="field"><label>Jogador perigoso 3</label><input id="adv-j3" placeholder="Nome e posição"/></div>
-          <div class="field"><label>Articulador do jogo</label><input id="adv-art" placeholder="Quem organiza o jogo deles"/></div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/></svg>
-          Observações sobre o adversário
-        </div>
-        <div class="field">
-          <label>Padrões observados, fraquezas identificadas, situações de bola parada</label>
-          <textarea id="adv-obs" rows="5" placeholder="Descreva o que você observou nos jogos anteriores do adversário: como saem jogando, como defendem, vulnerabilidades, padrões em bolas paradas, reação quando estão perdendo..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- PÓS-JOGO -->
-    <div class="section" id="sec-posjogo">
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-          Dados da partida
-        </div>
-        <div class="form-grid">
-          <div class="field"><label>Nosso time</label><input id="pj-time" placeholder="Nome do time"/></div>
-          <div class="field"><label>Adversário</label><input id="pj-adv" placeholder="Nome do adversário"/></div>
-          <div class="field"><label>Placar</label><input id="pj-placar" placeholder="Ex: 2x1"/></div>
-          <div class="field"><label>Resultado</label>
-            <select id="pj-result"><option value="">Selecione...</option><option>Vitória</option><option>Empate</option><option>Derrota</option></select>
-          </div>
-          <div class="field"><label>Competição / Rodada</label><input id="pj-comp" placeholder="Ex: Paulistão Rd 5"/></div>
-          <div class="field"><label>Local</label>
-            <select id="pj-local"><option>Casa</option><option>Fora</option><option>Neutro</option></select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="7"/><rect x="13" y="9" width="3" height="11"/><rect x="1" y="5" width="3" height="15" x="19"/></svg>
-          Estatísticas da partida
-        </div>
-        <div class="form-grid-3">
-          <div class="field"><label>Estatística</label></div>
-          <div class="field"><label>Nosso time</label></div>
-          <div class="field"><label>Adversário</label></div>
-        </div>
-        <div id="stats-table">
-          <!-- gerado por JS -->
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-card-title">
-          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/></svg>
-          Análise narrativa do analista
-        </div>
-        <div class="field" style="margin-bottom:12px">
-          <label>Visão geral da partida</label>
-          <textarea id="pj-visao" rows="3" placeholder="Como foi o jogo no geral? Dinâmica, controle, momentos-chave..."></textarea>
-        </div>
-        <div class="form-grid">
-          <div class="field">
-            <label>Pontos positivos</label>
-            <textarea id="pj-pos" rows="3" placeholder="O que funcionou bem..."></textarea>
-          </div>
-          <div class="field">
-            <label>Pontos de atenção</label>
-            <textarea id="pj-neg" rows="3" placeholder="O que precisa melhorar..."></textarea>
-          </div>
-          <div class="field">
-            <label>Análise defensiva</label>
-            <textarea id="pj-def" rows="3" placeholder="Como foi a defesa..."></textarea>
-          </div>
-          <div class="field">
-            <label>Análise ofensiva</label>
-            <textarea id="pj-ata" rows="3" placeholder="Como foi o ataque..."></textarea>
-          </div>
-        </div>
-        <div class="field" style="margin-top:12px">
-          <label>Recomendações para o próximo jogo</label>
-          <textarea id="pj-rec" rows="3" placeholder="O que ajustar para a próxima partida..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- SAÍDA -->
-    <div class="section" id="sec-saida">
-      <div class="info-banner">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>
-        Clique em "Gerar texto" para montar o relatório completo. Depois copie e cole no Claude para receber a análise com IA.
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <button class="btn btn-green" onclick="gerarTexto()">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Gerar texto para IA
-        </button>
-        <button class="btn" onclick="copiarTexto()">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copiar texto
-        </button>
-        <button class="btn" onclick="baixarTexto()">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Baixar .txt
-        </button>
-      </div>
-
-      <div id="output-box" class="output-box">
-        <div class="output-empty">
-          <svg viewBox="0 0 24 24"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="M14 3l5 5-9 9H5v-5l9-9z"/></svg>
-          <p>Preencha os dados nas abas e clique em "Gerar texto para IA"</p>
-        </div>
-      </div>
-      <div class="copy-success" id="copy-msg">Texto copiado! Cole agora no Claude.</div>
-
-      <div class="form-card" style="margin-top:16px;background:var(--verde-claro);border-color:var(--border-m)">
-        <div class="form-card-title" style="color:var(--verde);border-color:var(--border-m)">
-          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Como usar no Claude
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-neon);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">1</div>
-            <div style="font-size:13px;color:var(--txt2)">Clique em <strong style="color:var(--verde)">Gerar texto</strong> acima para montar o relatório completo</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-neon);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">2</div>
-            <div style="font-size:13px;color:var(--txt2)">Clique em <strong style="color:var(--verde)">Copiar texto</strong> para copiar tudo</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-neon);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">3</div>
-            <div style="font-size:13px;color:var(--txt2)">Abra o <strong style="color:var(--verde)">claude.ai</strong> e cole o texto — a IA gera a análise completa em segundos</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-neon);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">4</div>
-            <div style="font-size:13px;color:var(--txt2)">Receba o relatório com score, análise técnica/física/tática e recomendações</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
+<div class="main-tabs">
+  <button class="main-tab active" onclick="switchMainTab('atleta', this)">
+    <span class="tab-icon">⚽</span> Análise de Atleta
+  </button>
+  <button class="main-tab" onclick="switchMainTab('clube', this)">
+    <span class="tab-icon">🏟️</span> Análise de Clube
+  </button>
+  <button class="main-tab" onclick="switchMainTab('prospeccao', this)">
+    <span class="tab-icon">🔍</span> Prospecção de Atletas
+    <span style="font-size:9px;background:var(--verde);color:var(--preto);padding:2px 6px;border-radius:10px;font-weight:700;margin-left:2px;">IA</span>
+  </button>
 </div>
-</div>
+
+<div class="app-body">
+
+  <!-- SIDEBAR ATLETA -->
+  <div class="sidebar" id="sidebar-atleta">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Seções</div>
+      <button class="sidebar-btn active" onclick="scrollTo('s-dados-pessoais')"><span class="s-icon">👤</span> Dados pessoais</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-periodo')"><span class="s-icon">📅</span> Período</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-metricas-tec')"><span class="s-icon">⚙️</span> Métricas técnicas</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-metricas-fis')"><span class="s-icon">🏃</span> Métricas físicas</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-observacoes')"><span class="s-icon">📝</span> Observações</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-output-atleta')"><span class="s-icon">📤</span> Gerar relatório</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ações</div>
+      <button class="sidebar-btn" onclick="limparAtleta()"><span class="s-icon">🗑️</span> Limpar formulário</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR CLUBE -->
+  <div class="sidebar hidden" id="sidebar-clube">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Seções</div>
+      <button class="sidebar-btn active" onclick="scrollTo('s-clube-id')"><span class="s-icon">🏟️</span> Identificação</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-escalacao')"><span class="s-icon">👥</span> Escalação</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-coletivo')"><span class="s-icon">📊</span> Métricas coletivas</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-adversario')"><span class="s-icon">🆚</span> Adversário</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-posjogo')"><span class="s-icon">📋</span> Pós-jogo</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-output-clube')"><span class="s-icon">📤</span> Gerar relatório</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR PROSPECÇÃO -->
+  <div class="sidebar hidden" id="sidebar-prospeccao">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Seções</div>
+      <button class="sidebar-btn active" onclick="scrollTo('s-prosp-perfil')"><span class="s-icon">🔍</span> Perfil do atleta</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-prosp-pos')"><span class="s-icon">📍</span> Posição e sistema</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-prosp-metricas')"><span class="s-icon">📈</span> Dados de desempenho</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-prosp-contexto')"><span class="s-icon">🌍</span> Contexto</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-prosp-ia')"><span class="s-icon">🤖</span> Análise IA</button>
+    </div>
+  </div>
+
+  <!-- ========================= ABA ATLETA ========================= -->
+  <div class="main-content" id="tab-atleta">
+
+    <div class="page-header">
+      <div class="page-title">Análise de Atleta Individual</div>
+      <div class="page-subtitle">Preencha os dados, gere o texto e cole no Claude para o relatório completo.</div>
+    </div>
+
+    <div class="howto">
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">Preencha os campos do atleta</div></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">Clique em <strong>Gerar texto para IA</strong></div></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">Copie e cole no <strong>Claude</strong></div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">Receba o relatório completo</div></div>
+    </div>
+
+    <!-- Dados pessoais -->
+    <div class="section-block" id="s-dados-pessoais">
+      <div class="section-title">👤 Dados pessoais</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nome completo</label>
+          <input class="form-input" id="a-nome" placeholder="Nome do atleta">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de nascimento</label>
+          <input class="form-input" id="a-nasc" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Posição principal</label>
+          <select class="form-select" id="a-posicao" onchange="atualizarPerfis()">
+            <option value="">Selecione...</option>
+            <option>Goleiro</option>
+            <option>Zagueiro</option>
+            <option>Lateral direito</option>
+            <option>Lateral esquerdo</option>
+            <option>Volante</option>
+            <option>Meia central</option>
+            <option>Meia-atacante</option>
+            <option>Ponta direita</option>
+            <option>Ponta esquerda</option>
+            <option>Centroavante</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Perfil na posição</label>
+          <div class="perfil-chips" id="a-perfil-chips">
+            <span style="color:var(--cinza-400);font-size:12px;">Selecione a posição primeiro</span>
+          </div>
+          <input type="hidden" id="a-perfil">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pé dominante</label>
+          <select class="form-select" id="a-pe">
+            <option value="">Selecione...</option>
+            <option>Direito</option>
+            <option>Esquerdo</option>
+            <option>Ambidestro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Clube atual</label>
+          <input class="form-input" id="a-clube" placeholder="Nome do clube">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-select" id="a-categoria">
+            <option value="">Selecione...</option>
+            <option>Profissional</option>
+            <option>Sub-23</option>
+            <option>Sub-20</option>
+            <option>Sub-17</option>
+            <option>Sub-15</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sistema tático do time</label>
+          <select class="form-select" id="a-sistema">
+            <option value="">Selecione...</option>
+            <option>4-3-3</option>
+            <option>4-4-2</option>
+            <option>4-2-3-1</option>
+            <option>3-5-2</option>
+            <option>3-4-3</option>
+            <option>5-3-2</option>
+            <option>4-1-4-1</option>
+            <option>4-3-2-1</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Altura (cm)</label>
+          <input class="form-input" id="a-altura" type="number" placeholder="182">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Peso (kg)</label>
+          <input class="form-input" id="a-peso" type="number" placeholder="78">
+        </div>
+      </div>
+    </div>
+
+    <!-- Período -->
+    <div class="section-block" id="s-periodo">
+      <div class="section-title">📅 Período de análise</div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Período</label>
+        <div class="periodo-chips" id="a-periodo-chips">
+          <div class="periodo-chip sel" onclick="selPeriodo(this,'Semana')">Semana</div>
+          <div class="periodo-chip" onclick="selPeriodo(this,'Mês')">Mês</div>
+          <div class="periodo-chip" onclick="selPeriodo(this,'Trimestre')">Trimestre</div>
+          <div class="periodo-chip" onclick="selPeriodo(this,'Semestre')">Semestre</div>
+          <div class="periodo-chip" onclick="selPeriodo(this,'Ano')">Ano</div>
+        </div>
+        <input type="hidden" id="a-periodo" value="Semana">
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Número do período</label>
+          <input class="form-input" id="a-periodo-num" type="number" placeholder="Ex: 3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Competição / Contexto</label>
+          <input class="form-input" id="a-competicao" placeholder="Ex: Campeonato Paulista, fase de grupos">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Partidas disputadas</label>
+          <input class="form-input" id="a-partidas" type="number" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Minutos jogados</label>
+          <input class="form-input" id="a-minutos" type="number" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Métricas técnicas -->
+    <div class="section-block" id="s-metricas-tec">
+      <div class="section-title">⚙️ Métricas técnicas</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Gols</label><input class="form-input" id="a-gols" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Assistências</label><input class="form-input" id="a-assis" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">xG</label><input class="form-input" id="a-xg" type="number" step="0.01" placeholder="0.00"></div>
+        <div class="form-group"><label class="form-label">Passes certos (%)</label><input class="form-input" id="a-passes-pct" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Passes progressivos</label><input class="form-input" id="a-passes-prog" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Passes chave</label><input class="form-input" id="a-passes-chave" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Dribles completados</label><input class="form-input" id="a-dribles-ok" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Dribles tentados</label><input class="form-input" id="a-dribles-tent" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Finalizações totais</label><input class="form-input" id="a-fin-total" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Finalizações no alvo</label><input class="form-input" id="a-fin-alvo" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Chances criadas</label><input class="form-input" id="a-chances" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Cruzamentos certos (%)</label><input class="form-input" id="a-cruz-pct" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Duelos ganhos (%)</label><input class="form-input" id="a-duelos-pct" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Duelos aéreos (%)</label><input class="form-input" id="a-aereos-pct" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Interceptações</label><input class="form-input" id="a-interc" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Cortes / Afastamentos</label><input class="form-input" id="a-cortes" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Recuperações de bola</label><input class="form-input" id="a-recup" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Faltas cometidas</label><input class="form-input" id="a-faltas" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Cartões amarelos</label><input class="form-input" id="a-amarelos" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Cartões vermelhos</label><input class="form-input" id="a-vermelhos" type="number" placeholder="0"></div>
+        <!-- Goleiro -->
+        <div class="form-group" id="g-defesas-g"><label class="form-label">Defesas (goleiro)</label><input class="form-input" id="a-defesas" type="number" placeholder="0"></div>
+        <div class="form-group" id="g-defesas-pct"><label class="form-label">% Defesas</label><input class="form-input" id="a-defesas-pct" type="number" placeholder="0"></div>
+        <div class="form-group" id="g-xga"><label class="form-label">xGA</label><input class="form-input" id="a-xga" type="number" step="0.01" placeholder="0.00"></div>
+        <div class="form-group" id="g-saidas"><label class="form-label">Saídas de área</label><input class="form-input" id="a-saidas" type="number" placeholder="0"></div>
+        <div class="form-group" id="g-passes-l"><label class="form-label">Passes longos (%)</label><input class="form-input" id="a-passes-longos" type="number" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- Métricas físicas -->
+    <div class="section-block" id="s-metricas-fis">
+      <div class="section-title">🏃 Métricas físicas (GPS)</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Distância total (km)</label><input class="form-input" id="a-dist" type="number" step="0.1" placeholder="0.0"></div>
+        <div class="form-group"><label class="form-label">Dist. alta intens. (km)</label><input class="form-input" id="a-dist-ai" type="number" step="0.1" placeholder="0.0"></div>
+        <div class="form-group"><label class="form-label">Dist. sprint (km)</label><input class="form-input" id="a-dist-sprint" type="number" step="0.1" placeholder="0.0"></div>
+        <div class="form-group"><label class="form-label">Número de sprints</label><input class="form-input" id="a-sprints" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Vel. máxima (km/h)</label><input class="form-input" id="a-vel" type="number" step="0.1" placeholder="0.0"></div>
+        <div class="form-group"><label class="form-label">Acelerações</label><input class="form-input" id="a-acel" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Desacelerações</label><input class="form-input" id="a-desacel" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Carga treino (PSE)</label><input class="form-input" id="a-pse" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">FC média (% FC máx)</label><input class="form-input" id="a-fc" type="number" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- Observações e score -->
+    <div class="section-block" id="s-observacoes">
+      <div class="section-title">📝 Observações e score</div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">Observações do analista (vídeo, comportamento, contexto)</label>
+        <textarea class="form-textarea" id="a-obs" placeholder="Descreva o que você observou em vídeo, comportamento em campo, contexto da partida, situações específicas..." style="min-height:120px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Score estimado pelo analista</label>
+        <div class="score-row">
+          <div class="score-value" id="a-score-display">70</div>
+          <input type="range" min="0" max="100" value="70" id="a-score" oninput="document.getElementById('a-score-display').textContent=this.value">
+          <span style="color:var(--cinza-400);font-size:12px;">/ 100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output atleta -->
+    <div class="section-block" id="s-output-atleta">
+      <div class="section-title">📤 Relatório para IA</div>
+      <div class="btn-row" style="margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="gerarTextoAtleta()">⚡ Gerar texto para IA</button>
+        <button class="btn btn-secondary" onclick="copiarTexto('output-atleta')">📋 Copiar texto</button>
+        <button class="btn btn-ghost" onclick="baixarTxt('output-atleta','relatorio-atleta')">⬇ Baixar .txt</button>
+      </div>
+      <div class="output-box" id="output-atleta"><span class="output-empty">Preencha os dados e clique em "Gerar texto para IA" para montar o relatório.</span></div>
+    </div>
+
+  </div><!-- fim tab-atleta -->
+
+  <!-- ========================= ABA CLUBE ========================= -->
+  <div class="main-content hidden" id="tab-clube">
+
+    <div class="page-header">
+      <div class="page-title">Análise de Clube / Time</div>
+      <div class="page-subtitle">Dados coletivos, tática e pós-jogo. Gere o texto e cole no Claude.</div>
+    </div>
+
+    <div class="howto">
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">Preencha identificação e escalação</div></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">Adicione métricas coletivas</div></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">Gere e copie o texto</div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">Cole no <strong>Claude</strong> para análise tática</div></div>
+    </div>
+
+    <!-- Identificação -->
+    <div class="section-block" id="s-clube-id">
+      <div class="section-title">🏟️ Identificação do clube</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nome do clube</label><input class="form-input" id="c-nome" placeholder="Nome do clube"></div>
+        <div class="form-group"><label class="form-label">Categoria</label>
+          <select class="form-select" id="c-categoria">
+            <option value="">Selecione...</option>
+            <option>Profissional</option><option>Sub-23</option><option>Sub-20</option><option>Sub-17</option><option>Sub-15</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Competição</label><input class="form-input" id="c-comp" placeholder="Ex: Campeonato Brasileiro Série A"></div>
+        <div class="form-group"><label class="form-label">Fase / Rodada</label><input class="form-input" id="c-fase" placeholder="Ex: Rodada 12"></div>
+        <div class="form-group"><label class="form-label">Treinador</label><input class="form-input" id="c-treinador" placeholder="Nome do treinador"></div>
+        <div class="form-group"><label class="form-label">Formação principal</label>
+          <div class="formacao-grid" id="c-formacao-chips" style="margin-top:6px;">
+            <div class="formacao-chip sel" onclick="selFormacao(this,'4-3-3')">4-3-3</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'4-4-2')">4-4-2</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'4-2-3-1')">4-2-3-1</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'3-5-2')">3-5-2</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'3-4-3')">3-4-3</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'5-3-2')">5-3-2</div>
+            <div class="formacao-chip" onclick="selFormacao(this,'4-1-4-1')">4-1-4-1</div>
+          </div>
+          <input type="hidden" id="c-formacao" value="4-3-3">
+        </div>
+      </div>
+    </div>
+
+    <!-- Escalação -->
+    <div class="section-block" id="s-escalacao">
+      <div class="section-title">👥 Escalação por posição</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Goleiro</label><input class="form-input" id="c-gk" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Zagueiro 1</label><input class="form-input" id="c-zag1" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Zagueiro 2</label><input class="form-input" id="c-zag2" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Lateral direito</label><input class="form-input" id="c-ld" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Lateral esquerdo</label><input class="form-input" id="c-le" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Volante 1</label><input class="form-input" id="c-vol1" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Volante 2</label><input class="form-input" id="c-vol2" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Meia</label><input class="form-input" id="c-meia" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Ponta direita</label><input class="form-input" id="c-pd" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Ponta esquerda</label><input class="form-input" id="c-pe" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Centroavante</label><input class="form-input" id="c-ca" placeholder="Nome"></div>
+        <div class="form-group"><label class="form-label">Observações táticas</label><textarea class="form-textarea" id="c-obs-tatica" placeholder="Sistema de pressão, comportamento defensivo, padrões de saída de bola..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- Métricas coletivas -->
+    <div class="section-block" id="s-coletivo">
+      <div class="section-title">📊 Métricas coletivas</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Posse de bola (%)</label><input class="form-input" id="c-posse" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">PPDA</label><input class="form-input" id="c-ppda" type="number" step="0.1" placeholder="0.0"></div>
+        <div class="form-group"><label class="form-label">xG / jogo</label><input class="form-input" id="c-xg" type="number" step="0.01" placeholder="0.00"></div>
+        <div class="form-group"><label class="form-label">xGA / jogo</label><input class="form-input" id="c-xga" type="number" step="0.01" placeholder="0.00"></div>
+        <div class="form-group"><label class="form-label">Gols marcados</label><input class="form-input" id="c-gols" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Gols sofridos</label><input class="form-input" id="c-gols-s" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Precisão passes (%)</label><input class="form-input" id="c-passes" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Chutes / jogo</label><input class="form-input" id="c-chutes" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Duelos ganhos (%)</label><input class="form-input" id="c-duelos" type="number" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- Adversário -->
+    <div class="section-block" id="s-adversario">
+      <div class="section-title">🆚 Análise do adversário</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nome do adversário</label><input class="form-input" id="c-adv-nome" placeholder="Nome do adversário"></div>
+        <div class="form-group"><label class="form-label">Formação adversária</label>
+          <select class="form-select" id="c-adv-form">
+            <option value="">Selecione...</option>
+            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Data do confronto</label><input class="form-input" id="c-adv-data" type="date"></div>
+        <div class="form-group"><label class="form-label">Local</label>
+          <select class="form-select" id="c-adv-local">
+            <option value="">Selecione...</option><option>Casa</option><option>Fora</option><option>Neutro</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Estilo de jogo adversário</label>
+          <select class="form-select" id="c-adv-estilo">
+            <option value="">Selecione...</option>
+            <option>Posse e construção baixa</option><option>Jogo direto / longo</option><option>Contra-ataque</option>
+            <option>Pressing alto</option><option>Bloco baixo</option><option>Jogo pelas beiradas</option><option>Jogo pelo meio</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Competição / Fase</label><input class="form-input" id="c-adv-comp" placeholder="Ex: Semifinal"></div>
+        <div class="form-group"><label class="form-label">Jogador perigoso 1</label><input class="form-input" id="c-adv-j1" placeholder="Nome e posição"></div>
+        <div class="form-group"><label class="form-label">Jogador perigoso 2</label><input class="form-input" id="c-adv-j2" placeholder="Nome e posição"></div>
+        <div class="form-group"><label class="form-label">Jogador perigoso 3</label><input class="form-input" id="c-adv-j3" placeholder="Nome e posição"></div>
+        <div class="form-group"><label class="form-label">Articulador do jogo</label><input class="form-input" id="c-adv-art" placeholder="Nome e posição"></div>
+        <div class="form-group form-full"><label class="form-label">Observações sobre o adversário</label><textarea class="form-textarea" id="c-adv-obs" placeholder="Padrões observados, fraquezas identificadas, situações de bola parada..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- Pós-jogo -->
+    <div class="section-block" id="s-posjogo">
+      <div class="section-title">📋 Pós-jogo</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nosso time (gols)</label><input class="form-input" id="pj-nos" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Adversário (gols)</label><input class="form-input" id="pj-adv" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Resultado</label>
+          <select class="form-select" id="pj-resultado">
+            <option value="">Selecione...</option><option>Vitória</option><option>Empate</option><option>Derrota</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Local</label>
+          <select class="form-select" id="pj-local">
+            <option value="">Selecione...</option><option>Casa</option><option>Fora</option><option>Neutro</option>
+          </select>
+        </div>
+        <div class="form-group form-full"><label class="form-label">Visão geral da partida</label><textarea class="form-textarea" id="pj-geral" placeholder="Como foi o jogo em termos gerais?"></textarea></div>
+        <div class="form-group"><label class="form-label">Pontos positivos</label><textarea class="form-textarea" id="pj-pos" placeholder="O que funcionou bem?"></textarea></div>
+        <div class="form-group"><label class="form-label">Pontos de atenção</label><textarea class="form-textarea" id="pj-atencao" placeholder="O que precisa melhorar?"></textarea></div>
+        <div class="form-group"><label class="form-label">Análise defensiva</label><textarea class="form-textarea" id="pj-def" placeholder="Como o time se comportou defensivamente?"></textarea></div>
+        <div class="form-group"><label class="form-label">Análise ofensiva</label><textarea class="form-textarea" id="pj-of" placeholder="Como o time se comportou ofensivamente?"></textarea></div>
+        <div class="form-group form-full"><label class="form-label">Recomendações para o próximo jogo</label><textarea class="form-textarea" id="pj-rec" placeholder="O que ajustar para a próxima partida?"></textarea></div>
+      </div>
+    </div>
+
+    <!-- Output clube -->
+    <div class="section-block" id="s-output-clube">
+      <div class="section-title">📤 Relatório para IA</div>
+      <div class="btn-row" style="margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="gerarTextoClube()">⚡ Gerar texto para IA</button>
+        <button class="btn btn-secondary" onclick="copiarTexto('output-clube')">📋 Copiar texto</button>
+        <button class="btn btn-ghost" onclick="baixarTxt('output-clube','relatorio-clube')">⬇ Baixar .txt</button>
+      </div>
+      <div class="output-box" id="output-clube"><span class="output-empty">Preencha os dados e clique em "Gerar texto para IA".</span></div>
+    </div>
+
+  </div><!-- fim tab-clube -->
+
+  <!-- ========================= ABA PROSPECÇÃO ========================= -->
+  <div class="main-content hidden" id="tab-prospeccao">
+
+    <div class="page-header">
+      <div class="page-title">Prospecção de Atletas</div>
+      <div class="page-subtitle">Análise completa com IA embutida — sem precisar copiar para o Claude.</div>
+    </div>
+
+    <div class="howto">
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">Preencha o perfil do atleta</div></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">Descreva o contexto e dados</div></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">Clique em <strong>Analisar com IA</strong></div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">Receba o parecer de prospecção</div></div>
+    </div>
+
+    <!-- Perfil -->
+    <div class="section-block" id="s-prosp-perfil">
+      <div class="section-title">🔍 Perfil do atleta</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nome do atleta</label><input class="form-input" id="p-nome" placeholder="Nome completo"></div>
+        <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="p-idade" type="number" placeholder="Ex: 19"></div>
+        <div class="form-group"><label class="form-label">Clube atual</label><input class="form-input" id="p-clube" placeholder="Clube onde joga"></div>
+        <div class="form-group"><label class="form-label">Nível competitivo</label>
+          <select class="form-select" id="p-nivel">
+            <option value="">Selecione...</option>
+            <option>Série A</option><option>Série B</option><option>Série C</option><option>Estadual profissional</option>
+            <option>Sub-20 elite</option><option>Sub-20 regional</option><option>Sub-17</option><option>Amateur</option><option>Internacional</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="p-altura" type="number" placeholder="Ex: 182"></div>
+        <div class="form-group"><label class="form-label">Pé dominante</label>
+          <select class="form-select" id="p-pe">
+            <option value="">Selecione...</option><option>Direito</option><option>Esquerdo</option><option>Ambidestro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posição e sistema -->
+    <div class="section-block" id="s-prosp-pos">
+      <div class="section-title">📍 Posição e sistema</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Posição</label>
+          <select class="form-select" id="p-posicao" onchange="atualizarPerfisPros()">
+            <option value="">Selecione...</option>
+            <option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option><option>Lateral esquerdo</option>
+            <option>Volante</option><option>Meia central</option><option>Meia-atacante</option>
+            <option>Ponta direita</option><option>Ponta esquerda</option><option>Centroavante</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Perfil na posição</label>
+          <div class="perfil-chips" id="p-perfil-chips">
+            <span style="color:var(--cinza-400);font-size:12px;">Selecione a posição primeiro</span>
+          </div>
+          <input type="hidden" id="p-perfil">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sistema do clube prospectando</label>
+          <select class="form-select" id="p-sistema-clube">
+            <option value="">Selecione...</option>
+            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Clube prospectando</label>
+          <input class="form-input" id="p-clube-dest" placeholder="Clube interessado no atleta">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados de desempenho -->
+    <div class="section-block" id="s-prosp-metricas">
+      <div class="section-title">📈 Dados de desempenho</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label class="form-label">Partidas analisadas</label><input class="form-input" id="p-partidas" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Minutos jogados</label><input class="form-input" id="p-minutos" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Gols</label><input class="form-input" id="p-gols" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Assistências</label><input class="form-input" id="p-assis" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">xG</label><input class="form-input" id="p-xg" type="number" step="0.01" placeholder="0.00"></div>
+        <div class="form-group"><label class="form-label">Passes certos (%)</label><input class="form-input" id="p-passes" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Duelos ganhos (%)</label><input class="form-input" id="p-duelos" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Dribles completados</label><input class="form-input" id="p-dribles" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Vel. máxima (km/h)</label><input class="form-input" id="p-vel" type="number" step="0.1" placeholder="0.0"></div>
+      </div>
+    </div>
+
+    <!-- Contexto -->
+    <div class="section-block" id="s-prosp-contexto">
+      <div class="section-title">🌍 Contexto e observações</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Risco de lesão / histórico</label>
+          <div class="risco-bar">
+            <div class="risco-item baixo sel-baixo" onclick="selRisco(this,'Baixo — sem histórico relevante')">Baixo</div>
+            <div class="risco-item medio" onclick="selRisco(this,'Médio — lesões pontuais')">Médio</div>
+            <div class="risco-item alto" onclick="selRisco(this,'Alto — lesões recorrentes')">Alto</div>
+          </div>
+          <input type="hidden" id="p-risco" value="Baixo — sem histórico relevante">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor de mercado estimado</label>
+          <input class="form-input" id="p-valor" placeholder="Ex: R$ 500k, €200k, livre">
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Observações de vídeo e comportamento</label>
+          <textarea class="form-textarea" id="p-obs" style="min-height:110px;" placeholder="Descreva o que você observou: movimentos sem bola, leitura de jogo, posicionamento, comportamento em pressão, liderança, pontos técnicos específicos..."></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Contexto adicional</label>
+          <textarea class="form-textarea" id="p-contexto" placeholder="Explique o contexto: time que joga, adversários enfrentados, fase da temporada, lesões recentes, situação contratual..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- IA embutida -->
+    <div class="section-block" id="s-prosp-ia">
+      <div class="section-title">🤖 Análise com IA</div>
+      <p style="color:var(--cinza-200);font-size:13px;margin-bottom:16px;">A IA vai gerar um parecer completo de prospecção com base nos dados preenchidos — adequação ao sistema, potencial, riscos e recomendação final.</p>
+      <div class="btn-row" style="margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="analisarProscpeccao()">🤖 Analisar com IA</button>
+        <button class="btn btn-ghost" onclick="copiarIA()">📋 Copiar resultado</button>
+      </div>
+      <div class="ia-box" id="ia-box">
+        <div class="ia-box-title">🤖 Parecer de Prospecção — Potencial Sports</div>
+        <div class="ia-result" id="ia-result"><span style="color:var(--cinza-400);font-style:italic;">Preencha os dados e clique em "Analisar com IA" para gerar o parecer.</span></div>
+      </div>
+    </div>
+
+  </div><!-- fim tab-prospeccao -->
+
+</div><!-- fim app-body -->
+
+<div class="toast" id="toast">✓ Copiado com sucesso!</div>
 
 <script>
-var periodoAtivo = 'Semana';
-
-var statsFields = [
-  ['Posse de bola (%)','stat-posse'],['Chutes totais','stat-chutes'],['Chutes no alvo','stat-alvo'],
-  ['xG','stat-xg'],['xGA','stat-xga'],['Passes totais','stat-passes'],['Precisão passes (%)','stat-passe-pct'],
-  ['Cruzamentos','stat-cruz'],['Escanteios','stat-escanteios'],['PPDA','stat-ppda'],
-  ['Duelos ganhos (%)','stat-duel'],['Interceptações','stat-int'],['Distância total (km)','stat-dist'],
-  ['Faltas cometidas','stat-faltas'],['Cartões amarelos','stat-amarelo']
-];
-
-function buildStatsTable(){
-  var html = '';
-  statsFields.forEach(function(s){
-    html += '<div class="form-grid-3" style="gap:8px;margin-bottom:6px">';
-    html += '<div style="display:flex;align-items:center;font-size:12px;color:var(--txt2)">'+s[0]+'</div>';
-    html += '<input class="metric-input" id="'+s[1]+'-a" type="number" placeholder="0"/>';
-    html += '<input class="metric-input" id="'+s[1]+'-b" type="number" placeholder="0"/>';
-    html += '</div>';
+// ============ NAVEGAÇÃO ============
+function switchMainTab(tab, btn) {
+  ['atleta','clube','prospeccao'].forEach(t => {
+    document.getElementById('tab-'+t).classList.add('hidden');
+    document.getElementById('sidebar-'+t).classList.add('hidden');
   });
-  document.getElementById('stats-table').innerHTML = html;
-}
-
-function go(id, btn){
-  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
-  document.getElementById('sec-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active')});
-  if(btn) btn.classList.add('active');
-  var titles = {
-    atleta:['Atleta individual','Ficha completa e métricas de desempenho'],
-    clube:['Clube / Time','Elenco, formação e métricas coletivas'],
-    tatica:['Análise tática','Análise de adversário e plano de jogo'],
-    posjogo:['Pós-jogo','Estatísticas e análise da partida'],
-    saida:['Gerar para IA','Texto formatado para colar no Claude']
-  };
-  if(titles[id]){
-    document.getElementById('page-title').textContent = titles[id][0];
-    document.getElementById('page-sub').textContent = titles[id][1];
-  }
-}
-
-function setPeriodo(btn, val){
-  periodoAtivo = val;
-  document.querySelectorAll('.periodo-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+  document.getElementById('sidebar-'+tab).classList.remove('hidden');
   btn.classList.add('active');
 }
 
-function v(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; }
-
-document.getElementById('a-score').addEventListener('input', function(){
-  var n = this.value;
-  document.getElementById('score-val').textContent = n;
-  document.getElementById('score-display-num').textContent = n;
-  document.getElementById('score-bar').style.width = n + '%';
-});
-
-function gerarTexto(){
-  var out = '';
-  var periodo = periodoAtivo + ' ' + (v('a-periodo-num') || '1');
-
-  if(v('a-nome')){
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += '📊 RELATÓRIO DE DESEMPENHO — ATLETA INDIVIDUAL\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-    out += '🏷️ Atleta: ' + v('a-nome') + '\n';
-    if(v('a-nasc')) out += '📅 Nascimento: ' + v('a-nasc') + '\n';
-    if(v('a-pos')) out += '⚽ Posição: ' + v('a-pos') + '\n';
-    if(v('a-pe')) out += '🦶 Pé dominante: ' + v('a-pe') + '\n';
-    if(v('a-clube')) out += '🏟️ Clube: ' + v('a-clube') + '\n';
-    if(v('a-cat')) out += '📋 Categoria: ' + v('a-cat') + '\n';
-    if(v('a-alt') || v('a-peso')) out += '📐 Físico: ' + (v('a-alt')?v('a-alt')+'cm':'') + (v('a-alt')&&v('a-peso')?' / ':'') + (v('a-peso')?v('a-peso')+'kg':'') + '\n';
-    out += '📅 Período analisado: ' + periodo + '\n';
-    if(v('a-contexto')) out += '📍 Contexto: ' + v('a-contexto') + '\n';
-    if(v('a-jogos')) out += '🎮 Partidas no período: ' + v('a-jogos') + '\n';
-    if(v('a-min')) out += '⏱️ Minutos em campo: ' + v('a-min') + '\n';
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'MÉTRICAS TÉCNICAS\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    var met = [
-      ['Gols','m-gols'],['Assistências','m-ast'],['xG','m-xg'],
-      ['Passes certos (%)','m-passe'],['Passes progressivos','m-pass-prog'],['Passes chave','m-pass-chave'],
-      ['Dribles completados','m-drib'],['Dribles tentados','m-drib-tent'],
-      ['Finalizações totais','m-fin'],['Finalizações no alvo','m-fin-alvo'],
-      ['Chances criadas','m-chances'],['Cruzamentos certos (%)','m-cruz'],
-      ['Duelos ganhos (%)','m-duel'],['Duelos aéreos (%)','m-aer'],
-      ['Interceptações','m-int'],['Cortes / Afastamentos','m-cortes'],
-      ['Recuperações de bola','m-rec'],['Faltas cometidas','m-faltas']
-    ];
-    met.forEach(function(m){ if(v(m[1])) out += '• '+m[0]+': '+v(m[1])+'\n'; });
-
-    var temFisico = ['f-dist','f-hai','f-sprint-d','f-sprints','f-vmax','f-acel','f-desacel','f-pse','f-fc'].some(function(id){return v(id)!=='';});
-    if(temFisico){
-      out += '\nMÉTRICAS FÍSICAS (GPS)\n';
-      out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-      var fis = [
-        ['Distância total (km)','f-dist'],['Dist. alta intensidade (km)','f-hai'],['Dist. sprint (km)','f-sprint-d'],
-        ['Número de sprints','f-sprints'],['Velocidade máxima (km/h)','f-vmax'],
-        ['Acelerações','f-acel'],['Desacelerações','f-desacel'],['Carga de treino PSE','f-pse'],['FC média (% FC máx)','f-fc']
-      ];
-      fis.forEach(function(f){ if(v(f[1])) out += '• '+f[0]+': '+v(f[1])+'\n'; });
-    }
-
-    if(v('a-amarelo')||v('a-vermelho')){
-      out += '\nCARTÕES\n';
-      if(v('a-amarelo')) out += '• Amarelos: '+v('a-amarelo')+'\n';
-      if(v('a-vermelho')) out += '• Vermelhos: '+v('a-vermelho')+'\n';
-    }
-
-    var score = document.getElementById('a-score').value;
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'SCORE ESTIMADO PELO ANALISTA: ' + score + '/100\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    if(v('a-obs')){
-      out += '\nOBSERVAÇÕES DO ANALISTA:\n' + v('a-obs') + '\n';
-    }
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'SOLICITAÇÃO:\nCom base nos dados acima, gere um relatório completo de desempenho incluindo:\n';
-    out += '1. Visão geral do período\n2. Análise técnica detalhada\n3. Análise física\n4. Pontos fortes identificados\n';
-    out += '5. Pontos de atenção e melhoria\n6. Recomendações práticas para a comissão técnica\n7. Score de desempenho (0-100) com justificativa detalhada\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-  }
-
-  if(v('c-nome')){
-    out += '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += '📊 RELATÓRIO DE DESEMPENHO — CLUBE / TIME\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-    out += '🏟️ Clube: ' + v('c-nome') + '\n';
-    if(v('c-cat')) out += '📋 Categoria: ' + v('c-cat') + '\n';
-    if(v('c-comp')) out += '🏆 Competição: ' + v('c-comp') + '\n';
-    if(v('c-fase')) out += '📍 Fase: ' + v('c-fase') + '\n';
-    if(v('c-treinador')) out += '👤 Treinador: ' + v('c-treinador') + '\n';
-    if(v('c-form')) out += '📐 Formação: ' + v('c-form') + '\n';
-    var jogadores = ['GK','Z1','Z2','LD','LE','V1','V2','ME','PD','PE','CA'];
-    var ids = ['p-gk','p-z1','p-z2','p-ld','p-le','p-v1','p-v2','p-me','p-pd','p-pe','p-ca'];
-    var elenco = jogadores.map(function(pos,i){ return v(ids[i]) ? pos+': '+v(ids[i]) : null; }).filter(Boolean);
-    if(elenco.length){ out += '\nESCALAÇÃO:\n'; elenco.forEach(function(e){ out += '• '+e+'\n'; }); }
-    var metricas = [
-      ['Posse de bola (%)','t-posse'],['PPDA','t-ppda'],['xG / jogo','t-xg'],['xGA / jogo','t-xga'],
-      ['Gols marcados','t-gols'],['Gols sofridos','t-gc'],['Precisão passes (%)','t-passe'],
-      ['Chutes / jogo','t-chutes'],['Duelos ganhos (%)','t-duel']
-    ];
-    var temMet = metricas.some(function(m){ return v(m[1])!==''; });
-    if(temMet){
-      out += '\nMÉTRICAS COLETIVAS:\n';
-      metricas.forEach(function(m){ if(v(m[1])) out += '• '+m[0]+': '+v(m[1])+'\n'; });
-    }
-    if(v('c-obs')) out += '\nOBSERVAÇÕES TÁTICAS:\n' + v('c-obs') + '\n';
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'SOLICITAÇÃO:\nCom base nos dados acima, gere análise tática coletiva do time com análise por setor, pontos fortes, vulnerabilidades e recomendações de ajuste.\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-  }
-
-  if(v('adv-nome')){
-    out += '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += '🎯 ANÁLISE DE ADVERSÁRIO\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-    out += '⚔️ Adversário: ' + v('adv-nome') + '\n';
-    if(v('adv-form')) out += '📐 Formação: ' + v('adv-form') + '\n';
-    if(v('adv-estilo')) out += '🎭 Estilo de jogo: ' + v('adv-estilo') + '\n';
-    if(v('adv-data')) out += '📅 Data do confronto: ' + v('adv-data') + '\n';
-    if(v('adv-local')) out += '📍 Local: ' + v('adv-local') + '\n';
-    if(v('adv-comp')) out += '🏆 Competição: ' + v('adv-comp') + '\n';
-    var jogs = [v('adv-j1'),v('adv-j2'),v('adv-j3'),v('adv-art')].filter(Boolean);
-    if(jogs.length){ out += '\nJOGADORES-CHAVE:\n'; jogs.forEach(function(j){ out += '• '+j+'\n'; }); }
-    if(v('adv-obs')) out += '\nOBSERVAÇÕES DO ANALISTA:\n' + v('adv-obs') + '\n';
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'SOLICITAÇÃO:\nCom base nos dados acima, gere análise completa do adversário com: forças identificadas, vulnerabilidades, jogadores a marcar/neutralizar, recomendações táticas para o confronto e plano de jogo sugerido.\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-  }
-
-  if(v('pj-time')||v('pj-adv')){
-    out += '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += '⚡ RELATÓRIO PÓS-JOGO\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-    if(v('pj-time')) out += '🏟️ Time: ' + v('pj-time') + '\n';
-    if(v('pj-adv')) out += '⚔️ Adversário: ' + v('pj-adv') + '\n';
-    if(v('pj-placar')) out += '🏆 Placar: ' + v('pj-placar') + '\n';
-    if(v('pj-result')) out += '📊 Resultado: ' + v('pj-result') + '\n';
-    if(v('pj-comp')) out += '📋 Competição: ' + v('pj-comp') + '\n';
-    if(v('pj-local')) out += '📍 Local: ' + v('pj-local') + '\n';
-
-    var temStats = statsFields.some(function(s){ return v(s[1]+'-a')!==''||v(s[1]+'-b')!==''; });
-    if(temStats){
-      out += '\nESTATÍSTICAS:\n';
-      statsFields.forEach(function(s){
-        var va = v(s[1]+'-a'); var vb = v(s[1]+'-b');
-        if(va||vb) out += '• '+s[0]+': '+va+' (nosso) x '+vb+' (adversário)\n';
-      });
-    }
-    if(v('pj-visao')) out += '\nVISÃO GERAL:\n' + v('pj-visao') + '\n';
-    if(v('pj-pos')) out += '\nPONTOS POSITIVOS:\n' + v('pj-pos') + '\n';
-    if(v('pj-neg')) out += '\nPONTOS DE ATENÇÃO:\n' + v('pj-neg') + '\n';
-    if(v('pj-def')) out += '\nANÁLISE DEFENSIVA:\n' + v('pj-def') + '\n';
-    if(v('pj-ata')) out += '\nANÁLISE OFENSIVA:\n' + v('pj-ata') + '\n';
-    if(v('pj-rec')) out += '\nRECOMENDAÇÕES:\n' + v('pj-rec') + '\n';
-    out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    out += 'SOLICITAÇÃO:\nCom base nos dados acima, gere relatório pós-jogo completo com: análise tática, desempenho por setor, pontos fortes, pontos de atenção, recomendações para próximo jogo e score da partida (0-100).\n';
-    out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-  }
-
-  if(!out){
-    out = 'Nenhum dado preenchido. Preencha pelo menos o nome do atleta ou do clube nas abas do menu lateral.';
-  }
-
-  var box = document.getElementById('output-box');
-  box.innerHTML = '';
-  box.style.fontFamily = "'Courier New', monospace";
-  box.textContent = out;
-  document.getElementById('copy-msg').style.display = 'none';
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function copiarTexto(){
-  var text = document.getElementById('output-box').textContent;
-  if(!text || text.includes('Nenhum dado')) return;
-  navigator.clipboard.writeText(text).then(function(){
-    var msg = document.getElementById('copy-msg');
-    msg.style.display = 'block';
-    setTimeout(function(){ msg.style.display = 'none'; }, 3000);
+// ============ PERÍODO CHIPS ============
+function selPeriodo(el, val) {
+  document.querySelectorAll('#a-periodo-chips .periodo-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('a-periodo').value = val;
+}
+
+// ============ FORMAÇÃO CHIPS ============
+function selFormacao(el, val) {
+  document.querySelectorAll('#c-formacao-chips .formacao-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('c-formacao').value = val;
+}
+
+// ============ RISCO ============
+function selRisco(el, val) {
+  document.querySelectorAll('.risco-item').forEach(r => {
+    r.classList.remove('sel-baixo','sel-medio','sel-alto');
+  });
+  if(val.startsWith('Baixo')) el.classList.add('sel-baixo');
+  else if(val.startsWith('Médio')) el.classList.add('sel-medio');
+  else el.classList.add('sel-alto');
+  document.getElementById('p-risco').value = val;
+}
+
+// ============ PERFIS POR POSIÇÃO ============
+const perfisMap = {
+  'Goleiro': ['Sweeper-keeper','Goleiro de área tradicional'],
+  'Zagueiro': ['Saída de bola','Contenção pura','Zagueiro de linha alta'],
+  'Lateral direito': ['Sobreposição ofensiva','Contenção defensiva','Invertido'],
+  'Lateral esquerdo': ['Sobreposição ofensiva','Contenção defensiva','Invertido'],
+  'Volante': ['Contenção','Ligação','Box-to-box'],
+  'Meia central': ['Armador / criação','Alta intensidade','Entre linhas'],
+  'Meia-atacante': ['Camisa 10 clássico','Segundo atacante de pressão'],
+  'Ponta direita': ['Tradicional de velocidade','Invertido'],
+  'Ponta esquerda': ['Tradicional de velocidade','Invertido'],
+  'Centroavante': ['Centroavante de área','Pivô / ligação','Falso 9'],
+};
+
+function renderPerfis(pos, containerEl, hiddenEl) {
+  const perfis = perfisMap[pos] || [];
+  if(!perfis.length) {
+    containerEl.innerHTML = '<span style="color:var(--cinza-400);font-size:12px;">Selecione a posição primeiro</span>';
+    return;
+  }
+  containerEl.innerHTML = perfis.map(p =>
+    `<div class="perfil-chip" onclick="selPerfil(this,'${p}','${hiddenEl}')">${p}</div>`
+  ).join('');
+}
+
+function selPerfil(el, val, hiddenId) {
+  el.closest('.perfil-chips').querySelectorAll('.perfil-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById(hiddenId).value = val;
+}
+
+function atualizarPerfis() {
+  const pos = document.getElementById('a-posicao').value;
+  renderPerfis(pos, document.getElementById('a-perfil-chips'), 'a-perfil');
+  const isGK = pos === 'Goleiro';
+  ['g-defesas-g','g-defesas-pct','g-xga','g-saidas','g-passes-l'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = isGK ? 'flex' : 'none';
   });
 }
 
-function baixarTexto(){
-  var text = document.getElementById('output-box').textContent;
-  if(!text || text.includes('Nenhum dado')){ gerarTexto(); text = document.getElementById('output-box').textContent; }
-  var blob = new Blob([text], {type:'text/plain;charset=utf-8'});
-  var a = document.createElement('a');
+function atualizarPerfisPros() {
+  const pos = document.getElementById('p-posicao').value;
+  renderPerfis(pos, document.getElementById('p-perfil-chips'), 'p-perfil');
+}
+
+// Inicializa campos do goleiro ocultos
+window.addEventListener('DOMContentLoaded', () => {
+  ['g-defesas-g','g-defesas-pct','g-xga','g-saidas','g-passes-l'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+});
+
+// ============ UTILITÁRIOS ============
+function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function n(id) { const val = v(id); return val !== '' ? val : null; }
+
+function linha(label, val) {
+  if(!val || val === '' || val === '0' || val === 'null') return '';
+  return `${label}: ${val}\n`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function copiarTexto(id) {
+  const el = document.getElementById(id);
+  const txt = el.innerText || el.textContent;
+  if(!txt || txt.includes('Preencha os dados')) { showToast('⚠ Gere o relatório antes de copiar.'); return; }
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ Copiado! Cole no Claude.'));
+}
+
+function copiarIA() {
+  const el = document.getElementById('ia-result');
+  const txt = el.innerText || el.textContent;
+  if(!txt || txt.includes('Preencha os dados')) { showToast('⚠ Gere a análise primeiro.'); return; }
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ Análise copiada!'));
+}
+
+function baixarTxt(id, nome) {
+  const txt = document.getElementById(id).innerText;
+  const blob = new Blob([txt], {type:'text/plain'});
+  const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'analise_desempenho_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.download = nome + '.txt';
   a.click();
 }
 
-function limpar(){
-  if(confirm('Limpar todos os dados preenchidos?')){
-    document.querySelectorAll('input,textarea,select').forEach(function(el){
-      if(el.type==='range'){ el.value=70; document.getElementById('score-val').textContent='70'; document.getElementById('score-display-num').textContent='70'; document.getElementById('score-bar').style.width='70%'; }
-      else if(el.type==='number'||el.type==='text'||el.type==='date'||el.tagName==='TEXTAREA') el.value='';
-      else if(el.tagName==='SELECT') el.selectedIndex=0;
-    });
-    document.getElementById('output-box').innerHTML = '<div class="output-empty"><svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:var(--border-m);fill:none;stroke-width:1.5;margin:0 auto 10px;display:block"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9"/><path d="M14 3l5 5-9 9H5v-5l9-9z"/></svg><p>Preencha os dados nas abas e clique em "Gerar texto para IA"</p></div>';
-  }
+function limparAtleta() {
+  document.querySelectorAll('#tab-atleta input, #tab-atleta select, #tab-atleta textarea').forEach(el => {
+    if(el.type === 'range') el.value = 70;
+    else el.value = '';
+  });
+  document.getElementById('a-score-display').textContent = '70';
+  document.getElementById('output-atleta').innerHTML = '<span class="output-empty">Preencha os dados e clique em "Gerar texto para IA".</span>';
+  showToast('Formulário limpo.');
 }
 
-buildStatsTable();
+// ============ GERAR TEXTO — ATLETA ============
+function gerarTextoAtleta() {
+  const pos = v('a-posicao');
+  const nome = v('a-nome') || 'Atleta não identificado';
+
+  let txt = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — ANÁLISE DE DESEMPENHO IA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você é um analista de desempenho especializado em futebol, treinado pela Potencial Sports.
+Analise o atleta abaixo e gere um relatório profissional completo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DADOS DO ATLETA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Nome', nome);
+  txt += linha('Data de nascimento', v('a-nasc'));
+  txt += linha('Posição', pos);
+  txt += linha('Perfil na posição', v('a-perfil'));
+  txt += linha('Pé dominante', v('a-pe'));
+  txt += linha('Clube', v('a-clube'));
+  txt += linha('Categoria', v('a-categoria'));
+  txt += linha('Sistema tático do time', v('a-sistema'));
+  txt += linha('Altura', v('a-altura') ? v('a-altura')+'cm' : null);
+  txt += linha('Peso', v('a-peso') ? v('a-peso')+'kg' : null);
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PERÍODO DE ANÁLISE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Período', v('a-periodo') + (v('a-periodo-num') ? ' '+v('a-periodo-num') : ''));
+  txt += linha('Competição', v('a-competicao'));
+  txt += linha('Partidas disputadas', n('a-partidas'));
+  txt += linha('Minutos jogados', n('a-minutos'));
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MÉTRICAS TÉCNICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Gols', n('a-gols'));
+  txt += linha('Assistências', n('a-assis'));
+  txt += linha('xG', n('a-xg'));
+  txt += linha('Passes certos (%)', n('a-passes-pct'));
+  txt += linha('Passes progressivos', n('a-passes-prog'));
+  txt += linha('Passes chave', n('a-passes-chave'));
+  txt += linha('Dribles completados', n('a-dribles-ok'));
+  txt += linha('Dribles tentados', n('a-dribles-tent'));
+  txt += linha('Finalizações totais', n('a-fin-total'));
+  txt += linha('Finalizações no alvo', n('a-fin-alvo'));
+  txt += linha('Chances criadas', n('a-chances'));
+  txt += linha('Cruzamentos certos (%)', n('a-cruz-pct'));
+  txt += linha('Duelos ganhos (%)', n('a-duelos-pct'));
+  txt += linha('Duelos aéreos (%)', n('a-aereos-pct'));
+  txt += linha('Interceptações', n('a-interc'));
+  txt += linha('Cortes / Afastamentos', n('a-cortes'));
+  txt += linha('Recuperações de bola', n('a-recup'));
+  txt += linha('Faltas cometidas', n('a-faltas'));
+  txt += linha('Cartões amarelos', n('a-amarelos'));
+  txt += linha('Cartões vermelhos', n('a-vermelhos'));
+  if(pos === 'Goleiro') {
+    txt += linha('Defesas', n('a-defesas'));
+    txt += linha('% Defesas', n('a-defesas-pct'));
+    txt += linha('xGA', n('a-xga'));
+    txt += linha('Saídas de área', n('a-saidas'));
+    txt += linha('Passes longos (%)', n('a-passes-longos'));
+  }
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MÉTRICAS FÍSICAS (GPS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Distância total', n('a-dist') ? n('a-dist')+'km' : null);
+  txt += linha('Dist. alta intensidade', n('a-dist-ai') ? n('a-dist-ai')+'km' : null);
+  txt += linha('Dist. sprint', n('a-dist-sprint') ? n('a-dist-sprint')+'km' : null);
+  txt += linha('Número de sprints', n('a-sprints'));
+  txt += linha('Velocidade máxima', n('a-vel') ? n('a-vel')+'km/h' : null);
+  txt += linha('Acelerações', n('a-acel'));
+  txt += linha('Desacelerações', n('a-desacel'));
+  txt += linha('Carga treino (PSE)', n('a-pse'));
+  txt += linha('FC média (% FC máx)', n('a-fc'));
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBSERVAÇÕES DO ANALISTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += v('a-obs') || 'Sem observações registradas.';
+  txt += `\n\nScore estimado pelo analista: ${v('a-score')}/100`;
+
+  txt += `
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES PARA O RELATÓRIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gere um relatório completo com as seguintes seções:
+
+1. VISÃO GERAL — resumo executivo do desempenho
+2. MÉTRICAS PRINCIPAIS — interpretação dos dados numéricos com contexto
+3. ANÁLISE TÉCNICA — qualidade técnica por função na posição (${pos})
+4. ANÁLISE FÍSICA — volume e intensidade do trabalho físico
+5. PONTOS FORTES — evidenciados pelos dados e observações
+6. PONTOS DE ATENÇÃO — o que precisa melhorar
+7. RECOMENDAÇÕES — orientações práticas para comissão técnica
+8. SCORE DE DESEMPENHO — valide ou ajuste o score ${v('a-score')}/100 com justificativa
+
+Use terminologia técnica do futebol brasileiro. Tom profissional para comissão técnica.
+Marca: Potencial Sports.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  document.getElementById('output-atleta').textContent = txt;
+  showToast('✓ Texto gerado! Copie e cole no Claude.');
+}
+
+// ============ GERAR TEXTO — CLUBE ============
+function gerarTextoClube() {
+  let txt = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — ANÁLISE DE CLUBE / TIME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você é um analista de desempenho especializado em futebol, treinado pela Potencial Sports.
+Analise os dados do time abaixo e gere um relatório tático completo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IDENTIFICAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Clube', v('c-nome'));
+  txt += linha('Categoria', v('c-categoria'));
+  txt += linha('Competição', v('c-comp'));
+  txt += linha('Fase / Rodada', v('c-fase'));
+  txt += linha('Treinador', v('c-treinador'));
+  txt += linha('Formação principal', v('c-formacao'));
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESCALAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Goleiro', v('c-gk'));
+  txt += linha('Zagueiro 1', v('c-zag1'));
+  txt += linha('Zagueiro 2', v('c-zag2'));
+  txt += linha('Lateral direito', v('c-ld'));
+  txt += linha('Lateral esquerdo', v('c-le'));
+  txt += linha('Volante 1', v('c-vol1'));
+  txt += linha('Volante 2', v('c-vol2'));
+  txt += linha('Meia', v('c-meia'));
+  txt += linha('Ponta direita', v('c-pd'));
+  txt += linha('Ponta esquerda', v('c-pe'));
+  txt += linha('Centroavante', v('c-ca'));
+  txt += linha('Observações táticas', v('c-obs-tatica'));
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MÉTRICAS COLETIVAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Posse de bola (%)', n('c-posse'));
+  txt += linha('PPDA', n('c-ppda'));
+  txt += linha('xG / jogo', n('c-xg'));
+  txt += linha('xGA / jogo', n('c-xga'));
+  txt += linha('Gols marcados', n('c-gols'));
+  txt += linha('Gols sofridos', n('c-gols-s'));
+  txt += linha('Precisão passes (%)', n('c-passes'));
+  txt += linha('Chutes / jogo', n('c-chutes'));
+  txt += linha('Duelos ganhos (%)', n('c-duelos'));
+
+  if(v('c-adv-nome')) {
+    txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ADVERSÁRIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+    txt += linha('Adversário', v('c-adv-nome'));
+    txt += linha('Formação adversária', v('c-adv-form'));
+    txt += linha('Data', v('c-adv-data'));
+    txt += linha('Local', v('c-adv-local'));
+    txt += linha('Estilo de jogo', v('c-adv-estilo'));
+    txt += linha('Competição / Fase', v('c-adv-comp'));
+    txt += linha('Jogador perigoso 1', v('c-adv-j1'));
+    txt += linha('Jogador perigoso 2', v('c-adv-j2'));
+    txt += linha('Jogador perigoso 3', v('c-adv-j3'));
+    txt += linha('Articulador do jogo', v('c-adv-art'));
+    txt += linha('Observações', v('c-adv-obs'));
+  }
+
+  if(v('pj-geral') || v('pj-resultado')) {
+    txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PÓS-JOGO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+    txt += linha('Placar', (n('pj-nos')||'0') + ' x ' + (n('pj-adv')||'0'));
+    txt += linha('Resultado', v('pj-resultado'));
+    txt += linha('Local', v('pj-local'));
+    txt += linha('Visão geral', v('pj-geral'));
+    txt += linha('Pontos positivos', v('pj-pos'));
+    txt += linha('Pontos de atenção', v('pj-atencao'));
+    txt += linha('Análise defensiva', v('pj-def'));
+    txt += linha('Análise ofensiva', v('pj-of'));
+    txt += linha('Recomendações', v('pj-rec'));
+  }
+
+  txt += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES PARA O RELATÓRIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gere um relatório tático completo com:
+
+1. VISÃO GERAL DO TIME — identidade tática e momento
+2. ANÁLISE DEFENSIVA — organização, linhas, transições
+3. ANÁLISE OFENSIVA — construção, progressão, criação, finalização
+4. ANÁLISE DO ADVERSÁRIO — forças, vulnerabilidades e jogadores-chave (se informado)
+5. MÉTRICAS INTERPRETADAS — contextualize os dados coletivos
+6. PONTOS FORTES DO TIME
+7. PONTOS DE ATENÇÃO
+8. RECOMENDAÇÕES TÁTICAS — ajustes e próximos passos
+
+Terminologia técnica do futebol brasileiro. Tom para comissão técnica.
+Marca: Potencial Sports.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  document.getElementById('output-clube').textContent = txt;
+  showToast('✓ Texto gerado! Copie e cole no Claude.');
+}
+
+// ============ ANÁLISE IA — PROSPECÇÃO ============
+async function analisarProscpeccao() {
+  const nome = v('p-nome') || 'Atleta';
+  const resultEl = document.getElementById('ia-result');
+
+  resultEl.innerHTML = `<div class="ia-loading"><div class="dot-pulse"><span></span><span></span><span></span></div> Analisando ${nome}...</div>`;
+
+  const prompt = `Você é um scout e analista de desempenho sênior da Potencial Sports, especializado em prospecção de atletas no futebol brasileiro.
+
+Analise o atleta abaixo e gere um PARECER DE PROSPECÇÃO completo e profissional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DADOS DO ATLETA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nome: ${v('p-nome') || 'Não informado'}
+Idade: ${v('p-idade') || 'Não informada'}
+Clube atual: ${v('p-clube') || 'Não informado'}
+Nível competitivo: ${v('p-nivel') || 'Não informado'}
+Posição: ${v('p-posicao') || 'Não informada'}
+Perfil na posição: ${v('p-perfil') || 'Não informado'}
+Pé dominante: ${v('p-pe') || 'Não informado'}
+Altura: ${v('p-altura') ? v('p-altura')+'cm' : 'Não informada'}
+Clube prospectando: ${v('p-clube-dest') || 'Não informado'}
+Sistema do clube prospectando: ${v('p-sistema-clube') || 'Não informado'}
+Valor de mercado estimado: ${v('p-valor') || 'Não informado'}
+Risco de lesão: ${v('p-risco') || 'Não informado'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DADOS DE DESEMPENHO (${v('p-partidas') || '?'} partidas / ${v('p-minutos') || '?'} min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gols: ${n('p-gols') || '-'}
+Assistências: ${n('p-assis') || '-'}
+xG: ${n('p-xg') || '-'}
+Passes certos (%): ${n('p-passes') || '-'}
+Duelos ganhos (%): ${n('p-duelos') || '-'}
+Dribles completados: ${n('p-dribles') || '-'}
+Velocidade máxima: ${n('p-vel') ? n('p-vel')+'km/h' : '-'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBSERVAÇÕES DO ANALISTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${v('p-obs') || 'Sem observações de vídeo.'}
+
+Contexto: ${v('p-contexto') || 'Não informado'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gere um PARECER DE PROSPECÇÃO com:
+
+1. RESUMO DO ATLETA — perfil em 3 a 5 linhas
+2. ADEQUAÇÃO AO SISTEMA — o atleta serve ao sistema e clube prospectando? Por quê?
+3. ANÁLISE DO NÍVEL COMPETITIVO — como o contexto afeta a leitura dos dados?
+4. POTENCIAL DE DESENVOLVIMENTO — considerando idade e trajetória, qual o teto?
+5. PONTOS FORTES — evidenciados por dados e observações
+6. PONTOS DE ATENÇÃO — gaps técnicos, físicos ou comportamentais
+7. RISCOS — lesão, adaptação, custo-benefício
+8. PARECER FINAL — escolha uma das opções e justifique em até 4 linhas:
+   ✅ RECOMENDAR CONTRATAÇÃO
+   👁 MONITORAR (reavaliar em X meses)
+   ❌ NÃO RECOMENDAR
+
+Use terminologia técnica do futebol brasileiro. Tom profissional de relatório de scout.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const texto = data.content?.[0]?.text || 'Erro ao obter resposta.';
+    resultEl.textContent = texto;
+  } catch(err) {
+    resultEl.textContent = '⚠ Erro de conexão. Verifique sua internet e tente novamente.\n\n' + err.message;
+  }
+}
 </script>
 </body>
 </html>
