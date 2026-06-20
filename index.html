@@ -666,6 +666,9 @@
   <button class="main-tab" onclick="switchMainTab('prospeccao', this)">
     <span class="tab-icon">🔍</span> Prospecção de Atletas
   </button>
+  <button class="main-tab" onclick="switchMainTab('ajuda', this)">
+    <span class="tab-icon">❓</span> Como usar
+  </button>
   <button class="main-tab" onclick="switchMainTab('feedback', this)">
     <span class="tab-icon">💬</span> Feedback
   </button>
@@ -712,6 +715,18 @@
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-metricas')"><span class="s-icon">📈</span> Dados de desempenho</button>
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-contexto')"><span class="s-icon">🌍</span> Contexto</button>
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-ia')"><span class="s-icon">📤</span> Gerar texto</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR AJUDA -->
+  <div class="sidebar hidden" id="sidebar-ajuda">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Seções</div>
+      <button class="sidebar-btn active" onclick="scrollTo('s-ajuda-fluxo')"><span class="s-icon">🔄</span> Como funciona</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-ajuda-modulos')"><span class="s-icon">🧭</span> Os 3 módulos</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-ajuda-ias')"><span class="s-icon">🤖</span> Quais IAs usar</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-ajuda-dicas')"><span class="s-icon">💡</span> Dicas para boas análises</button>
+      <button class="sidebar-btn" onclick="scrollTo('s-ajuda-faq')"><span class="s-icon">❓</span> Perguntas frequentes</button>
     </div>
   </div>
 
@@ -1215,6 +1230,124 @@
 
   </div><!-- fim tab-prospeccao -->
 
+  <!-- ========================= ABA AJUDA ========================= -->
+  <div class="main-content hidden" id="tab-ajuda">
+
+    <div class="page-header">
+      <div class="page-title">Como usar a ferramenta</div>
+      <div class="page-subtitle">Guia rápido para tirar o máximo proveito da Potencial Sports.</div>
+    </div>
+
+    <!-- Como funciona -->
+    <div class="section-block" id="s-ajuda-fluxo">
+      <div class="section-title">🔄 Como funciona, em 4 passos</div>
+      <div class="howto" style="margin-bottom:0;">
+        <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">Escolha o módulo certo: <strong>Atleta</strong>, <strong>Clube</strong> ou <strong>Prospecção</strong></div></div>
+        <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">Preencha os campos com os dados que você tem disponíveis</div></div>
+        <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">Clique em <strong>Gerar texto para IA</strong> e depois em <strong>Copiar texto</strong></div></div>
+        <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">Cole numa IA de sua preferência e receba o relatório completo</div></div>
+      </div>
+      <p style="color:var(--cinza-200);font-size:13px;margin-top:16px;line-height:1.7;">
+        A ferramenta não faz a análise sozinha — ela organiza seus dados num texto estruturado e pronto, no formato que qualquer IA entende bem. Você não precisa preencher tudo: quanto mais campos você completar, mais rica fica a análise, mas campos em branco simplesmente não entram no texto gerado.
+      </p>
+    </div>
+
+    <!-- Os 3 módulos -->
+    <div class="section-block" id="s-ajuda-modulos">
+      <div class="section-title">🧭 Os 3 módulos</div>
+      <div class="form-grid">
+        <div class="form-group" style="background:var(--cinza-900);border-radius:10px;padding:16px;border:1px solid var(--cinza-700);">
+          <label class="form-label" style="color:var(--verde);margin-bottom:8px;">⚽ Análise de Atleta</label>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Use para acompanhar um jogador específico ao longo do tempo — métricas técnicas, físicas, score, e evolução semana a semana ou jogo a jogo.</p>
+        </div>
+        <div class="form-group" style="background:var(--cinza-900);border-radius:10px;padding:16px;border:1px solid var(--cinza-700);">
+          <label class="form-label" style="color:var(--verde);margin-bottom:8px;">🏟️ Análise de Clube</label>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Use para times inteiros — escalação, métricas coletivas, análise de adversário e relatório pós-jogo completo.</p>
+        </div>
+        <div class="form-group" style="background:var(--cinza-900);border-radius:10px;padding:16px;border:1px solid var(--cinza-700);">
+          <label class="form-label" style="color:var(--verde);margin-bottom:8px;">🔍 Prospecção de Atletas</label>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Use quando estiver avaliando um atleta para possível contratação — gera parecer com adequação ao sistema, potencial, riscos e recomendação final.</p>
+        </div>
+        <div class="form-group" style="background:var(--cinza-900);border-radius:10px;padding:16px;border:1px solid var(--cinza-700);">
+          <label class="form-label" style="color:var(--verde);margin-bottom:8px;">💬 Feedback</label>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Conta pra gente como foi sua experiência. Leva 2 minutos e ajuda a deixar a ferramenta melhor pra todo mundo.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quais IAs usar -->
+    <div class="section-block" id="s-ajuda-ias">
+      <div class="section-title">🤖 Em qual IA colar o texto?</div>
+      <p style="color:var(--cinza-200);font-size:13px;margin-bottom:14px;line-height:1.7;">
+        O texto gerado pela ferramenta funciona em <strong>qualquer IA de conversa</strong> — não precisa ser o Claude. Use a que você já tem costume de usar:
+      </p>
+      <div class="form-grid-3">
+        <div class="form-group" style="text-align:center;background:var(--cinza-900);border-radius:10px;padding:14px;border:1px solid var(--cinza-700);">
+          <div style="font-size:13px;font-weight:600;color:var(--branco);">Claude</div>
+          <div style="font-size:11px;color:var(--cinza-400);margin-top:4px;">claude.ai — conta grátis</div>
+        </div>
+        <div class="form-group" style="text-align:center;background:var(--cinza-900);border-radius:10px;padding:14px;border:1px solid var(--cinza-700);">
+          <div style="font-size:13px;font-weight:600;color:var(--branco);">ChatGPT</div>
+          <div style="font-size:11px;color:var(--cinza-400);margin-top:4px;">chatgpt.com — conta grátis</div>
+        </div>
+        <div class="form-group" style="text-align:center;background:var(--cinza-900);border-radius:10px;padding:14px;border:1px solid var(--cinza-700);">
+          <div style="font-size:13px;font-weight:600;color:var(--branco);">Gemini</div>
+          <div style="font-size:11px;color:var(--cinza-400);margin-top:4px;">gemini.google.com — conta grátis</div>
+        </div>
+      </div>
+      <p style="color:var(--cinza-400);font-size:12px;margin-top:14px;line-height:1.6;">
+        A qualidade da resposta pode variar um pouco entre elas, mas todas conseguem interpretar o texto gerado e devolver o relatório completo.
+      </p>
+    </div>
+
+    <!-- Dicas -->
+    <div class="section-block" id="s-ajuda-dicas">
+      <div class="section-title">💡 Dicas para análises melhores</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-dim);color:var(--verde);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</div>
+          <p style="font-size:13px;color:var(--cinza-200);line-height:1.6;">Preencha o campo de <strong>observações</strong> sempre que possível — é onde você descreve o que viu em vídeo, e costuma ser a parte que mais enriquece a análise.</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-dim);color:var(--verde);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</div>
+          <p style="font-size:13px;color:var(--cinza-200);line-height:1.6;">Não tem problema deixar campos em branco. A ferramenta só inclui no texto o que você de fato preencheu.</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-dim);color:var(--verde);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">3</div>
+          <p style="font-size:13px;color:var(--cinza-200);line-height:1.6;">Depois de receber a resposta da IA, você pode continuar a conversa pedindo ajustes — "deixe mais direto", "aprofunde o ponto X", "compare com a semana anterior" etc.</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--verde-dim);color:var(--verde);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">4</div>
+          <p style="font-size:13px;color:var(--cinza-200);line-height:1.6;">Use o botão <strong>Baixar .txt</strong> se quiser guardar o texto gerado antes de colar na IA — útil para manter um histórico próprio.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section-block" id="s-ajuda-faq">
+      <div class="section-title">❓ Perguntas frequentes</div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--branco);margin-bottom:4px;">Preciso pagar para usar a ferramenta ou a IA?</p>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Não. A ferramenta é gratuita nessa fase de testes, e as contas de Claude, ChatGPT e Gemini têm planos gratuitos que já dão conta do uso normal.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--branco);margin-bottom:4px;">Os dados que eu preencho ficam salvos em algum lugar?</p>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Não. Tudo fica só no seu navegador, na sua sessão. Se fechar a aba sem copiar o texto, os dados se perdem — recomendamos gerar o texto e copiar (ou baixar) antes de sair.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--branco);margin-bottom:4px;">Posso usar para mais de um atleta ou time?</p>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Sim, à vontade. Use o botão "Limpar formulário" entre uma análise e outra para começar do zero.</p>
+        </div>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--branco);margin-bottom:4px;">Encontrei um problema ou tenho uma sugestão. O que fazer?</p>
+          <p style="font-size:12px;color:var(--cinza-200);line-height:1.6;">Vá até a aba <strong>Feedback</strong> no menu acima e conta pra gente. Leva 2 minutos e é a forma mais direta de melhorar a ferramenta.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- fim tab-ajuda -->
+
   <!-- ========================= ABA FEEDBACK ========================= -->
   <div class="main-content hidden" id="tab-feedback">
 
@@ -1494,7 +1627,7 @@ verificarSessao();
 
 
 function switchMainTab(tab, btn) {
-  ['atleta','clube','prospeccao','feedback'].forEach(t => {
+  ['atleta','clube','prospeccao','ajuda','feedback'].forEach(t => {
     document.getElementById('tab-'+t).classList.add('hidden');
     document.getElementById('sidebar-'+t).classList.add('hidden');
   });
