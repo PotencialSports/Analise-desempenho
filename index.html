@@ -598,6 +598,9 @@
     <span class="tab-icon">🔍</span> Prospecção de Atletas
     <span style="font-size:9px;background:var(--verde);color:var(--preto);padding:2px 6px;border-radius:10px;font-weight:700;margin-left:2px;">IA</span>
   </button>
+  <button class="main-tab" onclick="switchMainTab('feedback', this)">
+    <span class="tab-icon">💬</span> Feedback
+  </button>
 </div>
 
 <div class="app-body">
@@ -641,6 +644,14 @@
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-metricas')"><span class="s-icon">📈</span> Dados de desempenho</button>
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-contexto')"><span class="s-icon">🌍</span> Contexto</button>
       <button class="sidebar-btn" onclick="scrollTo('s-prosp-ia')"><span class="s-icon">🤖</span> Análise IA</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR FEEDBACK -->
+  <div class="sidebar hidden" id="sidebar-feedback">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Sobre</div>
+      <button class="sidebar-btn active"><span class="s-icon">💬</span> Dar feedback</button>
     </div>
   </div>
 
@@ -1138,6 +1149,135 @@
 
   </div><!-- fim tab-prospeccao -->
 
+  <!-- ========================= ABA FEEDBACK ========================= -->
+  <div class="main-content hidden" id="tab-feedback">
+
+    <div class="page-header">
+      <div class="page-title">Ajude a melhorar a ferramenta</div>
+      <div class="page-subtitle">Leva menos de 2 minutos. Sua opinião vai direto para o desenvolvimento do produto.</div>
+    </div>
+
+    <div class="howto">
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">Responda as perguntas rápidas</div></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">Clique em <strong>Enviar feedback</strong></div></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">O arquivo é baixado automaticamente</div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">Envie o .txt por WhatsApp para o analista</div></div>
+    </div>
+
+    <!-- Perfil -->
+    <div class="section-block">
+      <div class="section-title">👤 Sua situação atual</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nome (opcional)</label>
+          <input class="form-input" id="fb-nome" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Situação</label>
+          <div class="perfil-chips" id="fb-situacao-chips">
+            <div class="perfil-chip" onclick="selChipGroup(this,'fb-situacao-chips','fb-situacao')">Analista em clube</div>
+            <div class="perfil-chip" onclick="selChipGroup(this,'fb-situacao-chips','fb-situacao')">Em formação</div>
+            <div class="perfil-chip" onclick="selChipGroup(this,'fb-situacao-chips','fb-situacao')">Comissão técnica</div>
+            <div class="perfil-chip" onclick="selChipGroup(this,'fb-situacao-chips','fb-situacao')">Estudante / entusiasta</div>
+          </div>
+          <input type="hidden" id="fb-situacao">
+        </div>
+      </div>
+    </div>
+
+    <!-- Experiência -->
+    <div class="section-block">
+      <div class="section-title">⭐ Experiência de uso</div>
+      <div class="form-group" style="margin-bottom:18px;">
+        <label class="form-label">Facilidade de uso (1 = difícil · 5 = fácil)</label>
+        <div class="risco-bar" id="fb-facilidade-bar">
+          <div class="risco-item baixo" onclick="selEscala(this,'fb-facilidade-bar','fb-facilidade','1')">1</div>
+          <div class="risco-item baixo" onclick="selEscala(this,'fb-facilidade-bar','fb-facilidade','2')">2</div>
+          <div class="risco-item medio" onclick="selEscala(this,'fb-facilidade-bar','fb-facilidade','3')">3</div>
+          <div class="risco-item baixo" onclick="selEscala(this,'fb-facilidade-bar','fb-facilidade','4')">4</div>
+          <div class="risco-item baixo" onclick="selEscala(this,'fb-facilidade-bar','fb-facilidade','5')">5</div>
+        </div>
+        <input type="hidden" id="fb-facilidade">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Qual módulo mais te impressionou?</label>
+        <div class="perfil-chips" id="fb-modulo-chips">
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-modulo-chips','fb-modulo')">Análise de atleta</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-modulo-chips','fb-modulo')">Análise de clube</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-modulo-chips','fb-modulo')">Prospecção com IA</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-modulo-chips','fb-modulo')">Pós-jogo</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-modulo-chips','fb-modulo')">Texto gerado para o Claude</div>
+        </div>
+        <input type="hidden" id="fb-modulo">
+      </div>
+    </div>
+
+    <!-- O que faltou -->
+    <div class="section-block">
+      <div class="section-title">🛠️ O que pode melhorar</div>
+      <div class="form-group" style="margin-bottom:18px;">
+        <label class="form-label">O que você sentiu falta? (selecione quantos quiser)</label>
+        <div class="perfil-chips" id="fb-faltou-chips">
+          <div class="perfil-chip" onclick="toggleChip(this)">Dashboard com gráficos</div>
+          <div class="perfil-chip" onclick="toggleChip(this)">Exportar PDF direto</div>
+          <div class="perfil-chip" onclick="toggleChip(this)">App para celular</div>
+          <div class="perfil-chip" onclick="toggleChip(this)">Import CSV (GPS)</div>
+          <div class="perfil-chip" onclick="toggleChip(this)">Histórico salvo</div>
+          <div class="perfil-chip" onclick="toggleChip(this)">Mais métricas por posição</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Uma coisa que você mudaria (a mais importante)</label>
+        <textarea class="form-textarea" id="fb-mudaria" placeholder="Seja direto — qual é a principal melhoria que transformaria essa ferramenta?"></textarea>
+      </div>
+    </div>
+
+    <!-- NPS e valor -->
+    <div class="section-block">
+      <div class="section-title">📊 Valor e recomendação</div>
+      <div class="form-group" style="margin-bottom:18px;">
+        <label class="form-label">De 0 a 10: chance de recomendar para outro analista</label>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;" id="fb-nps-bar">
+          <div class="risco-item alto" onclick="selNPS(this,'0')" style="flex:1;min-width:30px;">0</div>
+          <div class="risco-item alto" onclick="selNPS(this,'1')" style="flex:1;min-width:30px;">1</div>
+          <div class="risco-item alto" onclick="selNPS(this,'2')" style="flex:1;min-width:30px;">2</div>
+          <div class="risco-item alto" onclick="selNPS(this,'3')" style="flex:1;min-width:30px;">3</div>
+          <div class="risco-item alto" onclick="selNPS(this,'4')" style="flex:1;min-width:30px;">4</div>
+          <div class="risco-item alto" onclick="selNPS(this,'5')" style="flex:1;min-width:30px;">5</div>
+          <div class="risco-item alto" onclick="selNPS(this,'6')" style="flex:1;min-width:30px;">6</div>
+          <div class="risco-item medio" onclick="selNPS(this,'7')" style="flex:1;min-width:30px;">7</div>
+          <div class="risco-item medio" onclick="selNPS(this,'8')" style="flex:1;min-width:30px;">8</div>
+          <div class="risco-item baixo" onclick="selNPS(this,'9')" style="flex:1;min-width:30px;">9</div>
+          <div class="risco-item baixo" onclick="selNPS(this,'10')" style="flex:1;min-width:30px;">10</div>
+        </div>
+        <input type="hidden" id="fb-nps">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--cinza-400);margin-top:4px;"><span>Não recomendaria</span><span>Recomendaria com certeza</span></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pagaria por acesso completo a essa ferramenta?</label>
+        <div class="perfil-chips" id="fb-pagaria-chips">
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-pagaria-chips','fb-pagaria')">Sim, mensalidade</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-pagaria-chips','fb-pagaria')">Sim, acesso único</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-pagaria-chips','fb-pagaria')">Só se o clube pagasse</div>
+          <div class="perfil-chip" onclick="selChipGroup(this,'fb-pagaria-chips','fb-pagaria')">Não pagaria</div>
+        </div>
+        <input type="hidden" id="fb-pagaria">
+      </div>
+    </div>
+
+    <!-- Envio -->
+    <div class="section-block">
+      <div class="section-title">📤 Enviar</div>
+      <div class="btn-row" style="margin-bottom:12px;">
+        <button class="btn btn-primary" onclick="enviarFeedback()">⚡ Enviar feedback e baixar resultado</button>
+      </div>
+      <div id="fb-ok" class="hidden" style="background:var(--verde-dim);border:1px solid var(--verde);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--verde);">
+        ✓ Obrigado! O arquivo de feedback foi baixado automaticamente. Envie-o por WhatsApp ou e-mail.
+      </div>
+    </div>
+
+  </div><!-- fim tab-feedback -->
+
 </div><!-- fim app-body -->
 
 <div class="toast" id="toast">✓ Copiado com sucesso!</div>
@@ -1145,7 +1285,7 @@
 <script>
 // ============ NAVEGAÇÃO ============
 function switchMainTab(tab, btn) {
-  ['atleta','clube','prospeccao'].forEach(t => {
+  ['atleta','clube','prospeccao','feedback'].forEach(t => {
     document.getElementById('tab-'+t).classList.add('hidden');
     document.getElementById('sidebar-'+t).classList.add('hidden');
   });
@@ -1597,6 +1737,68 @@ Use terminologia técnica do futebol brasileiro. Tom profissional de relatório 
   } catch(err) {
     resultEl.textContent = '⚠ Erro de conexão. Verifique sua internet e tente novamente.\n\n' + err.message;
   }
+}
+// ============ FEEDBACK ============
+function selChipGroup(el, groupId, hiddenId) {
+  document.querySelectorAll('#'+groupId+' .perfil-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById(hiddenId).value = el.textContent.trim();
+}
+
+function toggleChip(el) {
+  el.classList.toggle('sel');
+}
+
+function selEscala(el, barId, hiddenId, val) {
+  document.querySelectorAll('#'+barId+' .risco-item').forEach(r => {
+    r.classList.remove('sel-baixo','sel-medio','sel-alto');
+  });
+  const cls = el.classList.contains('baixo') ? 'sel-baixo' : el.classList.contains('medio') ? 'sel-medio' : 'sel-alto';
+  el.classList.add(cls);
+  document.getElementById(hiddenId).value = val;
+}
+
+function selNPS(el, val) {
+  document.querySelectorAll('#fb-nps-bar .risco-item').forEach(r => {
+    r.classList.remove('sel-baixo','sel-medio','sel-alto');
+  });
+  const cls = el.classList.contains('baixo') ? 'sel-baixo' : el.classList.contains('medio') ? 'sel-medio' : 'sel-alto';
+  el.classList.add(cls);
+  document.getElementById('fb-nps').value = val;
+}
+
+function getFaltouChips() {
+  const sels = document.querySelectorAll('#fb-faltou-chips .perfil-chip.sel');
+  if(!sels.length) return null;
+  return Array.from(sels).map(s => s.textContent.trim()).join(', ');
+}
+
+function enviarFeedback() {
+  let txt = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — FEEDBACK DE ANALISTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+  txt += linha('Data', new Date().toLocaleDateString('pt-BR'));
+  txt += linha('Nome', v('fb-nome') || 'Anônimo');
+  txt += linha('Situação', v('fb-situacao'));
+  txt += linha('Facilidade de uso', v('fb-facilidade') ? v('fb-facilidade')+'/5' : null);
+  txt += linha('Módulo destaque', v('fb-modulo'));
+  txt += linha('O que faltou', getFaltouChips());
+  txt += linha('Uma coisa que mudaria', v('fb-mudaria'));
+  txt += linha('NPS', v('fb-nps') ? v('fb-nps')+'/10' : null);
+  txt += linha('Pagaria', v('fb-pagaria'));
+  txt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+potencialsports.com.br
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'feedback_potencialsports_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+
+  document.getElementById('fb-ok').classList.remove('hidden');
+  showToast('✓ Feedback enviado! Obrigado.');
 }
 </script>
 </body>
