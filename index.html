@@ -577,6 +577,25 @@
     padding: 11px 13px;
   }
   .login-field input:focus { outline: none; border-color: var(--verde); }
+  .login-pw-wrap { position: relative; }
+  .login-pw-wrap input { padding-right: 42px; }
+  .login-pw-toggle {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--cinza-400);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.15s;
+  }
+  .login-pw-toggle:hover { color: var(--verde); }
   .login-btn {
     width: 100%;
     padding: 12px;
@@ -636,7 +655,15 @@
     </div>
     <div class="login-field">
       <label>Senha</label>
-      <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password">
+      <div class="login-pw-wrap">
+        <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password">
+        <button type="button" class="login-pw-toggle" id="login-pw-toggle" onclick="toggleSenha()" aria-label="Mostrar senha">
+          <svg id="eye-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
     </div>
     <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar</button>
 
@@ -1610,6 +1637,20 @@ async function fazerLogin() {
   }
 
   mostrarApp(data.user);
+}
+
+function toggleSenha() {
+  const input = document.getElementById('login-senha');
+  const icon = document.getElementById('eye-icon');
+  const btn = document.getElementById('login-pw-toggle');
+  const mostrando = input.type === 'text';
+
+  input.type = mostrando ? 'password' : 'text';
+  btn.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+
+  icon.innerHTML = mostrando
+    ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3"></circle>'
+    : '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.5 18.5 0 0 1 4.22-5.06M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
 }
 
 async function fazerLogout() {
