@@ -394,9 +394,9 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   </div>
 
   <div class="sblk" id="sa-ia">
-    <div class="stitle">🤖 Análise com IA + Radar de Performance</div>
-    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">A IA gera o relatório completo e o radar de performance com categorias ajustadas automaticamente para a posição.</p>
-    <div class="br"><button class="btn bp" onclick="gerarAtleta()">🤖 Gerar análise completa</button></div>
+    <div class="stitle">⚡ Gerar texto estruturado</div>
+    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">Preencha os campos acima e clique em gerar. O texto estruturado aparece abaixo — copie e cole no Claude, ChatGPT ou Gemini para receber o relatório completo.</p>
+    <div class="br"><button class="btn bp" onclick="gerarAtleta()">⚡ Gerar texto para IA</button></div>
     <div id="atleta-out" class="hidden">
       <div class="rwrap">
         <div class="rcard"><div class="rt" id="r-nome">—</div><div class="rs" id="r-pos">—</div><canvas class="rc" id="radar-a" width="320" height="280"></canvas></div>
@@ -405,7 +405,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
         </div>
       </div>
       <div class="iabox">
-        <div class="iatitle">📊 Relatório de Desempenho — Potencial Sports</div>
+        <div class="iatitle">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
         <div class="iares" id="ia-a"></div>
         <div class="fbbar">
           <span class="fbl">Avaliar:</span>
@@ -502,10 +502,10 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
     </div>
   </div>
   <div class="sblk" id="sc-ia">
-    <div class="stitle">🤖 Análise com IA</div>
-    <div class="br"><button class="btn bp" onclick="gerarClube()">🤖 Gerar análise tática</button></div>
+    <div class="stitle">⚡ Gerar texto estruturado</div>
+    <div class="br"><button class="btn bp" onclick="gerarClube()">⚡ Gerar texto para IA</button></div>
     <div class="iabox hidden" id="clube-out">
-      <div class="iatitle">🏟️ Análise Tática — Potencial Sports</div>
+      <div class="iatitle">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
       <div class="iares" id="ia-c"></div>
       <div class="fbbar">
         <span class="fbl">Avaliar:</span>
@@ -583,10 +583,10 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
     </div>
   </div>
   <div class="sblk" id="sp-ia">
-    <div class="stitle">🤖 Parecer de prospecção</div>
-    <div class="br"><button class="btn bp" onclick="gerarProsp()">🤖 Gerar parecer</button></div>
+    <div class="stitle">⚡ Gerar texto estruturado</div>
+    <div class="br"><button class="btn bp" onclick="gerarProsp()">⚡ Gerar texto para IA</button></div>
     <div class="iabox hidden" id="prosp-out">
-      <div class="iatitle">🔍 Parecer de Prospecção — Potencial Sports</div>
+      <div class="iatitle">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
       <div class="iares" id="ia-p"></div>
       <div class="fbbar">
         <span class="fbl">Avaliar:</span>
@@ -1077,59 +1077,46 @@ async function gerarAtleta(){
   const out=document.getElementById('atleta-out');
   const resEl=document.getElementById('ia-a');
   out.classList.remove('hidden');
-  resEl.innerHTML=`<div class="ild"><div class="dp"><span></span><span></span><span></span></div> Gerando análise e radar para ${nome}...</div>`;
   document.getElementById('r-nome').textContent=nome;
-  document.getElementById('r-pos').textContent=`${v('a-pos')} • ${v('a-perf')||''}`;
+  document.getElementById('r-pos').textContent=v('a-pos')+' • '+(v('a-perf')||'');
   gt('sa-ia');
+  const texto=mkPromptAtleta();
+  resEl.textContent=texto;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:mkPromptAtleta()}]})});
-    const data=await res.json();
-    const full=data.content?.[0]?.text||'Erro.';
-    let rd=null;
-    const match=full.match(/SCORES_JSON:(\{[\s\S]*?\})(?=\s*\n|\s*##|\s*1\.)/);
-    if(match){try{rd=JSON.parse(match[1]);}catch(e){}}
-    const texto=full.replace(/SCORES_JSON:\{[\s\S]*?\}(?=\s*\n|\s*##|\s*1\.)/,'').replace(/^##\s*BLOCO[^\n]*\n/gm,'').trim();
-    resEl.textContent=texto;
-    if(rd?.categorias?.length){
-      lastRD=rd;
-      setTimeout(()=>desenharRadar('radar-a',rd.categorias.map(c=>c.categoria),rd.categorias.map(c=>c.valor),nome),100);
-      renderScores('scores-a',rd.categorias,'sg-n','sg-d');
-    }
-    const mets=coletarMetricasAtleta();
-    const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'atleta',nome,posicao:v('a-pos'),periodo:v('a-per'),dados:{nome,pos:v('a-pos'),perf:v('a-perf'),clube:v('a-clube'),cat:v('a-cat'),periodo:v('a-per'),comp:v('a-comp'),score:v('a-sc'),radarData:rd,metricas:mets},relatorio_ia:texto,score:parseInt(v('a-sc'))||null}).select().single();
+    const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'atleta',nome,posicao:v('a-pos'),periodo:v('a-per'),dados:{nome,pos:v('a-pos'),perf:v('a-perf'),clube:v('a-clube'),cat:v('a-cat'),score:v('a-sc')},relatorio_ia:texto,score:parseInt(v('a-sc'))||null}).select().single();
     if(rel)rIds.atleta=rel.id;
-    showToast('✓ Análise gerada e salva!');
-  }catch(err){resEl.textContent='⚠ Erro de conexão.\n\n'+err.message;}
+  }catch(e){}
+  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
 }
 
 async function gerarClube(){
   const nome=v('c-nome')||'Clube';
-  const out=document.getElementById('clube-out');const resEl=document.getElementById('ia-c');
+  const out=document.getElementById('clube-out');
+  const resEl=document.getElementById('ia-c');
   out.classList.remove('hidden');
-  resEl.innerHTML=`<div class="ild"><div class="dp"><span></span><span></span><span></span></div> Analisando ${nome}...</div>`;
   gt('sc-ia');
+  const texto=mkPromptClube();
+  resEl.textContent=texto;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:mkPromptClube()}]})});
-    const data=await res.json();const texto=data.content?.[0]?.text||'Erro.';
-    resEl.textContent=texto;
     const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'clube',nome,posicao:v('c-form'),dados:{nome,form:v('c-form'),comp:v('c-comp')},relatorio_ia:texto}).select().single();
-    if(rel)rIds.clube=rel.id;showToast('✓ Análise tática gerada!');
-  }catch(err){resEl.textContent='⚠ Erro.\n\n'+err.message;}
+    if(rel)rIds.clube=rel.id;
+  }catch(e){}
+  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
 }
 
 async function gerarProsp(){
   const nome=v('p-nome')||'Atleta';
-  const out=document.getElementById('prosp-out');const resEl=document.getElementById('ia-p');
+  const out=document.getElementById('prosp-out');
+  const resEl=document.getElementById('ia-p');
   out.classList.remove('hidden');
-  resEl.innerHTML=`<div class="ild"><div class="dp"><span></span><span></span><span></span></div> Avaliando ${nome}...</div>`;
   gt('sp-ia');
+  const texto=mkPromptProsp();
+  resEl.textContent=texto;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:mkPromptProsp()}]})});
-    const data=await res.json();const texto=data.content?.[0]?.text||'Erro.';
-    resEl.textContent=texto;
     const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'prospeccao',nome,posicao:v('p-pos'),dados:{nome,pos:v('p-pos'),clube:v('p-clube'),nivel:v('p-niv'),risco:v('p-risco')},relatorio_ia:texto}).select().single();
-    if(rel)rIds.prosp=rel.id;showToast('✓ Parecer gerado!');
-  }catch(err){resEl.textContent='⚠ Erro.\n\n'+err.message;}
+    if(rel)rIds.prosp=rel.id;
+  }catch(e){}
+  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
 }
 
 // ===== FEEDBACK =====
