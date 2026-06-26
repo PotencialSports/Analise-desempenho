@@ -185,6 +185,33 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 .fb-bar-fill{height:100%;background:var(--verde);border-radius:4px;}
 .empty-state{text-align:center;padding:40px 20px;color:var(--c4);}
 
+
+/* EVOLUÇÃO */
+.evo-modal{background:var(--c9);border:1px solid var(--c7);border-radius:16px;width:100%;max-width:900px;max-height:94vh;overflow-y:auto;}
+.evo-tabs{display:flex;gap:4px;background:var(--c8);border-radius:8px;padding:4px;margin-bottom:20px;}
+.evo-tab{flex:1;padding:8px;border:none;background:none;color:var(--c4);font-size:13px;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;text-align:center;}
+.evo-tab.active{background:var(--verde);color:var(--p);font-weight:600;}
+.evo-section{display:none;}
+.evo-section.active{display:block;}
+.evo-periodo{background:var(--c8);border:1px solid var(--c7);border-radius:10px;padding:16px;margin-bottom:10px;}
+.evo-periodo-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.evo-periodo-nome{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--b);}
+.evo-periodo-data{font-size:11px;color:var(--c4);}
+.comp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.comp-lbl{font-size:12px;color:var(--c2);min-width:140px;}
+.comp-bar-wrap{flex:1;background:var(--c7);border-radius:4px;height:6px;overflow:hidden;}
+.comp-bar{height:100%;border-radius:4px;transition:width .6s ease;}
+.comp-val{font-size:12px;font-weight:600;min-width:40px;text-align:right;}
+.comp-arrow{font-size:14px;min-width:20px;text-align:center;}
+.seta-up{color:#00C853;}
+.seta-dn{color:#FF4444;}
+.seta-eq{color:#666;}
+.chart-wrap{background:var(--c8);border:1px solid var(--c7);border-radius:12px;padding:20px;margin-bottom:16px;}
+.chart-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--b);margin-bottom:14px;}
+.metric-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.msel{padding:5px 12px;border-radius:20px;border:1px solid var(--c6);background:none;color:var(--c2);font-size:11px;cursor:pointer;transition:all .15s;}
+.msel.active{background:var(--verde);border-color:var(--verde);color:var(--p);font-weight:600;}
+
 .toast{position:fixed;bottom:28px;right:28px;background:var(--verde);color:var(--p);font-weight:600;font-size:13px;padding:12px 20px;border-radius:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 .hidden{display:none!important;}
@@ -633,6 +660,60 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 </div>
 
 </div>
+</div>
+
+
+<!-- MODAL EVOLUÇÃO -->
+<div class="mov hidden" id="mEvo" onclick="if(event.target===this)fEvo()">
+  <div class="evo-modal">
+    <div class="mhdr">
+      <div>
+        <div class="mttl" id="eNome">Evolução do atleta</div>
+        <div style="font-size:12px;color:var(--c4);margin-top:2px;" id="ePos">—</div>
+      </div>
+      <button class="mcls" onclick="fEvo()">✕</button>
+    </div>
+    <div class="mbdy">
+      <div class="evo-tabs">
+        <button class="evo-tab active" onclick="swEvo('grafico',this)">📈 Gráfico de evolução</button>
+        <button class="evo-tab" onclick="swEvo('comparar',this)">⚖️ Comparar períodos</button>
+        <button class="evo-tab" onclick="swEvo('historico',this)">📋 Todos os períodos</button>
+      </div>
+
+      <!-- GRÁFICO -->
+      <div class="evo-section active" id="evo-grafico">
+        <div class="chart-wrap">
+          <div class="chart-title">Score geral ao longo do tempo</div>
+          <canvas id="evo-chart-score" height="80"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-title">Métricas por período</div>
+          <div class="metric-selector" id="evo-met-sel"></div>
+          <canvas id="evo-chart-met" height="80"></canvas>
+        </div>
+      </div>
+
+      <!-- COMPARAR -->
+      <div class="evo-section" id="evo-comparar">
+        <div class="fg" style="margin-bottom:16px;">
+          <div class="fgrp">
+            <label class="flbl">Período A</label>
+            <select class="fsel" id="evo-perA" onchange="renderComparativo()"></select>
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Período B</label>
+            <select class="fsel" id="evo-perB" onchange="renderComparativo()"></select>
+          </div>
+        </div>
+        <div id="evo-comp-result"></div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div class="evo-section" id="evo-historico">
+        <div id="evo-hist-lista"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -1182,7 +1263,9 @@ function renderHist(){
   if(!lista.length){cont.innerHTML=`<div class="hemp"><div style="font-size:48px;margin-bottom:12px;">📂</div><div>Nenhum relatório encontrado.</div></div>`;return;}
   const tmap={atleta:'ta',clube:'tc',prospeccao:'tpr'};
   const lmap={atleta:'Atleta',clube:'Clube',prospeccao:'Prospecção'};
-  cont.innerHTML=lista.map(r=>`<div class="hc" onclick="abrirModal('${r.id}')"><div class="hct"><div class="hcn">${r.nome||'Sem nome'}</div><div class="hcd">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div></div><div class="hcm"><span class="htag ${tmap[r.tipo]||''}">${lmap[r.tipo]||r.tipo}</span>${r.posicao?`<span class="htag" style="background:var(--c7);color:var(--c2);">${r.posicao}</span>`:''} ${r.score?`<span class="htag" style="background:var(--vd);color:var(--verde);">Score: ${r.score}</span>`:''} ${r.dados?.radarData?`<span class="htag" style="background:#7C4DFF22;color:#B39DDB;">📊 Radar</span>`:''}</div><div class="hcp">${r.relatorio_ia?.substring(0,180)||''}...</div></div>`).join('');
+  cont.innerHTML=lista.map(r=>{
+    const btnEvo=r.tipo==='atleta'?`<button class="btn bg" style="padding:5px 10px;font-size:11px;margin-left:auto;" onclick="event.stopPropagation();abrirEvolucao('${r.nome}','${r.posicao||''}')">📈 Evolução</button>`:'';
+    return `<div class="hc" onclick="abrirModal('${r.id}')"><div class="hct"><div class="hcn">${r.nome||'Sem nome'}</div><div style="display:flex;align-items:center;gap:8px;"><div class="hcd">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div>${btnEvo}</div></div><div class="hct"><div class="hcn">${r.nome||'Sem nome'}</div><div class="hcd">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div></div><div class="hcm"><span class="htag ${tmap[r.tipo]||''}">${lmap[r.tipo]||r.tipo}</span>${r.posicao?`<span class="htag" style="background:var(--c7);color:var(--c2);">${r.posicao}</span>`:''} ${r.score?`<span class="htag" style="background:var(--vd);color:var(--verde);">Score: ${r.score}</span>`:''}</div><div class="hcp">${r.relatorio_ia?.substring(0,180)||''}...</div></div>`;}).join('');
 }
 
 function abrirModal(id){
@@ -1206,6 +1289,175 @@ async function delRel(){
   if(!cRid||!confirm('Excluir permanentemente?'))return;
   await supa.from('relatorios').delete().eq('id',cRid);
   todosR=todosR.filter(r=>r.id!==cRid);fModal();renderHist();showToast('Excluído.');
+}
+
+
+// ===== EVOLUÇÃO =====
+let evoChartScore=null,evoChartMet=null,evoAtleta=null,evoPos=null,evoRels=[];
+const MET_LABELS={
+  'a-duel':'Duelos (%)', 'a-aer':'Aéreos (%)', 'a-int':'Interceptações',
+  'a-paspct':'Passes (%)', 'a-gols':'Gols', 'a-assis':'Assistências',
+  'a-dist':'Distância (km)', 'a-vel':'Vel. máx (km/h)', 'a-spr':'Sprints',
+  'gps-dist':'Dist. GPS (km)', 'gps-vel':'Vel. GPS (km/h)', 'gps-pse':'PSE',
+};
+
+async function abrirEvolucao(nome, pos){
+  evoAtleta=nome; evoPos=pos;
+  document.getElementById('eNome').textContent=nome;
+  document.getElementById('ePos').textContent=pos||'Atleta';
+  // Buscar todos os relatórios desse atleta
+  const{data}=await supa.from('relatorios').select('*')
+    .eq('user_id',cU.id).eq('tipo','atleta').eq('nome',nome)
+    .order('created_at',{ascending:true});
+  evoRels=data||[];
+  document.getElementById('mEvo').classList.remove('hidden');
+  swEvo('grafico',document.querySelector('.evo-tab'));
+  renderEvoGrafico();
+  popularSelects();
+  renderHistEvo();
+}
+
+function fEvo(){document.getElementById('mEvo').classList.add('hidden');}
+
+function swEvo(sec,btn){
+  document.querySelectorAll('.evo-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.evo-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('evo-'+sec).classList.add('active');
+  btn.classList.add('active');
+}
+
+function renderEvoGrafico(){
+  if(!evoRels.length) return;
+  const labels=evoRels.map(r=>new Date(r.created_at).toLocaleDateString('pt-BR'));
+  const scores=evoRels.map(r=>r.score||0);
+
+  // Gráfico de score
+  const ctx1=document.getElementById('evo-chart-score').getContext('2d');
+  if(evoChartScore)evoChartScore.destroy();
+  evoChartScore=new Chart(ctx1,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'Score geral',data:scores,
+      borderColor:'#00C853',backgroundColor:'rgba(0,200,83,0.1)',
+      borderWidth:2.5,pointBackgroundColor:'#00C853',pointRadius:5,
+      pointHoverRadius:7,tension:0.3,fill:true,
+    }]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Score: ${c.raw}/100`}}},
+      scales:{y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:11}}},
+        x:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:10}}}}}
+  });
+
+  // Seletor de métricas
+  const mets=Object.keys(MET_LABELS);
+  const selCont=document.getElementById('evo-met-sel');
+  selCont.innerHTML=mets.map((k,i)=>`<div class="msel${i===0?' active':''}" onclick="selMet(this,'${k}')">${MET_LABELS[k]}</div>`).join('');
+  renderEvoMet(mets[0]);
+}
+
+function selMet(el,key){
+  document.querySelectorAll('.msel').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+  renderEvoMet(key);
+}
+
+function renderEvoMet(key){
+  const labels=evoRels.map(r=>new Date(r.created_at).toLocaleDateString('pt-BR'));
+  const valores=evoRels.map(r=>{
+    const d=r.dados?.metricas||{};
+    const lbl=MET_LABELS[key];
+    return parseFloat(d[lbl])||0;
+  });
+  const ctx2=document.getElementById('evo-chart-met').getContext('2d');
+  if(evoChartMet)evoChartMet.destroy();
+  evoChartMet=new Chart(ctx2,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:MET_LABELS[key],data:valores,
+      borderColor:'#00BCD4',backgroundColor:'rgba(0,188,212,0.1)',
+      borderWidth:2.5,pointBackgroundColor:'#00BCD4',pointRadius:5,
+      tension:0.3,fill:true,
+    }]},
+    options:{responsive:true,plugins:{legend:{display:false}},
+      scales:{y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:11}}},
+        x:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:10}}}}}
+  });
+}
+
+function popularSelects(){
+  const opts=evoRels.map((r,i)=>`<option value="${i}">${new Date(r.created_at).toLocaleDateString('pt-BR')} — ${r.dados?.periodo||'Período '+(i+1)}</option>`).join('');
+  document.getElementById('evo-perA').innerHTML=opts;
+  document.getElementById('evo-perB').innerHTML=opts;
+  if(evoRels.length>1){
+    document.getElementById('evo-perA').value='0';
+    document.getElementById('evo-perB').value=String(evoRels.length-1);
+  }
+  renderComparativo();
+}
+
+function renderComparativo(){
+  const ia=parseInt(document.getElementById('evo-perA')?.value||'0');
+  const ib=parseInt(document.getElementById('evo-perB')?.value||'0');
+  const ra=evoRels[ia],rb=evoRels[ib];
+  if(!ra||!rb){document.getElementById('evo-comp-result').innerHTML='<p style="color:var(--c4);font-size:13px;">Selecione dois períodos.</p>';return;}
+  const ma=ra.dados?.metricas||{}, mb=rb.dados?.metricas||{};
+  const todasKeys=[...new Set([...Object.keys(ma),...Object.keys(mb)])];
+
+  let html=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">`;
+  // Cards de score
+  html+=`<div class="evo-periodo"><div class="evo-periodo-hdr"><div class="evo-periodo-nome">Período A</div><div class="evo-periodo-data">${new Date(ra.created_at).toLocaleDateString('pt-BR')}</div></div><div style="font-size:32px;font-weight:700;color:var(--verde);font-family:'Space Grotesk',sans-serif;">${ra.score||'—'}<span style="font-size:14px;color:var(--c4);font-weight:400;">/100</span></div></div>`;
+  html+=`<div class="evo-periodo"><div class="evo-periodo-hdr"><div class="evo-periodo-nome">Período B</div><div class="evo-periodo-data">${new Date(rb.created_at).toLocaleDateString('pt-BR')}</div></div><div style="font-size:32px;font-weight:700;color:var(--verde);font-family:'Space Grotesk',sans-serif;">${rb.score||'—'}<span style="font-size:14px;color:var(--c4);font-weight:400;">/100</span></div></div>`;
+  html+=`</div>`;
+
+  // Tabela comparativa
+  html+=`<div class="chart-wrap"><div class="chart-title">Comparativo de métricas</div>`;
+  if(!todasKeys.length){html+='<p style="color:var(--c4);font-size:12px;">Nenhuma métrica registrada nestes períodos.</p>';}
+  else{
+    todasKeys.forEach(k=>{
+      const va=parseFloat(ma[k])||0, vb=parseFloat(mb[k])||0;
+      if(!va&&!vb)return;
+      const max=Math.max(va,vb,1);
+      const diff=vb-va;
+      const pct=va>0?Math.round((diff/va)*100):0;
+      const seta=diff>0?'↑':diff<0?'↓':'→';
+      const cor=diff>0?'#00C853':diff<0?'#FF4444':'#666';
+      html+=`<div class="comp-row">
+        <div class="comp-lbl">${k}</div>
+        <div style="flex:1;">
+          <div style="display:flex;gap:4px;margin-bottom:4px;">
+            <div class="comp-bar-wrap"><div class="comp-bar" style="width:${(va/max)*100}%;background:#00BCD4;"></div></div>
+            <span class="comp-val" style="color:#00BCD4;">${va||'—'}</span>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <div class="comp-bar-wrap"><div class="comp-bar" style="width:${(vb/max)*100}%;background:#00C853;"></div></div>
+            <span class="comp-val" style="color:#00C853;">${vb||'—'}</span>
+          </div>
+        </div>
+        <div class="comp-arrow" style="color:${cor};">${seta}${Math.abs(pct)>0?` ${Math.abs(pct)}%`:''}</div>
+      </div>`;
+    });
+    html+=`<div style="display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--c7);">
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--c2);"><div style="width:10px;height:6px;background:#00BCD4;border-radius:2px;"></div>Período A</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--c2);"><div style="width:10px;height:6px;background:#00C853;border-radius:2px;"></div>Período B</span>
+    </div>`;
+  }
+  html+=`</div>`;
+  document.getElementById('evo-comp-result').innerHTML=html;
+}
+
+function renderHistEvo(){
+  const cont=document.getElementById('evo-hist-lista');
+  if(!evoRels.length){cont.innerHTML='<p style="color:var(--c4);text-align:center;padding:40px;">Nenhum período registrado ainda.</p>';return;}
+  cont.innerHTML=[...evoRels].reverse().map((r,i)=>`
+    <div class="evo-periodo">
+      <div class="evo-periodo-hdr">
+        <div class="evo-periodo-nome">${r.dados?.periodo||'Período '+(evoRels.length-i)} ${r.dados?.comp?'— '+r.dados.comp:''}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${r.score?`<span style="font-size:13px;font-weight:700;color:var(--verde);">Score: ${r.score}/100</span>`:''}
+          <div class="evo-periodo-data">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div>
+        </div>
+      </div>
+      ${r.dados?.metricas?`<div style="display:flex;flex-wrap:wrap;gap:8px;">${Object.entries(r.dados.metricas).slice(0,8).map(([k,v])=>`<span style="font-size:11px;background:var(--c7);padding:3px 10px;border-radius:20px;color:var(--c2);">${k}: <strong style="color:var(--b);">${v}</strong></span>`).join('')}</div>`:'<p style="font-size:12px;color:var(--c4);">Métricas não registradas neste período.</p>'}
+    </div>`).join('');
 }
 
 // ===== EXPORTAR =====
