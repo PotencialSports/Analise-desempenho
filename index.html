@@ -640,7 +640,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
       <div class="fgrp"><label class="flbl">Data de nascimento</label><input class="finp" id="a-nasc" type="date"></div>
       <div class="fgrp">
         <label class="flbl">Posição <i class="tip-icon">?<span class="tip-box">A posição define quais métricas aparecem na seção abaixo e quais categorias o radar vai avaliar.</span></i></label>
-        <select class="fsel" id="a-pos" onchange="onPosAtleta()">
+        <select class="fsel" id="a-pos" onchange="onPosA()">
           <option value="">Selecione...</option>
           <option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option><option>Lateral esquerdo</option>
           <option>Volante</option><option>Meia central</option><option>Meia-atacante</option>
@@ -741,7 +741,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   <div class="sblk" id="sa-ia">
     <div class="stitle">⚡ Gerar texto estruturado</div>
     <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">Preencha os campos acima e clique em gerar. O texto estruturado aparece abaixo — copie e cole no Claude, ChatGPT ou Gemini para receber o relatório completo.</p>
-    <div class="br"><button class="btn bp" onclick="gerarAtleta()">⚡ Gerar texto para IA</button></div>
+    <div class="br"><button class="btn bp" onclick="gerarA()">⚡ Gerar texto para IA</button></div>
     <div id="atleta-out" class="hidden">
       <div class="rwrap">
         <div class="rcard"><div class="rt" id="r-nome">—</div><div class="rs" id="r-pos">—</div><canvas class="rc" id="radar-a" width="320" height="280"></canvas></div>
@@ -848,7 +848,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   </div>
   <div class="sblk" id="sc-ia">
     <div class="stitle">⚡ Gerar texto estruturado</div>
-    <div class="br"><button class="btn bp" onclick="gerarClube()">⚡ Gerar texto para IA</button></div>
+    <div class="br"><button class="btn bp" onclick="gerarC()">⚡ Gerar texto para IA</button></div>
     <div class="iabox hidden" id="clube-out">
       <div class="iatitle">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
       <div class="iares" id="ia-c"></div>
@@ -929,7 +929,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   </div>
   <div class="sblk" id="sp-ia">
     <div class="stitle">⚡ Gerar texto estruturado</div>
-    <div class="br"><button class="btn bp" onclick="gerarProsp()">⚡ Gerar texto para IA</button></div>
+    <div class="br"><button class="btn bp" onclick="gerarP()">⚡ Gerar texto para IA</button></div>
     <div class="iabox hidden" id="prosp-out">
       <div class="iatitle">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
       <div class="iares" id="ia-p"></div>
@@ -1209,7 +1209,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
           <div class="plano-item"><span class="plano-item-ok">✓</span>Suporte prioritário</div>
           <div class="plano-item"><span class="plano-item-ok">✓</span>Onboarding personalizado</div>
         </div>
-        <button class="plano-btn plano-btn-clube" onclick="interesseClube()">Tenho interesse →</button>
+        <button class="plano-btn plano-btn-clube" onclick="intClube()">Tenho interesse →</button>
       </div>
 
     </div>
@@ -1355,7 +1355,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
     <div class="stitle">👤 Jogadores perigosos</div>
     <p style="color:var(--c2);font-size:13px;margin-bottom:14px;">Cadastre os jogadores que mais ameaçam. A IA vai sugerir como neutralizá-los individualmente.</p>
     <div id="pj-jogadores-lista"></div>
-    <button class="add-evento-btn" onclick="addJogador()">+ Adicionar jogador perigoso</button>
+    <button class="add-evento-btn" onclick="addJog()">+ Adicionar jogador perigoso</button>
   </div>
 
   <!-- Nosso time -->
@@ -1432,9 +1432,9 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 
   <!-- TABS das situações -->
   <div class="bp-sit-tabs">
-    <button class="bp-sit-tab active" onclick="swBPSit('escanteios',this)">⛳ Escanteios</button>
-    <button class="bp-sit-tab" onclick="swBPSit('faltas',this)">🦵 Faltas</button>
-    <button class="bp-sit-tab" onclick="swBPSit('laterais',this)">📐 Laterais</button>
+    <button class="bp-sit-tab active" onclick="swBP('escanteios',this)">⛳ Escanteios</button>
+    <button class="bp-sit-tab" onclick="swBP('faltas',this)">🦵 Faltas</button>
+    <button class="bp-sit-tab" onclick="swBP('laterais',this)">📐 Laterais</button>
   </div>
 
   <!-- ESCANTEIOS -->
@@ -1471,12 +1471,12 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
       <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
         <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
         <div id="e-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('e-pad-of')">+ Adicionar padrão ofensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('e-pad-of')">+ Adicionar padrão ofensivo</button>
       </div>
       <div class="sblk" style="background:var(--c9);">
         <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
         <div id="e-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('e-pad-def')">+ Adicionar padrão defensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('e-pad-def')">+ Adicionar padrão defensivo</button>
       </div>
       <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="e-obs" placeholder="Outras observações sobre os escanteios..."></textarea></div>
     </div>
@@ -1512,12 +1512,12 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
       <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
         <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
         <div id="f-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('f-pad-of')">+ Adicionar padrão ofensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('f-pad-of')">+ Adicionar padrão ofensivo</button>
       </div>
       <div class="sblk" style="background:var(--c9);">
         <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
         <div id="f-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('f-pad-def')">+ Adicionar padrão defensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('f-pad-def')">+ Adicionar padrão defensivo</button>
       </div>
       <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="f-obs" placeholder="Outras observações sobre as faltas..."></textarea></div>
     </div>
@@ -1549,12 +1549,12 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
       <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
         <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
         <div id="l-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('l-pad-of')">+ Adicionar padrão ofensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('l-pad-of')">+ Adicionar padrão ofensivo</button>
       </div>
       <div class="sblk" style="background:var(--c9);">
         <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
         <div id="l-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPadrao('l-pad-def')">+ Adicionar padrão defensivo</button>
+        <button class="add-padrao-btn" onclick="addPad('l-pad-def')">+ Adicionar padrão defensivo</button>
       </div>
       <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="l-obs" placeholder="Outras observações sobre os laterais..."></textarea></div>
     </div>
@@ -1584,15 +1584,15 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 
   <!-- Filtros -->
   <div class="dash-filtros">
-    <select class="fsel" id="dash-periodo" onchange="carregarDashboard()" style="max-width:200px;">
+    <select class="fsel" id="dash-periodo" onchange="carregarDash()" style="max-width:200px;">
       <option value="0">Todos os períodos</option>
       <option value="7">Últimos 7 dias</option>
       <option value="30">Últimos 30 dias</option>
       <option value="90">Últimos 90 dias</option>
       <option value="180">Últimos 180 dias</option>
     </select>
-    <input class="finp" id="dash-busca" placeholder="🔍 Buscar atleta..." style="max-width:220px;" oninput="renderDashboard()">
-    <button class="btn bp" style="padding:9px 16px;font-size:12px;" onclick="carregarDashboard()">🔄 Atualizar</button>
+    <input class="finp" id="dash-busca" placeholder="🔍 Buscar atleta..." style="max-width:220px;" oninput="renderDash()">
+    <button class="btn bp" style="padding:9px 16px;font-size:12px;" onclick="carregarDash()">🔄 Atualizar</button>
   </div>
 
   <!-- Stats resumo -->
@@ -1625,8 +1625,8 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   <div class="sblk" id="sv-config">
     <div class="stitle">🎯 Foco da análise</div>
     <div class="foco-sel">
-      <button class="foco-btn active" id="foco-atleta" onclick="setFoco('atleta')">⚽ Atleta individual</button>
-      <button class="foco-btn" id="foco-time" onclick="setFoco('time')">🏟️ Time / Coletivo</button>
+      <button class="foco-btn active" id="foco-atleta" onclick="setVFoco('atleta')">⚽ Atleta individual</button>
+      <button class="foco-btn" id="foco-time" onclick="setVFoco('time')">🏟️ Time / Coletivo</button>
     </div>
 
     <!-- Config atleta -->
@@ -1696,7 +1696,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 
     <div id="eventos-lista"></div>
 
-    <button class="add-evento-btn" onclick="addEvento()">
+    <button class="add-evento-btn" onclick="addEv()">
       + Adicionar evento
     </button>
 
@@ -1735,7 +1735,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
     <div class="stitle">⚡ Gerar análise</div>
     <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">O texto estruturado vai combinar todos os eventos anotados com as observações livres — pronto para colar no Claude e receber a análise completa.</p>
     <div class="br" style="margin-bottom:0;">
-      <button class="btn bp" onclick="gerarVideo()">⚡ Gerar texto para IA</button>
+      <button class="btn bp" onclick="gerarV()">⚡ Gerar texto para IA</button>
     </div>
     <div class="vid-output-box hidden" id="video-output">
       <div class="vid-output-title">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
@@ -1829,11 +1829,11 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
         <div class="fg" style="margin-bottom:16px;">
           <div class="fgrp">
             <label class="flbl">Período A</label>
-            <select class="fsel" id="evo-perA" onchange="renderComparativo()"></select>
+            <select class="fsel" id="evo-perA" onchange="renderComp()"></select>
           </div>
           <div class="fgrp">
             <label class="flbl">Período B</label>
-            <select class="fsel" id="evo-perB" onchange="renderComparativo()"></select>
+            <select class="fsel" id="evo-perB" onchange="renderComp()"></select>
           </div>
         </div>
         <div id="evo-comp-result"></div>
@@ -2809,6 +2809,78 @@ function expPDF(id,nome,titulo){
   win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;font-size:12px;color:#111;padding:40px;max-width:820px;margin:0 auto;}.hdr{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #00C853;padding-bottom:14px;margin-bottom:22px;}.lgo{font-size:19px;font-weight:900;}.lgo span{color:#00C853;}p{margin:2px 0;line-height:1.8;}.ftr{margin-top:36px;padding-top:10px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center;}</style></head><body><div class="hdr"><div><div class="lgo">Potencial <span>Sports</span></div><div style="font-size:11px;color:#666;">'+(titulo||'Relatorio')+'</div></div><div style="text-align:right"><div style="font-weight:700;font-size:14px;">'+(nome||'Relatorio')+'</div><div style="font-size:11px;color:#666;">'+new Date().toLocaleDateString('pt-BR')+'</div></div></div>'+linhas.map(function(l){return '<p>'+l.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p>';}).join('')+'<div class="ftr">Potencial Sports -- potencialsports.com.br -- '+new Date().toLocaleDateString('pt-BR')+'</div></body></html>');
   win.document.close();setTimeout(function(){win.print();},400);
 }
+
+
+// Funções de compatibilidade e stubs
+function calcEficEsc(){
+  var tot=parseFloat(v('e-tot'))||0,ch=parseFloat(v('e-chut'))||0;
+  var pct=tot>0?Math.min(Math.round((ch/tot)*100),100):0;
+  var bar=document.getElementById('e-efic-bar');
+  var pct_el=document.getElementById('e-efic-pct');
+  if(bar)bar.style.width=pct+'%';
+  if(pct_el)pct_el.textContent=pct+'%';
+}
+function calcEficFal(){
+  var tot=parseFloat(v('f-tot'))||0,per=parseFloat(v('f-per'))||0;
+  var pct=tot>0?Math.min(Math.round((per/tot)*100),100):0;
+  var bar=document.getElementById('f-efic-bar');
+  var pct_el=document.getElementById('f-efic-pct');
+  if(bar)bar.style.width=pct+'%';
+  if(pct_el)pct_el.textContent=pct+'%';
+}
+function swPJInput(mode,btn){
+  document.querySelectorAll('.pj-input-tab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.pj-input-sec').forEach(function(s){s.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  var sec=document.getElementById('pj-sec-'+mode);
+  if(sec)sec.classList.add('active');
+}
+function toggleBilling(){
+  var track=document.getElementById('billing-toggle');
+  if(track)track.classList.toggle('on');
+}
+function expPDFs(id,nome,tipo){expPDF(id,nome,tipo);}
+function expPDFM(){
+  var rel=todosR.find(function(r){return r.id===cRid;});
+  if(!rel)return;
+  expPDF('mCont',rel.nome||'Relatorio','Relatorio');
+}
+function calcularRisco(){autoRisco();}
+function carregarPainelLesao(){carregarDash();}
+// Upload stubs (funcionalidade de upload removida nesta versao)
+function extrairDados(){}
+function gerarAnaliseDirecta(){}
+function handleFileSelect(el){
+  if(el&&el.files&&el.files[0])previewImagem(el);
+}
+function previewImagem(el){
+  if(!el||!el.files||!el.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var prev=document.getElementById('pj-preview-img');
+    var prevWrap=document.getElementById('pj-preview');
+    var area=document.getElementById('pj-upload-area');
+    if(prev)prev.src=e.target.result;
+    if(prevWrap)prevWrap.style.display='block';
+    if(area)area.style.display='none';
+  };
+  reader.readAsDataURL(el.files[0]);
+}
+function removerImagem(){
+  var prev=document.getElementById('pj-preview');
+  var area=document.getElementById('pj-upload-area');
+  var inp=document.getElementById('pj-file-input');
+  if(prev)prev.style.display='none';
+  if(area)area.style.display='block';
+  if(inp)inp.value='';
+}
+function limparUpload(){removerImagem();}
+function selExtrair(el,val){}
+function selPlat(el,val){}
+function usarDadosExtraidos(){}
+// Funções de vídeo/upload com nomes antigos
+// gerarV definida acima
+
 
 // INIT
 window.addEventListener('DOMContentLoaded',function(){
