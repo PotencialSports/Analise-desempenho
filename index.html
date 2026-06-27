@@ -1876,242 +1876,43 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 <script>
 const SU='https://mublmwtqxdcszcmvmquq.supabase.co';
 const SK='sb_publishable_PKXrAdb9U6JIoxSJmtk6Jw_s5Q3yYRr';
-const ADMIN_EMAIL='potencialsportsbeta@v1.com';
+const ADMIN='potencialsportsbeta@v1.com';
 const supa=window.supabase.createClient(SU,SK);
+
 let cU=null,cRid=null,rIds={atleta:null,clube:null,prosp:null};
-let fHt='todos',todosR=[],rChA=null,rChM=null,lastRD=null;
+let fHt='todos',todosR=[],dashR=[];
+let evList=[],vFoco='atleta',bpFoco='proprio';
+let bpPads={'ep-of':[],'ep-def':[],'fp-of':[],'fp-def':[],'lp-of':[],'lp-def':[]};
+let pjJogs=[];
+let evoR=[],evoChScore=null;
+let dashCharts={};
 
-// ===== MÉTRICAS POR POSIÇÃO =====
-const METRICAS={
-  'Goleiro':{
-    grupos:[
-      {titulo:'Defesa e controle de área',campos:[
-        {id:'a-def',label:'Defesas',tipo:'number',tip:'Número total de defesas realizadas no período.'},
-        {id:'a-defpct',label:'Defesas (%)',tipo:'number',tip:'Percentual de chutes defendidos em relação ao total de chutes no alvo sofridos. Ex: 78 significa 78% de defesas.'},
-        {id:'a-xga',label:'xGA',tipo:'number',step:'0.01',tip:'Expected Goals Against: soma dos gols esperados que o goleiro deveria sofrer. Comparar com gols sofridos reais revela a qualidade real das defesas.'},
-        {id:'a-gols-s',label:'Gols sofridos',tipo:'number',tip:'Total de gols sofridos no período.'},
-        {id:'a-said',label:'Saídas de área',tipo:'number',tip:'Quantas vezes o goleiro saiu da área para cortar bolas ou antecipar o adversário.'},
-        {id:'a-erros',label:'Erros que levaram a chutes',tipo:'number',tip:'Número de erros do goleiro que resultaram diretamente em finalização do adversário.'},
-      ]},
-      {titulo:'Jogo com os pés',campos:[
-        {id:'a-paspct',label:'Passes certos (%)',tipo:'number',tip:'Percentual de passes completados. Ex: 82 significa que 82% dos passes chegaram ao destino.'},
-        {id:'a-paslong',label:'Passes longos (%)',tipo:'number',tip:'Percentual de lançamentos longos bem-sucedidos. Importante para goleiros que atuam como sweeper-keeper.'},
-        {id:'a-toques',label:'Toques com os pés / jogo',tipo:'number',tip:'Média de toques com os pés por partida. Alto em times com posse, baixo em times que jogam direto.'},
-      ]},
-    ],
-    obs:'Observe: saídas de área (assertivas ou hesitantes?), comunicação com a zaga, comportamento em cruzamentos, distribuição sob pressão, reação mental após gols sofridos.'
-  },
-  'Zagueiro':{
-    grupos:[
-      {titulo:'Defesa',campos:[
-        {id:'a-duel',label:'Duelos terrestres (%)',tipo:'number',tip:'Percentual de disputas no chão vencidas. Ex: 67 significa vitória em 67% dos duelos terrestres.'},
-        {id:'a-aer',label:'Duelos aéreos (%)',tipo:'number',tip:'Percentual de disputas aéreas vencidas. Fundamental para zagueiros em times com linha alta.'},
-        {id:'a-int',label:'Interceptações',tipo:'number',tip:'Número de vezes que o zagueiro interceptou passes adversários. Reflete leitura antecipatória do jogo.'},
-        {id:'a-cort',label:'Cortes',tipo:'number',tip:'Afastamentos de bola dentro e fora da área. Indica presença defensiva.'},
-        {id:'a-bloq',label:'Bloqueios de chute',tipo:'number',tip:'Número de chutes bloqueados pelo zagueiro. Indica disposição e posicionamento defensivo.'},
-        {id:'a-erros',label:'Erros que levaram a chutes',tipo:'number',tip:'Falhas que resultaram diretamente em finalizações adversárias. Métrica crítica de risco.'},
-      ]},
-      {titulo:'Construção',campos:[
-        {id:'a-paspct',label:'Passes certos (%)',tipo:'number',tip:'Ex: 91 significa que 91% dos passes foram completados. Zagueiros modernos precisam de alto percentual.'},
-        {id:'a-pasprog',label:'Passes progressivos',tipo:'number',tip:'Passes que avançam o jogo para o terço final do campo. Indica participação na construção.'},
-        {id:'a-paslong',label:'Passes longos (%)',tipo:'number',tip:'Eficiência nos lançamentos longos. Importante para times que usam bola direta.'},
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Pico de velocidade. Relevante para zagueiros que atuam com linha alta e saem a campo.'},
-      ]},
-    ],
-    obs:'Observe: posicionamento na linha defensiva, comunicação com o parceiro de zaga, decisão entre fazer falta ou deixar passar, comportamento nas coberturas laterais, saída de bola sob pressão.'
-  },
-  'Lateral direito':{
-    grupos:[
-      {titulo:'Defesa',campos:[
-        {id:'a-duel',label:'Duelos defensivos (%)',tipo:'number',tip:'Percentual de duelos defensivos vencidos no corredor direito. Ex: 62.'},
-        {id:'a-int',label:'Interceptações',tipo:'number',tip:'Passes cortados na zona de marcação do lateral. Indica posicionamento e antecipação.'},
-        {id:'a-recup',label:'Recuperações de bola',tipo:'number',tip:'Total de recuperações no período, independente de duelo.'},
-        {id:'a-spr',label:'Sprints defensivos',tipo:'number',tip:'Número de sprints realizados em fase defensiva (retorno após perda de bola).'},
-      ]},
-      {titulo:'Ataque',campos:[
-        {id:'a-cruz',label:'Cruzamentos certos (%)',tipo:'number',tip:'Percentual de cruzamentos que chegaram a um companheiro. Ex: 34. Valores acima de 30% são considerados bons.'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol no período.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas pelo lateral, incluindo cruzamentos e passes decisivos.'},
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Número de dribles bem-sucedidos no corredor. Indica capacidade de criar superioridade.'},
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Total percorrido no período. Laterais de alto nível costumam passar de 11km por jogo.'},
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Pico de velocidade. Fundamental para laterais ofensivos que exploram a profundidade.'},
-      ]},
-    ],
-    obs:'Observe: timing das sobreposições (quando subir e quando ficar), combinação com o ponta do mesmo lado, retorno defensivo após perda (velocidade e disciplina tática), posicionamento no 1x1 defensivo.'
-  },
-  'Lateral esquerdo':{
-    grupos:[
-      {titulo:'Defesa',campos:[
-        {id:'a-duel',label:'Duelos defensivos (%)',tipo:'number',tip:'Percentual de duelos defensivos vencidos no corredor esquerdo.'},
-        {id:'a-int',label:'Interceptações',tipo:'number',tip:'Passes cortados na zona de marcação do lateral esquerdo.'},
-        {id:'a-recup',label:'Recuperações de bola',tipo:'number',tip:'Total de recuperações no período.'},
-        {id:'a-spr',label:'Sprints defensivos',tipo:'number',tip:'Sprints de retorno após perda de bola.'},
-      ]},
-      {titulo:'Ataque',campos:[
-        {id:'a-cruz',label:'Cruzamentos certos (%)',tipo:'number',tip:'Percentual de cruzamentos que chegaram a um companheiro.'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas pelo lateral esquerdo.'},
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Dribles bem-sucedidos no corredor esquerdo.'},
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Total percorrido. Laterais de alto nível costumam passar de 11km por jogo.'},
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Pico de velocidade no período.'},
-      ]},
-    ],
-    obs:'Observe: timing das sobreposições, combinação com o ponta esquerdo, retorno defensivo após perda, posicionamento no 1x1 defensivo, aproveitamento dos espaços nas costas do lateral adversário.'
-  },
-  'Volante':{
-    grupos:[
-      {titulo:'Defesa e recuperação',campos:[
-        {id:'a-int',label:'Interceptações',tipo:'number',tip:'Principal métrica defensiva do volante. Reflete leitura do jogo e posicionamento preventivo.'},
-        {id:'a-duel',label:'Duelos ganhos (%)',tipo:'number',tip:'Percentual de disputas físicas vencidas no meio-campo. Ex: 58.'},
-        {id:'a-recup',label:'Recuperações de bola',tipo:'number',tip:'Total de recuperações, incluindo roubadas de bola e segundas bolas.'},
-        {id:'a-cob',label:'Coberturas defensivas',tipo:'number',tip:'Ações onde o volante cobriu o espaço de um companheiro que saiu de posição. Indica inteligência tática.'},
-        {id:'a-spr',label:'Sprints defensivos',tipo:'number',tip:'Sprints realizados para fechar espaços ou pressionar o portador da bola.'},
-      ]},
-      {titulo:'Construção e progressão',campos:[
-        {id:'a-paspct',label:'Passes em pressão (%)',tipo:'number',tip:'Percentual de passes completados quando o volante estava sendo pressionado. Indica qualidade técnica sob pressão.'},
-        {id:'a-pasprog',label:'Passes progressivos',tipo:'number',tip:'Passes que avançam o jogo. Para volante de ligação, essa é uma métrica central.'},
-        {id:'a-paschv',label:'Passes chave',tipo:'number',tip:'Passes que geram diretamente uma finalização.'},
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Volume físico. Volantes box-to-box costumam passar de 12km por jogo.'},
-        {id:'a-distai',label:'Alta intensidade (km)',tipo:'number',step:'0.1',tip:'Metros percorridos acima de 19 km/h. Indica intensidade de trabalho.'},
-      ]},
-    ],
-    obs:'Observe: posicionamento entre as linhas (cobre espaço ou marca homem?), velocidade de decisão com a bola (1 ou 2 toques?), comportamento após perda da bola (pressiona ou recua?), liderança organizando o time defensivamente.'
-  },
-  'Meia central':{
-    grupos:[
-      {titulo:'Criação e progressão',campos:[
-        {id:'a-paschv',label:'Passes chave / jogo',tipo:'number',tip:'Passes que geram diretamente uma finalização. Principal métrica de criação de um armador.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Total de situações de gol geradas (inclui pré-assistências e jogadas que resultaram em finalização).'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol.'},
-        {id:'a-paspct',label:'Passes certos (%)',tipo:'number',tip:'Ex: 89. Meias criadores precisam de alto percentual para manter o ritmo do time.'},
-        {id:'a-pasprog',label:'Passes progressivos',tipo:'number',tip:'Passes que avançam o jogo. Indica participação na construção ofensiva.'},
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Para meias entre linhas, o drible é ferramenta de progressão e desequilíbrio.'},
-      ]},
-      {titulo:'Defesa e físico',campos:[
-        {id:'a-recup',label:'Recuperações',tipo:'number',tip:'Recuperações de bola no meio-campo. Mesmo o armador precisa contribuir defensivamente.'},
-        {id:'a-duel',label:'Duelos ganhos (%)',tipo:'number',tip:'Eficiência nas disputas físicas no meio do campo.'},
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Volume físico do meia. Meias de alta intensidade costumam passar de 11km.'},
-      ]},
-    ],
-    obs:'Observe: movimento sem bola (cria linhas de passe ou se esconde?), velocidade de leitura e decisão, qualidade do primeiro toque, pressing após perda da bola, relação com o centroavante e com os pontas.'
-  },
-  'Meia-atacante':{
-    grupos:[
-      {titulo:'Criação e finalização',campos:[
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol. Métrica central do meia-atacante.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas, incluindo assistências.'},
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Número de dribles bem-sucedidos. O drible é arma fundamental do camisa 10.'},
-        {id:'a-drtent',label:'Dribles tentados',tipo:'number',tip:'Total de dribles tentados. Comparar com completados para calcular eficiência.'},
-        {id:'a-gols',label:'Gols',tipo:'number',tip:'Gols marcados no período. O meia-atacante também precisa finalizar.'},
-        {id:'a-xg',label:'xG',tipo:'number',step:'0.01',tip:'Expected Goals: qualidade das chances de finalização geradas. Ex: 2.3'},
-        {id:'a-fintot',label:'Finalizações totais',tipo:'number',tip:'Volume de chutes no período.'},
-        {id:'a-finalv',label:'Finalizações no alvo',tipo:'number',tip:'Chutes que foram na direção do gol.'},
-      ]},
-      {titulo:'Pressão e físico',campos:[
-        {id:'a-recup',label:'Recuperações pelo pressing',tipo:'number',tip:'Recuperações geradas pela pressão alta do meia-atacante sobre a defesa adversária.'},
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Volume físico. Meias-atacantes modernos também trabalham defensivamente.'},
-      ]},
-    ],
-    obs:'Observe: movimentação entre as linhas (recebe entre a zaga e o meio adversário?), relação com o centroavante (um abre espaço para o outro?), decisão entre finalizar ou assistir, pressing sem bola quando o time não tem a posse.'
-  },
-  'Ponta direita':{
-    grupos:[
-      {titulo:'Desequilíbrio e criação',campos:[
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Número de dribles bem-sucedidos no corredor ou no interior. Principal métrica de desequilíbrio individual.'},
-        {id:'a-drtent',label:'Dribles tentados',tipo:'number',tip:'Total de tentativas. Comparar com completados para ver a eficiência (ideal acima de 45%).'},
-        {id:'a-cruz',label:'Cruzamentos certos (%)',tipo:'number',tip:'Para pontas tradicionais, o cruzamento é a ação final mais importante. Ex: 32.'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas pelo ponta.'},
-      ]},
-      {titulo:'Finalização',campos:[
-        {id:'a-gols',label:'Gols',tipo:'number',tip:'Gols marcados. Mais relevante para pontas invertidos que chegam para finalizar.'},
-        {id:'a-xg',label:'xG',tipo:'number',step:'0.01',tip:'Qualidade das chances de finalização. Ponta com xG alto e poucos gols indica ineficiência na conclusão.'},
-        {id:'a-fintot',label:'Finalizações totais',tipo:'number',tip:'Volume de chutes.'},
-        {id:'a-finalv',label:'Finalizações no alvo',tipo:'number',tip:'Chutes na direção do gol.'},
-      ]},
-      {titulo:'Físico',campos:[
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Fundamental para pontas de velocidade. Acima de 33 km/h é referência no alto nível.'},
-        {id:'a-distai',label:'Alta intensidade (km)',tipo:'number',step:'0.1',tip:'Metros percorridos em alta velocidade. Indica disposição ofensiva e defensiva.'},
-        {id:'a-spr',label:'Número de sprints',tipo:'number',tip:'Volume de esforços máximos. Pontas de velocidade têm alto número de sprints.'},
-      ]},
-    ],
-    obs:'Observe: primeiro gesto no drible (abre o corpo para criar ângulo?), movimento sem bola (corre nas costas do lateral?), posicionamento quando o time não tem a bola, relação com o lateral do mesmo lado (sobreposição ou sublinhagem?).'
-  },
-  'Ponta esquerda':{
-    grupos:[
-      {titulo:'Desequilíbrio e criação',campos:[
-        {id:'a-drok',label:'Dribles completados',tipo:'number',tip:'Dribles bem-sucedidos. Principal métrica de impacto individual do ponta.'},
-        {id:'a-drtent',label:'Dribles tentados',tipo:'number',tip:'Total de tentativas. Eficiência ideal acima de 45%.'},
-        {id:'a-cruz',label:'Cruzamentos certos (%)',tipo:'number',tip:'Para pontas tradicionais pelo lado esquerdo. Ex: 30.'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'Passes diretamente para gol.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas.'},
-      ]},
-      {titulo:'Finalização',campos:[
-        {id:'a-gols',label:'Gols',tipo:'number',tip:'Mais relevante para pontas invertidos (esquerdo que joga pela esquerda cortando para dentro).'},
-        {id:'a-xg',label:'xG',tipo:'number',step:'0.01',tip:'Qualidade das chances de finalização.'},
-        {id:'a-fintot',label:'Finalizações totais',tipo:'number',tip:'Volume de chutes no período.'},
-        {id:'a-finalv',label:'Finalizações no alvo',tipo:'number',tip:'Chutes que foram na direção do gol.'},
-      ]},
-      {titulo:'Físico',campos:[
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Pico de velocidade. Essencial para pontas que exploram a profundidade.'},
-        {id:'a-distai',label:'Alta intensidade (km)',tipo:'number',step:'0.1',tip:'Metros em alta velocidade no período.'},
-        {id:'a-spr',label:'Número de sprints',tipo:'number',tip:'Volume de esforços máximos por partida.'},
-      ]},
-    ],
-    obs:'Observe: primeiro gesto no drible, movimento de ruptura nas costas do lateral adversário, pressing sem bola (retorna defensivamente?), combinação com o lateral esquerdo do time, decisão entre cruzar ou cortar para dentro.'
-  },
-  'Centroavante':{
-    grupos:[
-      {titulo:'Finalização',campos:[
-        {id:'a-gols',label:'Gols',tipo:'number',tip:'Métrica central do centroavante. Sempre analisar em conjunto com xG.'},
-        {id:'a-xg',label:'xG',tipo:'number',step:'0.01',tip:'Expected Goals: soma da qualidade das chances de finalização. Se gols > xG, o atleta está finalizando acima do esperado.'},
-        {id:'a-fintot',label:'Finalizações totais',tipo:'number',tip:'Volume de chutes. Centroavantes de área precisam de alto volume.'},
-        {id:'a-finalv',label:'Finalizações no alvo',tipo:'number',tip:'Chutes na direção do gol. Eficiência ideal: acima de 40% do total.'},
-        {id:'a-golscab',label:'Gols de cabeça',tipo:'number',tip:'Gols marcados de cabeça. Fundamental para centroavantes de referência aérea.'},
-      ]},
-      {titulo:'Domínio e jogo coletivo',campos:[
-        {id:'a-aer',label:'Duelos aéreos (%)',tipo:'number',tip:'Percentual de disputas aéreas vencidas. Essencial para o centroavante de referência.'},
-        {id:'a-duel',label:'Duelos terrestres (%)',tipo:'number',tip:'Percentual de disputas no chão vencidas. Inclui proteção de bola de costas para o gol.'},
-        {id:'a-assis',label:'Assistências',tipo:'number',tip:'O centroavante que combina também cria gols para os companheiros.'},
-        {id:'a-chances',label:'Chances criadas',tipo:'number',tip:'Situações de finalização geradas para companheiros.'},
-        {id:'a-recup',label:'Recuperações pelo pressing',tipo:'number',tip:'Recuperações geradas pela pressão alta do centroavante na saída de bola adversária.'},
-      ]},
-      {titulo:'Físico',campos:[
-        {id:'a-dist',label:'Distância total (km)',tipo:'number',step:'0.1',tip:'Volume físico. Centroavantes modernos trabalham muito fora da área.'},
-        {id:'a-vel',label:'Velocidade máxima (km/h)',tipo:'number',step:'0.1',tip:'Pico de velocidade. Relevante para centroavantes de ruptura.'},
-      ]},
-    ],
-    obs:'Observe: timing das corridas sem bola (corre no momento certo para não ficar impedido?), posicionamento dentro da área nos cruzamentos (primeiro ou segundo pau?), proteção de bola de costas para o gol, reação mental após chances perdidas.'
-  },
-};
-
-const PM={
-  'Goleiro':['Sweeper-keeper','Goleiro de área'],
-  'Zagueiro':['Saída de bola','Contenção pura','Linha alta'],
-  'Lateral direito':['Sobreposição ofensiva','Contenção defensiva','Invertido'],
-  'Lateral esquerdo':['Sobreposição ofensiva','Contenção defensiva','Invertido'],
-  'Volante':['Contenção','Ligação','Box-to-box'],
-  'Meia central':['Armador','Alta intensidade','Entre linhas'],
-  'Meia-atacante':['Camisa 10','Segundo atacante de pressão'],
-  'Ponta direita':['Tradicional de velocidade','Invertido'],
-  'Ponta esquerda':['Tradicional de velocidade','Invertido'],
-  'Centroavante':['Área','Pivô','Falso 9'],
-};
-
-const COLORS=['#00C853','#00BCD4','#7C4DFF','#FF6D00','#F50057','#FFD600'];
-
-// ===== AUTH =====
+// AUTH
 let authMode='login';
-function swAuth(m,btn){authMode=m;document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('abtn').textContent=m==='login'?'Entrar':'Criar conta';}
+function swAuth(m,btn){
+  authMode=m;
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('abtn').textContent=m==='login'?'Entrar':'Criar conta';
+}
 async function doAuth(){
-  const em=document.getElementById('aemail').value.trim(),ps=document.getElementById('apass').value;
-  const err=document.getElementById('aerr');err.style.display='none';
+  const em=document.getElementById('aemail').value.trim();
+  const ps=document.getElementById('apass').value;
+  const err=document.getElementById('aerr');
+  err.style.display='none';
   if(!em||!ps){err.textContent='Preencha email e senha.';err.style.display='block';return;}
-  const btn=document.getElementById('abtn');btn.textContent='...';btn.disabled=true;
-  const res=authMode==='login'?await supa.auth.signInWithPassword({email:em,password:ps}):await supa.auth.signUp({email:em,password:ps});
-  btn.disabled=false;btn.textContent=authMode==='login'?'Entrar':'Criar conta';
+  const btn=document.getElementById('abtn');
+  btn.textContent='...';btn.disabled=true;
+  const res=authMode==='login'
+    ?await supa.auth.signInWithPassword({email:em,password:ps})
+    :await supa.auth.signUp({email:em,password:ps});
+  btn.disabled=false;
+  btn.textContent=authMode==='login'?'Entrar':'Criar conta';
   if(res.error){err.textContent=res.error.message;err.style.display='block';return;}
-  if(authMode==='signup'&&!res.data.session){err.style.cssText='display:block;background:#00C85322;color:var(--verde);border-color:var(--verde);';err.textContent='Conta criada! Verifique seu email.';return;}
+  if(authMode==='signup'&&!res.data.session){
+    err.style.cssText='display:block;background:#00C85322;color:var(--v);border-color:var(--v);';
+    err.textContent='Conta criada! Verifique seu email e faca login.';return;
+  }
   startApp(res.data.user);
 }
 function startApp(u){
@@ -2119,2096 +1920,904 @@ function startApp(u){
   document.getElementById('auth-sc').classList.add('hidden');
   document.getElementById('app-sc').classList.remove('hidden');
   document.getElementById('uem').textContent=u.email;
-  if(u.email===ADMIN_EMAIL)document.getElementById('tab-fb-btn').style.display='flex';
-  document.getElementById('tab-lesao-btn').style.display='flex';
-  // Adicionar botão sidebar lesão
-  mostrarAbaLesao();
+  if(u.email===ADMIN)document.getElementById('tab-fb-btn').style.display='flex';
   loadHist();
+  renderPads();
+  renderJogs();
+  renderEvs();
+  swBP('escanteios',null);
 }
 async function logout(){await supa.auth.signOut();location.reload();}
-supa.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.user);});
+supa.auth.getSession().then(function(r){if(r.data.session)startApp(r.data.session.user);});
 
-// ===== NAV =====
+// NAV
 function swTab(t,btn){
-  ['atleta','clube','prosp','hist','feedback','lesao','video','dashboard','bolaparada','upload'].forEach(x=>{
-    const el=document.getElementById('tab-'+x);if(el)el.classList.add('hidden');
-    const sb=document.getElementById('sb-'+x);if(sb)sb.classList.add('hidden');
+  ['atleta','clube','prosp','video','bolaparada','prejogo','dashboard','hist','planos','feedback'].forEach(function(x){
+    var el=document.getElementById('tab-'+x);if(el)el.classList.add('hidden');
+    var sb=document.getElementById('sb-'+x);if(sb)sb.classList.add('hidden');
   });
-  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mtab').forEach(function(b){b.classList.remove('active');});
   document.getElementById('tab-'+t).classList.remove('hidden');
-  document.getElementById('sb-'+t)?.classList.remove('hidden');
+  var sb=document.getElementById('sb-'+t);if(sb)sb.classList.remove('hidden');
   btn.classList.add('active');
   if(t==='hist')renderHist();
-  if(t==='dashboard')carregarDashboard();
-  if(t==='planos')carregarPlanos();
-  if(t==='feedback')loadFeedbacks();
+  if(t==='dashboard')carregarDash();
+  if(t==='feedback')loadFB();
+  if(t==='planos')loadPlanos();
 }
-function gt(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+function gt(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
-// ===== UTILS =====
-function v(id){return document.getElementById(id)?.value?.trim()||'';}
-function selC(el,hid,val){el.closest('.cr').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById(hid).value=val;}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
-function limpar(tid){document.querySelectorAll('#'+tid+' input,#'+tid+' select,#'+tid+' textarea').forEach(el=>{if(el.type==='range')el.value=70;else if(el.type!=='hidden')el.value='';});showToast('Formulário limpo.');}
+// UTILS
+function v(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function selC(el,hid,val){
+  el.closest('.cr').querySelectorAll('.chip').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  document.getElementById(hid).value=val;
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
+function limpar(tid){
+  document.querySelectorAll('#'+tid+' input,#'+tid+' select,#'+tid+' textarea').forEach(function(el){
+    if(el.type==='range')el.value=70;
+    else if(el.type!=='hidden')el.value='';
+  });
+  showToast('Formulario limpo.');
+}
+function selR(el,val){
+  document.querySelectorAll('.ri').forEach(function(r){r.classList.remove('sb','sm','sa');});
+  if(val==='Baixo')el.classList.add('sb');
+  else if(val==='Medio')el.classList.add('sm');
+  else el.classList.add('sa');
+  document.getElementById('p-risco').value=val;
+}
 
+// PERFIS
+var PM={
+  'Goleiro':['Sweeper-keeper','Goleiro de area'],
+  'Zagueiro':['Saida de bola','Contencao pura','Linha alta'],
+  'Lateral direito':['Sobreposicao ofensiva','Contencao defensiva','Invertido'],
+  'Lateral esquerdo':['Sobreposicao ofensiva','Contencao defensiva','Invertido'],
+  'Volante':['Contencao','Ligacao','Box-to-box'],
+  'Meia central':['Armador','Alta intensidade','Entre linhas'],
+  'Meia-atacante':['Camisa 10','Segundo atacante de pressao'],
+  'Ponta direita':['Tradicional de velocidade','Invertido'],
+  'Ponta esquerda':['Tradicional de velocidade','Invertido'],
+  'Centroavante':['Area','Pivo','Falso 9'],
+};
 function rPerfis(posId,chipsId,hid){
-  const pos=v(posId),perfis=PM[pos]||[];
-  const c=document.getElementById(chipsId);
-  if(!perfis.length){c.innerHTML='<span style="color:var(--c4);font-size:12px;">Selecione a posição primeiro</span>';return;}
-  c.innerHTML=perfis.map(p=>`<div class="csq" onclick="selPChip(this,'${hid}','${p}')">${p}</div>`).join('');
+  var pos=v(posId),perfis=PM[pos]||[];
+  var c=document.getElementById(chipsId);
+  if(!perfis.length){c.innerHTML='<span style="color:var(--c4);font-size:12px;">Selecione a posicao primeiro</span>';return;}
+  c.innerHTML=perfis.map(function(p){
+    return '<div class="csq" onclick="selPChip(this,\''+hid+'\',\''+p+'\')">'+p+'</div>';
+  }).join('');
 }
-function selPChip(el,hid,val){el.closest('.cr').querySelectorAll('.csq').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById(hid).value=val;}
-function selR(el,val){document.querySelectorAll('.ri').forEach(r=>r.classList.remove('sb','sm','sa'));if(val==='Baixo')el.classList.add('sb');else if(val==='Médio')el.classList.add('sm');else el.classList.add('sa');document.getElementById('p-risco').value=val;}
+function selPChip(el,hid,val){
+  el.closest('.cr').querySelectorAll('.csq').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  document.getElementById(hid).value=val;
+}
 
-// ===== MÉTRICAS DINÂMICAS =====
-function onPosAtleta(){
-  const pos=v('a-pos');
-  rPerfis('a-pos','a-pchips','a-perf');
-  const cont=document.getElementById('a-met-campos');
-  const label=document.getElementById('a-met-pos');
-  const obs=document.getElementById('a-obs');
+// METRICAS POR POSICAO
+var METS={
+  'Goleiro':{g:[
+    {t:'Defesa',c:[
+      {id:'a-def',l:'Defesas',tip:'Total de defesas no periodo.'},
+      {id:'a-defpct',l:'Defesas (%)',tip:'% de chutes defendidos. Ex: 78'},
+      {id:'a-xga',l:'xGA',s:'0.01',tip:'Expected Goals Against. Compare com gols sofridos reais.'},
+      {id:'a-gols-s',l:'Gols sofridos',tip:'Total de gols sofridos.'},
+      {id:'a-said',l:'Saidas de area',tip:'Vezes que saiu da area para cortar ou antecipar.'}
+    ]},
+    {t:'Jogo com os pes',c:[
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 82 = 82% dos passes completados.'},
+      {id:'a-paslong',l:'Passes longos (%)',tip:'Eficiencia nos lancamentos longos.'},
+      {id:'a-toques',l:'Toques / jogo',tip:'Media de toques com os pes por partida.'}
+    ]}
+  ],obs:'Observe: saidas de area, comunicacao com a zaga, comportamento em cruzamentos, distribuicao sob pressao.'},
+  'Zagueiro':{g:[
+    {t:'Defesa',c:[
+      {id:'a-duel',l:'Duelos terrestres (%)',tip:'% de disputas no chao vencidas. Ex: 67'},
+      {id:'a-aer',l:'Duelos aereos (%)',tip:'% de disputas aereas vencidas.'},
+      {id:'a-int',l:'Interceptacoes',tip:'Reflete leitura antecipatoria do jogo.'},
+      {id:'a-cort',l:'Cortes',tip:'Afastamentos de bola dentro e fora da area.'},
+      {id:'a-bloq',l:'Bloqueios de chute',tip:'Indica disposicao e posicionamento defensivo.'}
+    ]},
+    {t:'Construcao',c:[
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 91 = 91% completados.'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Passes que avancam o jogo para o terco final.'},
+      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Relevante para zagueiros em linha alta.'}
+    ]}
+  ],obs:'Observe: posicionamento na linha defensiva, comunicacao com o parceiro, decisao entre fazer falta ou deixar passar, saida de bola sob pressao.'},
+  'Lateral direito':{g:[
+    {t:'Defesa',c:[
+      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% de duelos defensivos vencidos no corredor.'},
+      {id:'a-int',l:'Interceptacoes',tip:'Indica posicionamento e antecipacao.'},
+      {id:'a-recup',l:'Recuperacoes',tip:'Total de recuperacoes no periodo.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno apos perda de bola.'}
+    ]},
+    {t:'Ataque',c:[
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% de cruzamentos que chegaram a um companheiro.'},
+      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Capacidade de criar superioridade.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Laterais de alto nivel costumam passar de 11km.'},
+      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Fundamental para laterais ofensivos.'}
+    ]}
+  ],obs:'Observe: timing das sobreposicoes, combinacao com o ponta, retorno defensivo, posicionamento no 1x1 defensivo.'},
+  'Lateral esquerdo':{g:[
+    {t:'Defesa',c:[
+      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% de duelos defensivos vencidos.'},
+      {id:'a-int',l:'Interceptacoes',tip:'Passes cortados na zona de marcacao.'},
+      {id:'a-recup',l:'Recuperacoes',tip:'Total de recuperacoes.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno apos perda.'}
+    ]},
+    {t:'Ataque',c:[
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% de cruzamentos que chegaram a um companheiro.'},
+      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Dribles bem-sucedidos no corredor esquerdo.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Volume fisico total no periodo.'},
+      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Pico de velocidade no periodo.'}
+    ]}
+  ],obs:'Observe: timing das sobreposicoes, combinacao com o ponta esquerdo, retorno defensivo, aproveitamento dos espacos.'},
+  'Volante':{g:[
+    {t:'Defesa',c:[
+      {id:'a-int',l:'Interceptacoes',tip:'Principal metrica defensiva do volante.'},
+      {id:'a-duel',l:'Duelos ganhos (%)',tip:'% de disputas no meio-campo. Ex: 58'},
+      {id:'a-recup',l:'Recuperacoes',tip:'Inclui roubadas de bola e segundas bolas.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Para fechar espacos ou pressionar.'}
+    ]},
+    {t:'Construcao',c:[
+      {id:'a-paspct',l:'Passes em pressao (%)',tip:'% de passes completados quando pressionado.'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Para volante de ligacao, metrica central.'},
+      {id:'a-paschv',l:'Passes chave',tip:'Passes que geram diretamente uma finalizacao.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Box-to-box costumam passar de 12km.'}
+    ]}
+  ],obs:'Observe: posicionamento entre as linhas, velocidade de decisao, comportamento apos perda, lideranca organizando defensivamente.'},
+  'Meia central':{g:[
+    {t:'Criacao',c:[
+      {id:'a-paschv',l:'Passes chave / jogo',tip:'Principal metrica de criacao do armador.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de gol geradas.'},
+      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 89. Alto % mantem o ritmo do time.'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Participacao na construcao ofensiva.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Ferramenta de progressao e desequilibrio.'}
+    ]},
+    {t:'Defesa',c:[
+      {id:'a-recup',l:'Recuperacoes',tip:'Mesmo o armador precisa recuperar.'},
+      {id:'a-duel',l:'Duelos ganhos (%)',tip:'Eficiencia nas disputas no meio.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Meias de alta intensidade passam de 11km.'}
+    ]}
+  ],obs:'Observe: movimento sem bola, velocidade de leitura, qualidade do primeiro toque, pressing apos perda, relacao com o centroavante.'},
+  'Meia-atacante':{g:[
+    {t:'Criacao e finalizacao',c:[
+      {id:'a-assis',l:'Assistencias',tip:'Metrica central do meia-atacante.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Arma fundamental do camisa 10.'},
+      {id:'a-drtent',l:'Dribles tentados',tip:'Total de tentativas. Compara com completados.'},
+      {id:'a-gols',l:'Gols',tip:'O meia-atacante tambem precisa finalizar.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao geradas.'},
+      {id:'a-fintot',l:'Finalizacoes totais',tip:'Volume de chutes no periodo.'}
+    ]},
+    {t:'Defesa',c:[
+      {id:'a-recup',l:'Recuperacoes pelo pressing',tip:'Recuperacoes geradas pela pressao alta.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'O camisa 10 moderno trabalha defensivamente.'}
+    ]}
+  ],obs:'Observe: movimentacao entre as linhas, relacao com o centroavante, decisao entre finalizar ou assistir, pressing sem bola.'},
+  'Ponta direita':{g:[
+    {t:'Desequilibrio',c:[
+      {id:'a-drok',l:'Dribles completados',tip:'Principal metrica de desequilibrio individual.'},
+      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiencia ideal acima de 45%.'},
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais. Ex: 32'},
+      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'}
+    ]},
+    {t:'Finalizacao e fisico',c:[
+      {id:'a-gols',l:'Gols',tip:'Mais relevante para pontas invertidos.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao.'},
+      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Acima de 33 km/h e referencia no alto nivel.'},
+      {id:'a-spr',l:'Numero de sprints',tip:'Pontas de velocidade tem alto volume.'}
+    ]}
+  ],obs:'Observe: primeiro gesto no drible, movimento de ruptura nas costas do lateral, pressing sem bola, combinacao com o lateral do mesmo lado.'},
+  'Ponta esquerda':{g:[
+    {t:'Desequilibrio',c:[
+      {id:'a-drok',l:'Dribles completados',tip:'Principal metrica de impacto individual.'},
+      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiencia ideal acima de 45%.'},
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais pelo lado esquerdo.'},
+      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'}
+    ]},
+    {t:'Finalizacao e fisico',c:[
+      {id:'a-gols',l:'Gols',tip:'Relevante para pontas invertidos.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao.'},
+      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Essencial para pontas que exploram profundidade.'},
+      {id:'a-spr',l:'Numero de sprints',tip:'Volume de esforcos maximos.'}
+    ]}
+  ],obs:'Observe: primeiro gesto no drible, movimento de ruptura, pressing sem bola, decisao entre cruzar ou cortar para dentro.'},
+  'Centroavante':{g:[
+    {t:'Finalizacao',c:[
+      {id:'a-gols',l:'Gols',tip:'Sempre analisar em conjunto com xG.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Se gols > xG, esta finalizando acima do esperado.'},
+      {id:'a-fintot',l:'Finalizacoes totais',tip:'Volume de chutes.'},
+      {id:'a-finalv',l:'Finalizacoes no alvo',tip:'Eficiencia ideal acima de 40% do total.'},
+      {id:'a-golscab',l:'Gols de cabeca',tip:'Fundamental para referencia aerea.'}
+    ]},
+    {t:'Dominio e coletivo',c:[
+      {id:'a-aer',l:'Duelos aereos (%)',tip:'Essencial para o centroavante de referencia.'},
+      {id:'a-duel',l:'Duelos terrestres (%)',tip:'Inclui protecao de bola de costas para o gol.'},
+      {id:'a-assis',l:'Assistencias',tip:'O centroavante que combina cria para companheiros.'},
+      {id:'a-recup',l:'Recuperacoes pelo pressing',tip:'Geradas pela pressao na saida de bola adversaria.'},
+      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Centroavantes modernos trabalham muito fora da area.'}
+    ]}
+  ],obs:'Observe: timing das corridas sem bola, posicionamento na area nos cruzamentos, protecao de bola de costas, reacao apos chances perdidas.'},
+};
 
-  if(!pos||!METRICAS[pos]){
-    label.textContent='— selecione a posição para ver as métricas';
-    cont.innerHTML='<div class="ibanner">Selecione a <strong>posição</strong> na seção de dados pessoais para carregar as métricas específicas desta posição.</div>';
-    obs.placeholder='Selecione a posição para ver sugestões do que observar...';
+function onPosA(){
+  var pos=v('a-pos');
+  rPerfis('a-pos','a-pch','a-perf');
+  var label=document.getElementById('a-mpos');
+  var cont=document.getElementById('a-mcampos');
+  var obs=document.getElementById('a-obs');
+  if(!pos||!METS[pos]){
+    label.textContent='';
+    cont.innerHTML='<div class="ibanner">Selecione a <strong>posicao</strong> para carregar as metricas especificas.</div>';
+    if(obs)obs.placeholder='Selecione a posicao para ver sugestoes...';
     return;
   }
-
-  label.textContent=`— ${pos}`;
-  obs.placeholder=METRICAS[pos].obs;
-
-  let html='';
-  METRICAS[pos].grupos.forEach(g=>{
-    html+=`<div style="margin-bottom:6px;"><p style="font-size:11px;font-weight:600;color:var(--c4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--c7);">${g.titulo}</p>`;
-    html+='<div class="fg3">';
-    g.campos.forEach(c=>{
-      const step=c.step?`step="${c.step}"`:'';
-      html+=`<div class="fgrp"><label class="flbl">${c.label} <i class="tip-icon">?<span class="tip-box">${c.tip}</span></i></label><input class="finp" id="${c.id}" type="${c.tipo}" ${step} placeholder="0"></div>`;
+  label.textContent='-- '+pos;
+  if(obs)obs.placeholder=METS[pos].obs;
+  var html='';
+  METS[pos].g.forEach(function(grp){
+    html+='<p style="font-size:10px;font-weight:600;color:var(--c4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--c7);">'+grp.t+'</p><div class="fg3">';
+    grp.c.forEach(function(f){
+      var step=f.s?' step="'+f.s+'"':'';
+      html+='<div class="fgrp"><label class="flbl">'+f.l+' <i class="ti">?<span class="tb">'+f.tip+'</span></i></label><input class="finp" id="'+f.id+'" type="number"'+step+' placeholder="0"></div>';
     });
-    html+='</div></div>';
+    html+='</div>';
   });
   cont.innerHTML=html;
 }
 
-function coletarMetricasAtleta(){
-  const pos=v("a-pos");
-  const dados={};
-  if(pos&&METRICAS[pos]){
-    METRICAS[pos].grupos.forEach(g=>{
-      g.campos.forEach(c=>{
-        const val=v(c.id);
-        if(val)dados[c.label]=val;
-      });
+function coletarMets(){
+  var pos=v('a-pos');
+  var d={};
+  if(pos&&METS[pos]){
+    METS[pos].g.forEach(function(grp){
+      grp.c.forEach(function(f){var vl=v(f.id);if(vl)d[f.l]=vl;});
     });
   }
-  const gps={"Distância total (km)":v("gps-dist")||null,"Alta intensidade (km)":v("gps-ai")||null,"Sprint (km)":v("gps-sp")||null,"Número de sprints":v("gps-nspr")||null,"Velocidade máxima (km/h)":v("gps-vel")||null,"Acelerações":v("gps-acel")||null,"Desacelerações":v("gps-desacel")||null,"Carga PSE":v("gps-pse")||null,"FC média (% FCmáx)":v("gps-fc")||null};
-  Object.entries(gps).forEach(([k,vl])=>{if(vl)dados[k]=vl;});
-  return dados;
+  var gps={'Distancia total (km)':v('gps-dist'),'Alta intensidade (km)':v('gps-ai'),'Sprint (km)':v('gps-sp'),'N sprints':v('gps-nspr'),'Vel. maxima (km/h)':v('gps-vel'),'Aceleracoes':v('gps-acel'),'Desaceleracoes':v('gps-desacel'),'PSE':v('gps-pse'),'FC media (%)':v('gps-fc')};
+  Object.keys(gps).forEach(function(k){if(gps[k])d[k]=gps[k];});
+  return d;
 }
 
-// ===== RADAR =====
-function desenharRadar(cid,labels,valores,nome){
-  const ctx=document.getElementById(cid)?.getContext('2d');
-  if(!ctx)return null;
-  if(cid==='radar-a'&&rChA){rChA.destroy();rChA=null;}
-  if(cid==='mRc'&&rChM){rChM.destroy();rChM=null;}
-  const gc='rgba(255,255,255,0.08)',lc='#AAAAAA';
-  const ch=new Chart(ctx,{type:'radar',data:{labels,datasets:[{data:valores,backgroundColor:'rgba(0,200,83,0.15)',borderColor:'#00C853',borderWidth:2.5,pointBackgroundColor:'#00C853',pointRadius:4,pointHoverRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{display:false,stepSize:20},grid:{color:gc},pointLabels:{color:lc,font:{size:11,family:'Inter'}},angleLines:{color:gc}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>`${c.label}: ${c.raw}/100`}}},animation:{duration:800,easing:'easeInOutQuart'}}});
-  if(cid==='radar-a')rChA=ch;
-  if(cid==='mRc')rChM=ch;
-  return ch;
-}
-
-function renderScores(cid,scores,gnId,gdId){
-  const cont=document.getElementById(cid);if(!cont)return;
-  cont.innerHTML=scores.map((s,i)=>`<div class="si2"><div class="sd" style="background:${COLORS[i%COLORS.length]}"></div><div class="sl">${s.categoria}</div><div class="sbw"><div class="sb2" style="width:${s.valor}%;background:${COLORS[i%COLORS.length]}"></div></div><div class="sn2" style="color:${COLORS[i%COLORS.length]}">${s.valor}</div></div>`).join('');
-  const g=Math.round(scores.reduce((a,s)=>a+s.valor,0)/scores.length);
-  document.getElementById(gnId).textContent=g;
-  if(gdId){const d=document.getElementById(gdId);if(d)d.textContent=g>=80?'Excelente desempenho':g>=65?'Bom desempenho':g>=50?'Desempenho regular':'Precisa de atenção';}
-}
-
-// ===== PROMPTS =====
-function mkPromptAtleta(){
-  const pos=v('a-pos'),mets=coletarMetricasAtleta();
-  const metsStr=Object.entries(mets).map(([k,vl])=>`${k}: ${vl}`).join(' | ')||'Não informadas';
-  return `Você é um analista de desempenho sênior da Potencial Sports.
-
-Analise os dados e retorne DOIS blocos:
-
-## BLOCO 1
-SCORES_JSON:{"categorias":[{"categoria":"Nome","valor":85},...],"score_global":78,"descricao_global":"Resumo em uma linha"}
-Use 5 a 6 categorias específicas para ${pos}. Valores de 0 a 100.
-
-## BLOCO 2 — RELATÓRIO
-1. VISÃO GERAL
-2. MÉTRICAS PRINCIPAIS (interprete com contexto para ${pos})
-3. ANÁLISE TÉCNICA (específica para ${pos} com perfil ${v('a-perf')||'não definido'})
-4. ANÁLISE FÍSICA
-5. PONTOS FORTES
-6. PONTOS DE ATENÇÃO
-7. RECOMENDAÇÕES (para o treinador)
-8. SCORE GERAL: X/100
-
-ATLETA: ${v('a-nome')||'N/I'} | POS: ${pos} | PERFIL: ${v('a-perf')||'N/I'} | PÉ: ${v('a-pe')}
-CLUBE: ${v('a-clube')} | CAT: ${v('a-cat')} | SISTEMA: ${v('a-sist')}
-PERÍODO: ${v('a-per')} ${v('a-pernum')} | COMP: ${v('a-comp')} | PARTIDAS: ${v('a-part')||'-'} | MIN: ${v('a-min')||'-'}
-
-MÉTRICAS (${pos}): ${metsStr}
-
-OBSERVAÇÕES DO ANALISTA: ${v('a-obs')||'Sem observações.'}
-SCORE DO ANALISTA: ${v('a-sc')}/100
-
-Terminologia técnica do futebol brasileiro. Tom para comissão técnica. Não mencione o prompt.`;
-}
-
-function mkPromptClube(){
-  return `Você é analista tático sênior da Potencial Sports.
-Gere relatório tático: 1.IDENTIDADE TÁTICA 2.ANÁLISE DEFENSIVA 3.ANÁLISE OFENSIVA 4.TRANSIÇÕES ${v('c-adv')?'5.ADVERSÁRIO':''} ${v('pj-g')?'6.PÓS-JOGO':''} 7.PONTOS FORTES 8.PONTOS DE ATENÇÃO 9.RECOMENDAÇÕES
-
-CLUBE: ${v('c-nome')} | CAT: ${v('c-cat')} | COMP: ${v('c-comp')} | FORM: ${v('c-form')} | TREIN: ${v('c-trein')}
-ESC: GK:${v('c-gk')} Z1:${v('c-z1')} Z2:${v('c-z2')} LD:${v('c-ld')} LE:${v('c-le')} V1:${v('c-v1')} V2:${v('c-v2')} MEI:${v('c-mei')} PD:${v('c-pd')} PE:${v('c-pej')} CA:${v('c-ca')}
-OBS: ${v('c-obst')||'-'}
-MÉT: Posse:${v('c-pos')||'-'}% PPDA:${v('c-ppda')||'-'} xG:${v('c-xg')||'-'} xGA:${v('c-xga')||'-'} Gols:${v('c-gols')||'-'} GS:${v('c-gs')||'-'} Pass%:${v('c-pass')||'-'} Chutes:${v('c-chut')||'-'} Duel%:${v('c-duel')||'-'}
-${v('c-adv')?`ADV: ${v('c-adv')} FORM:${v('c-advf')} EST:${v('c-adve')} LOCAL:${v('c-advl')} J1:${v('c-j1')} J2:${v('c-j2')} OBS:${v('c-advo')}`:''}
-${v('pj-g')?`PJ: ${v('c-nome')||'Time'} ${v('pj-n')||'0'}x${v('pj-a')||'0'} ${v('pj-r')} ${v('pj-l')} | ${v('pj-g')} | POS:${v('pj-pos')} AT:${v('pj-at')} DEF:${v('pj-def')} OF:${v('pj-of')} REC:${v('pj-rec')}`:''}
-Terminologia futebol brasileiro. Não mencione o prompt.`;
-}
-
-function mkPromptProsp(){
-  return `Você é scout sênior da Potencial Sports.
-PARECER DE PROSPECÇÃO: 1.RESUMO 2.ADEQUAÇÃO AO SISTEMA 3.NÍVEL COMPETITIVO 4.POTENCIAL DE DESENVOLVIMENTO 5.PONTOS FORTES 6.PONTOS DE ATENÇÃO 7.RISCOS 8.PARECER FINAL: ✅ RECOMENDAR / 👁 MONITORAR / ❌ NÃO RECOMENDAR
-
-ATLETA: ${v('p-nome')} | IDADE: ${v('p-idade')} | CLUBE: ${v('p-clube')} | NÍVEL: ${v('p-niv')}
-POS: ${v('p-pos')} | PERFIL: ${v('p-perf')} | PÉ: ${v('p-pe')} | ALT: ${v('p-alt')}cm
-DEST: ${v('p-cdest')} | SIST: ${v('p-sist')} | RISCO: ${v('p-risco')} | VALOR: ${v('p-val')}
-DADOS (${v('p-part')} jogos / ${v('p-min')} min): Gols:${v('p-gols')} Ast:${v('p-assis')} xG:${v('p-xg')} Pass%:${v('p-pass')} Duel%:${v('p-duel')} Drib:${v('p-drib')} Vel:${v('p-vel')}km/h
-OBS VÍDEO: ${v('p-obs')||'-'}
-CONTEXTO: ${v('p-ctx')||'-'}
-Terminologia futebol brasileiro. Não mencione o prompt.`;
-}
-
-// ===== GERAR ANÁLISES =====
-async function gerarAtleta(){
-  const nome=v('a-nome')||'Atleta';
-  const out=document.getElementById('atleta-out');
-  const resEl=document.getElementById('ia-a');
-  out.classList.remove('hidden');
-  document.getElementById('r-nome').textContent=nome;
-  document.getElementById('r-pos').textContent=v('a-pos')+' • '+(v('a-perf')||'');
-  gt('sa-ia');
-  const texto=mkPromptAtleta();
-  resEl.textContent=texto;
-  try{
-    const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'atleta',nome,posicao:v('a-pos'),periodo:v('a-per'),dados:{nome,pos:v('a-pos'),perf:v('a-perf'),clube:v('a-clube'),cat:v('a-cat'),score:v('a-sc')},relatorio_ia:texto,score:parseInt(v('a-sc'))||null}).select().single();
-    if(rel)rIds.atleta=rel.id;
-  }catch(e){}
-  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
-}
-
-async function gerarClube(){
-  const nome=v('c-nome')||'Clube';
-  const out=document.getElementById('clube-out');
-  const resEl=document.getElementById('ia-c');
-  out.classList.remove('hidden');
-  gt('sc-ia');
-  const texto=mkPromptClube();
-  resEl.textContent=texto;
-  try{
-    const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'clube',nome,posicao:v('c-form'),dados:{nome,form:v('c-form'),comp:v('c-comp')},relatorio_ia:texto}).select().single();
-    if(rel)rIds.clube=rel.id;
-  }catch(e){}
-  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
-}
-
-async function gerarProsp(){
-  const nome=v('p-nome')||'Atleta';
-  const out=document.getElementById('prosp-out');
-  const resEl=document.getElementById('ia-p');
-  out.classList.remove('hidden');
-  gt('sp-ia');
-  const texto=mkPromptProsp();
-  resEl.textContent=texto;
-  try{
-    const{data:rel}=await supa.from('relatorios').insert({user_id:cU.id,tipo:'prospeccao',nome,posicao:v('p-pos'),dados:{nome,pos:v('p-pos'),clube:v('p-clube'),nivel:v('p-niv'),risco:v('p-risco')},relatorio_ia:texto}).select().single();
-    if(rel)rIds.prosp=rel.id;
-  }catch(e){}
-  showToast('✓ Texto gerado! Copie e cole no Claude ou ChatGPT.');
-}
-
-// ===== FEEDBACK =====
-async function darFB(tipo,nota,el){
-  const rid=rIds[tipo];
-  el.closest('.fbbar').querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<nota));
-  const ok=document.getElementById(`fbok-${tipo}`);if(ok)ok.style.display='inline';
-  if(rid)await supa.from('feedbacks').insert({user_id:cU.id,relatorio_id:rid,nota});
-}
-
-// ===== PAINEL FEEDBACK (admin) =====
-async function loadFeedbacks(){
-  const{data:fbs}=await supa.from('feedbacks').select('*,relatorios(tipo,nome)').order('created_at',{ascending:false});
-  if(!fbs?.length){
-    document.getElementById('fb-stats-grid').innerHTML='<div class="fb-stat" style="grid-column:1/-1;"><div class="empty-state">Nenhum feedback ainda.</div></div>';
-    document.getElementById('fb-rows').innerHTML='';
-    return;
+// ALERTA LESAO
+function calcRisco(mets,anterior){
+  var pse=parseFloat(mets['PSE']||0);
+  var ai=parseFloat(mets['Alta intensidade (km)']||0);
+  var acel=parseFloat(mets['Aceleracoes']||0);
+  var spr=parseFloat(mets['N sprints']||0);
+  var score=0;
+  var fats=[];
+  if(pse>3500){score+=35;fats.push({i:'vermelho',t:'PSE '+pse+' -- sobrecarga severa.'});}
+  else if(pse>2800){score+=18;fats.push({i:'amarelo',t:'PSE '+pse+' -- acima do limiar.'});}
+  if(ai>4){score+=22;fats.push({i:'vermelho',t:'Alta intensidade '+ai+'km -- acima do recomendado.'});}
+  else if(ai>3){score+=12;fats.push({i:'amarelo',t:'Alta intensidade '+ai+'km -- proximo do limite.'});}
+  if(acel>80){score+=18;fats.push({i:'vermelho',t:'Aceleracoes '+acel+' -- sobrecarga neuromuscular.'});}
+  if(spr>30){score+=12;fats.push({i:'amarelo',t:'Sprints '+spr+' -- volume elevado.'});}
+  if(anterior){
+    var pAnt=parseFloat(anterior.dados&&anterior.dados.metricas?anterior.dados.metricas['PSE']||0:0);
+    if(pse>0&&pAnt>0){
+      var vr=((pse-pAnt)/pAnt)*100;
+      if(vr>30){score+=28;fats.push({i:'vermelho',t:'Carga aumentou '+vr.toFixed(0)+'% -- pico critico (ACWR).'});}
+      else if(vr>15){score+=14;fats.push({i:'amarelo',t:'Carga aumentou '+vr.toFixed(0)+'% -- variacao acima do recomendado.'});}
+    }
   }
-  const total=fbs.length;
-  const media=(fbs.reduce((a,f)=>a+f.nota,0)/total).toFixed(1);
-  const porTipo={atleta:[],clube:[],prospeccao:[]};
-  fbs.forEach(f=>{const t=f.relatorios?.tipo;if(porTipo[t])porTipo[t].push(f.nota);});
-
-  document.getElementById('fb-stats-grid').innerHTML=`
-    <div class="fb-stat"><div class="fb-stat-num">${total}</div><div class="fb-stat-lbl">Total de avaliações</div></div>
-    <div class="fb-stat"><div class="fb-stat-num">${media} ⭐</div><div class="fb-stat-lbl">Nota média geral</div></div>
-    <div class="fb-stat"><div class="fb-stat-num">${fbs.filter(f=>f.nota>=4).length}</div><div class="fb-stat-lbl">Avaliações 4-5 estrelas</div></div>
-    <div class="fb-stat"><div class="fb-stat-num">${fbs.filter(f=>f.nota<=2).length}</div><div class="fb-stat-lbl">Avaliações 1-2 estrelas</div></div>`;
-
-  const lmap={atleta:'⚽ Atleta',clube:'🏟️ Clube',prospeccao:'🔍 Prospecção'};
-  let mediasHtml='';
-  Object.entries(porTipo).forEach(([tipo,notas])=>{
-    if(!notas.length)return;
-    const m=(notas.reduce((a,n)=>a+n,0)/notas.length).toFixed(1);
-    mediasHtml+=`<div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:13px;color:var(--b);">${lmap[tipo]}</span><span style="font-size:13px;font-weight:600;color:var(--verde);">${m} ⭐ (${notas.length})</span></div><div class="fb-media-bar"><div class="fb-bar-wrap"><div class="fb-bar-fill" style="width:${(m/5)*100}%"></div></div></div></div>`;
-  });
-  document.getElementById('fb-medias').innerHTML=mediasHtml;
-
-  const tmap={atleta:'ta',clube:'tc',prospeccao:'tpr'};
-  document.getElementById('fb-rows').innerHTML=fbs.map(f=>`
-    <div class="fb-row">
-      <div class="fb-stars">${'⭐'.repeat(f.nota)}${'☆'.repeat(5-f.nota)}</div>
-      <span class="fb-tipo htag ${tmap[f.relatorios?.tipo]||''}">${lmap[f.relatorios?.tipo]||f.relatorios?.tipo||'—'}</span>
-      <div class="fb-nome">${f.relatorios?.nome||'—'}</div>
-      <div class="fb-data">${new Date(f.created_at).toLocaleDateString('pt-BR')}</div>
-    </div>`).join('');
+  score=Math.min(score,100);
+  var nivel,cls,bclr,rec;
+  if(score>=70){nivel='CRITICO';cls='r-critico';bclr='rb-critico';rec='Acao imediata. Consultar fisioterapeuta e reduzir carga.';}
+  else if(score>=45){nivel='ALTO';cls='r-alto';bclr='rb-alto';rec='Reduzir volume nos proximos dias. Priorizar recuperacao ativa.';}
+  else if(score>=20){nivel='MEDIO';cls='r-medio';bclr='rb-medio';rec='Monitorar de perto. Manter carga atual, evitar aumentos.';}
+  else{nivel='BAIXO';cls='r-baixo';bclr='rb-baixo';rec='Carga dentro do esperado. Atleta apto para treino normal.';}
+  if(!fats.length)fats.push({i:'ok',t:'Nenhum fator de risco identificado.'});
+  return {score:score,nivel:nivel,cls:cls,bclr:bclr,rec:rec,fats:fats};
 }
 
-// ===== HISTÓRICO =====
-async function loadHist(){const{data}=await supa.from('relatorios').select('*').eq('user_id',cU.id).order('created_at',{ascending:false});todosR=data||[];}
-function fHist(t,btn){fHt=t;document.querySelectorAll('#sb-hist .sbb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderHist();}
+function renderAlerta(res,cid){
+  var cor=res.nivel==='CRITICO'?'#FF0000':res.nivel==='ALTO'?'#FF4444':res.nivel==='MEDIO'?'#FFB300':'#00C853';
+  var fatsHtml=res.fats.map(function(f){
+    return '<div style="display:flex;gap:7px;font-size:12px;color:var(--c2);margin-bottom:4px;"><span>'+f.i+'</span><span>'+f.t+'</span></div>';
+  }).join('');
+  document.getElementById(cid).innerHTML='<div class="rcard '+res.cls+'"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;font-weight:600;color:var(--b);">Indice de risco</span><span class="rbdg '+res.bclr+'">'+res.nivel+'</span></div><div class="rbar"><div class="rbar-track"><div class="rbar-fill" style="width:'+res.score+'%;background:'+cor+';"></div></div><span style="font-size:12px;font-weight:700;color:'+cor+';min-width:40px;">'+res.score+'/100</span></div><div style="margin-top:10px;">'+fatsHtml+'</div><div style="font-size:12px;color:var(--b);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">'+res.rec+'</div></div>';
+}
+
+async function autoRisco(){
+  var nome=v('a-nome');
+  if(!nome)return;
+  var r=await supa.from('relatorios').select('*').eq('user_id',cU.id).eq('tipo','atleta').eq('nome',nome).order('created_at',{ascending:false}).limit(1);
+  var mets=coletarMets();
+  var res=calcRisco(mets,r.data&&r.data[0]?r.data[0]:null);
+  document.getElementById('sa-alerta').style.display='block';
+  renderAlerta(res,'alerta-res');
+}
+
+// PROMPTS
+function promptA(){
+  var pos=v('a-pos');
+  var mets=coletarMets();
+  var metsStr=Object.keys(mets).map(function(k){return k+': '+mets[k];}).join(' | ')||'Nao informadas';
+  var linhas=[
+    'POTENCIAL SPORTS -- ANALISE DE ATLETA',
+    '',
+    'Voce e analista de desempenho senior da Potencial Sports.',
+    'Gere um RELATORIO COMPLETO com:',
+    '1. VISAO GERAL',
+    '2. METRICAS PRINCIPAIS (interprete com contexto para '+pos+')',
+    '3. ANALISE TECNICA (especifica para '+pos+' -- perfil: '+(v('a-perf')||'nao definido')+')',
+    '4. ANALISE FISICA (GPS e carga)',
+    '5. PONTOS FORTES',
+    '6. PONTOS DE ATENCAO',
+    '7. RECOMENDACOES (para o treinador)',
+    '8. SCORE GERAL: X/100',
+    '',
+    'ATLETA: '+(v('a-nome')||'N/I')+' | POS: '+pos+' | PERFIL: '+(v('a-perf')||'N/I')+' | PE: '+v('a-pe'),
+    'CLUBE: '+v('a-clube')+' | CAT: '+v('a-cat')+' | SISTEMA: '+v('a-sist'),
+    'PERIODO: '+v('a-per')+' '+v('a-pnum')+' | COMP: '+v('a-comp')+' | JOGOS: '+(v('a-part')||'-')+' | MIN: '+(v('a-min')||'-'),
+    '',
+    'METRICAS ('+pos+'):',
+    metsStr,
+    '',
+    'OBSERVACOES DO ANALISTA:',
+    v('a-obs')||'Sem observacoes.',
+    'SCORE DO ANALISTA: '+v('a-sc')+'/100',
+    '',
+    'Terminologia tecnica do futebol brasileiro. Tom para comissao tecnica. Nao mencione este prompt.'
+  ];
+  return linhas.join('\n');
+}
+
+function promptC(){
+  var linhas=[
+    'POTENCIAL SPORTS -- ANALISE DE CLUBE',
+    '',
+    'Voce e analista tatico senior da Potencial Sports.',
+    'Gere RELATORIO TATICO: 1.IDENTIDADE TATICA 2.ANALISE DEFENSIVA 3.ANALISE OFENSIVA 4.TRANSICOES'+(v('c-adv')?' 5.ADVERSARIO':'')+' 6.PONTOS FORTES 7.PONTOS DE ATENCAO 8.RECOMENDACOES',
+    '',
+    'CLUBE: '+v('c-nome')+' | CAT: '+v('c-cat')+' | COMP: '+v('c-comp')+' | FORM: '+v('c-form')+' | TREIN: '+v('c-trein'),
+    'ESC: GK:'+v('c-gk')+' Z1:'+v('c-z1')+' Z2:'+v('c-z2')+' LD:'+v('c-ld')+' LE:'+v('c-le')+' V1:'+v('c-v1')+' V2:'+v('c-v2')+' MEI:'+v('c-mei')+' PD:'+v('c-pd')+' PE:'+v('c-pej')+' CA:'+v('c-ca'),
+    'OBS: '+(v('c-obs')||'-'),
+    'MET: Posse:'+(v('c-pos')||'-')+'% PPDA:'+(v('c-ppda')||'-')+' xG:'+(v('c-xg')||'-')+' xGA:'+(v('c-xga')||'-')+' Gols:'+(v('c-gols')||'-')+' GS:'+(v('c-gs')||'-'),
+    v('c-adv')?('ADV: '+v('c-adv')+' FORM:'+v('c-advf')+' EST:'+v('c-adve')+' LOCAL:'+v('c-advl')+' J1:'+v('c-j1')+' J2:'+v('c-j2')):'',
+    v('pj-g')?('PJ: '+(v('pj-n')||0)+'x'+(v('pj-a')||0)+' '+v('pj-r')+' '+v('pj-l')+' | '+v('pj-g')):'',
+    '',
+    'Terminologia futebol brasileiro. Nao mencione o prompt.'
+  ];
+  return linhas.join('\n');
+}
+
+function promptP(){
+  var linhas=[
+    'POTENCIAL SPORTS -- PROSPECCAO DE ATLETA',
+    '',
+    'Voce e scout senior da Potencial Sports.',
+    'PARECER: 1.RESUMO 2.ADEQUACAO AO SISTEMA 3.NIVEL COMPETITIVO 4.POTENCIAL 5.PONTOS FORTES 6.PONTOS DE ATENCAO 7.RISCOS 8.PARECER FINAL: RECOMENDAR / MONITORAR / NAO RECOMENDAR',
+    '',
+    'ATLETA: '+v('p-nome')+' | IDADE: '+v('p-idade')+' | CLUBE: '+v('p-clube')+' | NIVEL: '+v('p-niv'),
+    'POS: '+v('p-pos')+' | PERFIL: '+v('p-perf')+' | PE: '+v('p-pe')+' | ALT: '+v('p-alt')+'cm',
+    'DEST: '+v('p-cdest')+' | SIST: '+v('p-sist')+' | RISCO: '+v('p-risco')+' | VALOR: '+v('p-val'),
+    'DADOS ('+v('p-part')+' jogos / '+v('p-min')+' min): Gols:'+v('p-gols')+' Ast:'+v('p-assis')+' xG:'+v('p-xg')+' Pass%:'+v('p-pass')+' Duel%:'+v('p-duel')+' Drib:'+v('p-drib')+' Vel:'+v('p-vel')+'km/h',
+    'OBS: '+(v('p-obs')||'-'),
+    'CTX: '+(v('p-ctx')||'-'),
+    '',
+    'Terminologia futebol brasileiro. Nao mencione o prompt.'
+  ];
+  return linhas.join('\n');
+}
+
+// GERAR
+async function salvar(tipo,nome,posicao,dados,txt,score){
+  try{
+    var r=await supa.from('relatorios').insert({user_id:cU.id,tipo:tipo,nome:nome,posicao:posicao,dados:dados,relatorio_ia:txt,score:score||null}).select().single();
+    if(r.data){
+      if(tipo==='atleta')rIds.atleta=r.data.id;
+      else if(tipo==='clube')rIds.clube=r.data.id;
+      else if(tipo==='prospeccao')rIds.prosp=r.data.id;
+    }
+    await loadHist();
+  }catch(e){console.warn('Erro ao salvar:',e);}
+}
+
+function gerarA(){
+  var nome=v('a-nome')||'Atleta';
+  var txt=promptA();
+  document.getElementById('txt-a').textContent=txt;
+  document.getElementById('out-a').classList.remove('hidden');
+  gt('sa-i');
+  salvar('atleta',nome,v('a-pos'),{nome:nome,pos:v('a-pos'),perf:v('a-perf'),clube:v('a-clube'),cat:v('a-cat'),periodo:v('a-per'),comp:v('a-comp'),score:v('a-sc'),metricas:coletarMets()},txt,parseInt(v('a-sc'))||null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+function gerarC(){
+  var nome=v('c-nome')||'Clube';
+  var txt=promptC();
+  document.getElementById('txt-c').textContent=txt;
+  document.getElementById('out-c').classList.remove('hidden');
+  gt('sc-i');
+  salvar('clube',nome,v('c-form'),{nome:nome,form:v('c-form'),comp:v('c-comp')},txt,null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+function gerarP(){
+  var nome=v('p-nome')||'Atleta';
+  var txt=promptP();
+  document.getElementById('txt-p').textContent=txt;
+  document.getElementById('out-p').classList.remove('hidden');
+  gt('sp-i');
+  salvar('prospeccao',nome,v('p-pos'),{nome:nome,pos:v('p-pos'),clube:v('p-clube'),nivel:v('p-niv'),risco:v('p-risco')},txt,null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+
+// VIDEO
+var evTiposA=['Passe progressivo','Passe errado','Drible completo','Drible perdido','Finalizacao no alvo','Finalizacao para fora','Gol','Assistencia','Duelo ganho','Duelo perdido','Interceptacao','Recuperacao de bola','Sprint defensivo','Bola parada','Outro'];
+var evTiposT=['Gol marcado','Gol sofrido','Chance criada','Transicao ofensiva','Transicao defensiva','Pressao alta','Bloco defensivo','Escanteio ofensivo','Falta perigosa','Ajuste tatico','Outro'];
+
+function setVFoco(f){
+  vFoco=f;
+  document.getElementById('vf-atleta').classList.toggle('active',f==='atleta');
+  document.getElementById('vf-time').classList.toggle('active',f==='time');
+  document.getElementById('vcfg-atleta').style.display=f==='atleta'?'block':'none';
+  document.getElementById('vcfg-time').style.display=f==='time'?'block':'none';
+  renderEvs();
+}
+function addEv(){
+  var id=Date.now();
+  evList.push({id:id,min:'',tipo:'',desc:''});
+  renderEvs();
+  setTimeout(function(){var el=document.getElementById('ev-min-'+id);if(el)el.focus();},50);
+}
+function removeEv(id){evList=evList.filter(function(e){return e.id!==id;});renderEvs();}
+function updEv(id,k,vl){var e=evList.find(function(e){return e.id===id;});if(e)e[k]=vl;}
+function renderEvs(){
+  var tipos=vFoco==='atleta'?evTiposA:evTiposT;
+  var cont=document.getElementById('ev-lista');
+  if(!cont)return;
+  if(!evList.length){cont.innerHTML='<p style="color:var(--c4);font-size:12px;padding:8px 0;">Nenhum evento. Clique em Adicionar evento.</p>';return;}
+  cont.innerHTML=evList.map(function(e){
+    var opts=tipos.map(function(t){return '<option'+(e.tipo===t?' selected':'')+'>'+t+'</option>';}).join('');
+    return '<div class="erow"><input class="emin finp" id="ev-min-'+e.id+'" type="number" placeholder="00" value="'+e.min+'" min="0" max="120" oninput="updEv('+e.id+',\'min\',this.value)"><select class="etipo" oninput="updEv('+e.id+',\'tipo\',this.value)"><option value="">Tipo...</option>'+opts+'</select><textarea class="edesc" rows="1" placeholder="Descreva..." oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\';updEv('+e.id+',\'desc\',this.value)">'+e.desc+'</textarea><button class="edel" onclick="removeEv('+e.id+')">x</button></div>';
+  }).join('');
+}
+function limparVideo(){
+  evList=[];renderEvs();
+  ['v-nome','v-pos','v-clube','v-adv','v-comp','v-res','v-time','v-form','v-adv-t','v-res-t','v-comp-t','v-loc-t','v-geral','v-pos-obs','v-neg-obs','v-bp-obs','v-ctx-obs'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('out-v').classList.add('hidden');
+  showToast('Formulario limpo.');
+}
+function gerarV(){
+  var f=vFoco;
+  var evs=evList.filter(function(e){return e.tipo||e.desc;});
+  var cab=f==='atleta'?'FOCO: Atleta\nNome: '+v('v-nome')+' | Posicao: '+v('v-pos')+' | Clube: '+v('v-clube')+'\nAdv: '+v('v-adv')+' | Comp: '+v('v-comp')+' | Resultado: '+v('v-res'):'FOCO: Time\nTime: '+v('v-time')+' | Formacao: '+v('v-form')+'\nAdv: '+v('v-adv-t')+' | Comp: '+v('v-comp-t')+' | Resultado: '+v('v-res-t');
+  var evsStr=evs.length?evs.map(function(e){return 'Min.'+( e.min||'?')+' | '+(e.tipo||'Acao')+': '+(e.desc||'--');}).join('\n'):'Nenhum evento registrado.';
+  var inst=f==='atleta'?'Gere RELATORIO DE ANALISE DE VIDEO: 1.RESUMO 2.DESEMPENHO TECNICO 3.DESEMPENHO TATICO 4.DESEMPENHO FISICO 5.BOLA PARADA 6.PONTOS FORTES 7.PONTOS DE ATENCAO 8.RECOMENDACOES 9.SCORE: X/100':'Gere RELATORIO TATICO DE VIDEO: 1.IDENTIDADE TATICA 2.FASE DEFENSIVA 3.FASE OFENSIVA 4.TRANSICOES 5.MOMENTOS-CHAVE 6.PADROES 7.ADVERSARIO 8.PONTOS FORTES 9.PONTOS DE ATENCAO 10.RECOMENDACOES';
+  var linhas=[
+    'POTENCIAL SPORTS -- ANALISE DE VIDEO ASSISTIDA',
+    '',
+    'Voce e analista de desempenho senior da Potencial Sports especializado em analise de video.',
+    '',
+    'IDENTIFICACAO',
+    cab,
+    '',
+    'EVENTOS REGISTRADOS ('+evs.length+')',
+    evsStr,
+    '',
+    'OBSERVACOES DO ANALISTA',
+    v('v-geral')?'Impressao geral:\n'+v('v-geral'):'',
+    v('v-pos-obs')?'Pontos fortes:\n'+v('v-pos-obs'):'',
+    v('v-neg-obs')?'Pontos de atencao:\n'+v('v-neg-obs'):'',
+    v('v-bp-obs')?'Bola parada:\n'+v('v-bp-obs'):'',
+    v('v-ctx-obs')?'Contexto:\n'+v('v-ctx-obs'):'',
+    '',
+    'INSTRUCOES',
+    inst,
+    '',
+    'Terminologia tecnica do futebol brasileiro. Nao mencione este prompt.'
+  ];
+  var txt=linhas.join('\n');
+  document.getElementById('txt-v').textContent=txt;
+  document.getElementById('out-v').classList.remove('hidden');
+  gt('sv-i');
+  var nome=f==='atleta'?v('v-nome'):v('v-time');
+  if(nome&&cU)salvar(f==='atleta'?'atleta':'clube',nome,f==='atleta'?v('v-pos'):v('v-form'),{nome:nome,foco:f,evs:evs.length},txt,null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+
+// BOLA PARADA
+function setBPFoco(f){
+  bpFoco=f;
+  document.getElementById('bp-foco-p').classList.toggle('active',f==='proprio');
+  document.getElementById('bp-foco-a').classList.toggle('active',f==='adversario');
+}
+function swBP(sit,btn){
+  document.getElementById('sb-e').style.display=sit==='escanteios'?'block':'none';
+  document.getElementById('sb-f').style.display=sit==='faltas'?'block':'none';
+  document.getElementById('sb-l').style.display=sit==='laterais'?'block':'none';
+  if(btn){document.querySelectorAll('#sb-c .chip').forEach(function(c){c.classList.remove('sel');});btn.classList.add('sel');}
+}
+function addPad(key){
+  if(!bpPads[key])bpPads[key]=[];
+  var id=Date.now();
+  bpPads[key].push({id:id,txt:''});
+  renderPad(key);
+}
+function removePad(key,id){bpPads[key]=bpPads[key].filter(function(p){return p.id!==id;});renderPad(key);}
+function updPad(key,id,val){var p=bpPads[key]&&bpPads[key].find(function(p){return p.id===id;});if(p)p.txt=val;}
+function renderPad(key){
+  var cid=key+'-lista';
+  var cont=document.getElementById(cid);
+  if(!cont)return;
+  if(!bpPads[key]||!bpPads[key].length){cont.innerHTML='<p style="color:var(--c4);font-size:12px;padding:6px 0;">Nenhum padrao.</p>';return;}
+  cont.innerHTML=bpPads[key].map(function(p,i){
+    return '<div class="padrow"><div class="padnum">'+(i+1)+'</div><textarea class="ftxt" style="min-height:32px;resize:none;flex:1;" placeholder="Descreva o padrao..." oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\';updPad(\''+key+'\','+p.id+',this.value)">'+p.txt+'</textarea><button class="paddel" onclick="removePad(\''+key+'\','+p.id+')">x</button></div>';
+  }).join('');
+}
+function renderPads(){Object.keys(bpPads).forEach(function(k){renderPad(k);});}
+function getPads(key){return(bpPads[key]||[]).filter(function(p){return p.txt;}).map(function(p,i){return (i+1)+'. '+p.txt;}).join('\n');}
+function limparBP(){
+  Object.keys(bpPads).forEach(function(k){bpPads[k]=[];renderPad(k);});
+  ['bp-time','bp-adv','bp-comp','bp-res','e-tot','e-chut','e-gols','e-cob','e-zona','e-tipo','e-obs','f-tot','f-per','f-gdir','f-cob','f-barr','f-ref','f-obs','l-tot','l-of','l-gols','l-est','l-obs'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('out-bp').classList.add('hidden');
+  showToast('Formulario limpo.');
+}
+function gerarBP(){
+  var linhas=[
+    'POTENCIAL SPORTS -- ANALISE DE BOLA PARADA',
+    '',
+    'Voce e analista senior da Potencial Sports especializado em bola parada.',
+    '',
+    'FOCO: '+(bpFoco==='proprio'?'Proprio time':'Adversario')+' | Time: '+(v('bp-time')||'N/I')+' | Adv: '+(v('bp-adv')||'N/I')+' | Comp: '+(v('bp-comp')||'--')+' | Resultado: '+(v('bp-res')||'--'),
+    '',
+    'ESCANTEIOS',
+    'Total: '+(v('e-tot')||'--')+' | Geraram chute: '+(v('e-chut')||'--')+' | Gols: '+(v('e-gols')||'0'),
+    'Cobrador: '+(v('e-cob')||'--')+' | Zona: '+(v('e-zona')||'--')+' | Tipo: '+(v('e-tipo')||'--'),
+    'Padroes ofensivos:\n'+(getPads('ep-of')||'Nenhum.'),
+    'Padroes defensivos:\n'+(getPads('ep-def')||'Nenhum.'),
+    'Obs: '+(v('e-obs')||'--'),
+    '',
+    'FALTAS',
+    'Total: '+(v('f-tot')||'--')+' | Area finalizacao: '+(v('f-per')||'--')+' | Gols diretos: '+(v('f-gdir')||'0'),
+    'Cobrador: '+(v('f-cob')||'--')+' | Barreira: '+(v('f-barr')||'--'),
+    'Padroes ofensivos:\n'+(getPads('fp-of')||'Nenhum.'),
+    'Padroes defensivos:\n'+(getPads('fp-def')||'Nenhum.'),
+    'Obs: '+(v('f-obs')||'--'),
+    '',
+    'LATERAIS',
+    'Total: '+(v('l-tot')||'--')+' | Terco ofensivo: '+(v('l-of')||'--')+' | Gols: '+(v('l-gols')||'0'),
+    'Estrategia: '+(v('l-est')||'--'),
+    'Padroes ofensivos:\n'+(getPads('lp-of')||'Nenhum.'),
+    'Padroes defensivos:\n'+(getPads('lp-def')||'Nenhum.'),
+    '',
+    'INSTRUCOES',
+    'Gere RELATORIO COMPLETO DE BOLA PARADA: 1.RESUMO GERAL 2.ANALISE DE ESCANTEIOS 3.ANALISE DE FALTAS 4.ANALISE DE LATERAIS 5.PADROES RECORRENTES '+(bpFoco==='adversario'?'6.VULNERABILIDADES DO ADVERSARIO 7.RECOMENDACOES PRE-JOGO':'6.PONTOS FORTES 7.PONTOS DE ATENCAO 8.RECOMENDACOES'),
+    '',
+    'Terminologia tecnica do futebol brasileiro. Nao mencione este prompt.'
+  ];
+  var txt=linhas.join('\n');
+  document.getElementById('txt-bp').textContent=txt;
+  document.getElementById('out-bp').classList.remove('hidden');
+  gt('sb-i');
+  if(v('bp-time')&&cU)salvar('clube',v('bp-time'),'Bola parada',{time:v('bp-time'),adv:v('bp-adv'),foco:bpFoco},txt,null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+
+// PRE-JOGO
+function addJog(){
+  var id=Date.now();
+  pjJogs.push({id:id,nome:'',pos:'',pe:'',caract:'',como:''});
+  renderJogs();
+  setTimeout(function(){var el=document.getElementById('jnome-'+id);if(el)el.focus();},50);
+}
+function removeJog(id){pjJogs=pjJogs.filter(function(j){return j.id!==id;});renderJogs();}
+function updJog(id,k,val){var j=pjJogs.find(function(j){return j.id===id;});if(j)j[k]=val;}
+function renderJogs(){
+  var cont=document.getElementById('pj-jlista');
+  if(!cont)return;
+  if(!pjJogs.length){cont.innerHTML='<p style="color:var(--c4);font-size:12px;padding:6px 0;">Nenhum jogador cadastrado.</p>';return;}
+  cont.innerHTML=pjJogs.map(function(j,i){
+    return '<div class="jcard"><div class="jcardtop"><div style="display:flex;align-items:center;gap:8px;"><div class="jnum">'+(i+1)+'</div><span style="font-size:13px;font-weight:600;color:var(--b);">Jogador '+(i+1)+'</span></div><button class="paddel" onclick="removeJog('+j.id+')">x</button></div><div class="fg3"><div class="fgrp"><label class="flbl">Nome</label><input class="finp" id="jnome-'+j.id+'" value="'+j.nome+'" placeholder="Nome" oninput="updJog('+j.id+',\'nome\',this.value)"></div><div class="fgrp"><label class="flbl">Posicao</label><select class="fsel" oninput="updJog('+j.id+',\'pos\',this.value)"><option value="">Selecione...</option><option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option><option>Lateral esquerdo</option><option>Volante</option><option>Meia central</option><option>Meia-atacante</option><option>Ponta direita</option><option>Ponta esquerda</option><option>Centroavante</option></select></div><div class="fgrp"><label class="flbl">Pe</label><select class="fsel" oninput="updJog('+j.id+',\'pe\',this.value)"><option value="">Selecione...</option><option>Direito</option><option>Esquerdo</option><option>Ambidestro</option></select></div></div><div class="fg"><div class="fgrp"><label class="flbl">Caracteristicas</label><textarea class="ftxt" style="min-height:60px;" placeholder="Ex: Velocidade acima da media..." oninput="updJog('+j.id+',\'caract\',this.value)">'+j.caract+'</textarea></div><div class="fgrp"><label class="flbl">Como neutralizar</label><textarea class="ftxt" style="min-height:60px;" placeholder="Ex: Fechar o corredor..." oninput="updJog('+j.id+',\'como\',this.value)">'+j.como+'</textarea></div></div></div>';
+  }).join('');
+}
+function limparPJ(){
+  pjJogs=[];renderJogs();
+  ['pj-nos','pj-adv','pj-comp','pj-loc','pj-data','pj-imp','pj-form','pj-of','pj-def','pj-xg','pj-xga','pj-ppda','pj-pad-of','pj-vuln','pj-bp','pj-momento','pj-nform','pj-desf','pj-estilo','pj-obj'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('out-pj').classList.add('hidden');
+  showToast('Formulario limpo.');
+}
+function gerarPJ(){
+  var nos=v('pj-nos')||'Nosso time';
+  var adv=v('pj-adv')||'Adversario';
+  var jogsStr=pjJogs.filter(function(j){return j.nome;}).map(function(j,i){
+    return 'Jogador '+(i+1)+': '+j.nome+' | '+(j.pos||'--')+'\nCaracteristicas: '+(j.caract||'N/I')+'\nComo neutralizar: '+(j.como||'N/I');
+  }).join('\n\n')||'Nenhum cadastrado.';
+  var linhas=[
+    'POTENCIAL SPORTS -- PLANO DE PRE-JOGO',
+    '',
+    'Voce e analista e scout senior da Potencial Sports.',
+    'Gere PLANO DE PRE-JOGO completo e profissional.',
+    '',
+    'PARTIDA: '+nos+' x '+adv,
+    'Comp: '+(v('pj-comp')||'--')+' | Data: '+(v('pj-data')||'--')+' | Local: '+(v('pj-loc')||'--')+' | Importancia: '+(v('pj-imp')||'--'),
+    '',
+    'DADOS DO ADVERSARIO ('+adv+')',
+    'Formacao: '+(v('pj-form')||'--')+' | Estilo of.: '+(v('pj-of')||'--')+' | Estilo def.: '+(v('pj-def')||'--'),
+    'xG: '+(v('pj-xg')||'--')+' | xGA: '+(v('pj-xga')||'--')+' | PPDA: '+(v('pj-ppda')||'--'),
+    'Padroes ofensivos: '+(v('pj-pad-of')||'N/I'),
+    'Vulnerabilidades: '+(v('pj-vuln')||'N/I'),
+    'Bola parada: '+(v('pj-bp')||'N/I'),
+    'Momento: '+(v('pj-momento')||'N/I'),
+    '',
+    'JOGADORES PERIGOSOS',
+    jogsStr,
+    '',
+    'NOSSO TIME ('+nos+')',
+    'Formacao: '+(v('pj-nform')||'--')+' | Desfalques: '+(v('pj-desf')||'Nenhum'),
+    'Estilo que queremos impor: '+(v('pj-estilo')||'N/I'),
+    'Objetivos taticos: '+(v('pj-obj')||'N/I'),
+    '',
+    'INSTRUCOES',
+    'Gere PLANO DE PRE-JOGO: 1.RESUMO DO ADVERSARIO 2.ANALISE OFENSIVA DO ADVERSARIO 3.ANALISE DEFENSIVA DO ADVERSARIO 4.BOLA PARADA DO ADVERSARIO 5.NEUTRALIZACAO DOS JOGADORES PERIGOSOS (individual para cada um) 6.PLANO DE JOGO OFENSIVO 7.PLANO DE JOGO DEFENSIVO 8.BOLA PARADA PROPRIA 9.MOMENTOS-CHAVE 10.RECOMENDACOES FINAIS (5 pontos prioritarios)',
+    '',
+    'Terminologia tecnica do futebol brasileiro. Tom de documento profissional. Nao mencione este prompt.'
+  ];
+  var txt=linhas.join('\n');
+  document.getElementById('txt-pj').textContent=txt;
+  document.getElementById('out-pj').classList.remove('hidden');
+  gt('pj-i');
+  if(cU)salvar('clube',nos+' x '+adv,'Pre-jogo',{nos:nos,adv:adv,comp:v('pj-comp')},txt,null);
+  showToast('Texto gerado! Copie e cole no Claude.');
+}
+
+// FEEDBACK
+async function darFB(tipo,nota,el){
+  var rid=rIds[tipo];
+  el.closest('.fbbar').querySelectorAll('.star').forEach(function(s,i){s.classList.toggle('on',i<nota);});
+  var ok=document.getElementById('fbok-'+tipo);if(ok)ok.style.display='inline';
+  if(rid&&cU)await supa.from('feedbacks').insert({user_id:cU.id,relatorio_id:rid,nota:nota});
+}
+async function loadFB(){
+  var r=await supa.from('feedbacks').select('*,relatorios(tipo,nome)').order('created_at',{ascending:false});
+  var fbs=r.data||[];
+  if(!fbs.length){document.getElementById('fb-stats').innerHTML='<div style="color:var(--c4);font-size:13px;grid-column:1/-1;">Nenhum feedback ainda.</div>';document.getElementById('fb-rows').innerHTML='';return;}
+  var tot=fbs.length;
+  var med=(fbs.reduce(function(a,f){return a+f.nota;},0)/tot).toFixed(1);
+  var bons=fbs.filter(function(f){return f.nota>=4;}).length;
+  var ruins=fbs.filter(function(f){return f.nota<=2;}).length;
+  document.getElementById('fb-stats').innerHTML='<div class="stcard"><div class="stnum">'+tot+'</div><div class="stlbl">Total avaliacoes</div></div><div class="stcard"><div class="stnum">'+med+' estrela</div><div class="stlbl">Nota media</div></div><div class="stcard"><div class="stnum">'+bons+'</div><div class="stlbl">4-5 estrelas</div></div><div class="stcard"><div class="stnum">'+ruins+'</div><div class="stlbl">1-2 estrelas</div></div>';
+  var tmap={atleta:'ta',clube:'tc',prospeccao:'tpr'};
+  var lmap={atleta:'Atleta',clube:'Clube',prospeccao:'Prospeccao'};
+  document.getElementById('fb-rows').innerHTML=fbs.map(function(f){return '<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--c7);"><span style="color:#FFB300;font-size:14px;">'+'estrela'.repeat(f.nota)+'</span><span class="htag '+(tmap[f.relatorios&&f.relatorios.tipo]||'')+'">'+(lmap[f.relatorios&&f.relatorios.tipo]||'--')+'</span><span style="font-size:13px;color:var(--b);flex:1;">'+(f.relatorios&&f.relatorios.nome||'--')+'</span><span style="font-size:11px;color:var(--c4);">'+new Date(f.created_at).toLocaleDateString('pt-BR')+'</span></div>';}).join('');
+}
+
+// HISTORICO
+async function loadHist(){
+  var r=await supa.from('relatorios').select('*').eq('user_id',cU.id).order('created_at',{ascending:false});
+  todosR=r.data||[];
+}
+function fHist(t,btn){
+  fHt=t;
+  document.querySelectorAll('#sb-hist .sbb').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderHist();
+}
 function renderHist(){
-  const busca=document.getElementById('hbusca')?.value?.toLowerCase()||'';
-  const dias=parseInt(document.getElementById('hper')?.value)||0;
-  const agora=new Date();
-  const lista=todosR.filter(r=>{
+  var busca=document.getElementById('hbusca')?document.getElementById('hbusca').value.toLowerCase():'';
+  var dias=parseInt(document.getElementById('hper')?document.getElementById('hper').value:'0')||0;
+  var agora=new Date();
+  var lista=todosR.filter(function(r){
     if(fHt!=='todos'&&r.tipo!==fHt)return false;
-    if(busca&&!r.nome?.toLowerCase().includes(busca))return false;
-    if(dias>0){const d=(agora-new Date(r.created_at))/(1000*60*60*24);if(d>dias)return false;}
+    if(busca&&(!r.nome||r.nome.toLowerCase().indexOf(busca)===-1))return false;
+    if(dias>0&&(agora-new Date(r.created_at))/(864e5)>dias)return false;
     return true;
   });
-  const cont=document.getElementById('hlista');
-  if(!lista.length){cont.innerHTML=`<div class="hemp"><div style="font-size:48px;margin-bottom:12px;">📂</div><div>Nenhum relatório encontrado.</div></div>`;return;}
-  const tmap={atleta:'ta',clube:'tc',prospeccao:'tpr'};
-  const lmap={atleta:'Atleta',clube:'Clube',prospeccao:'Prospecção'};
-  cont.innerHTML=lista.map(r=>{
-    const btnEvo=r.tipo==='atleta'?`<button class="btn bg" style="padding:5px 10px;font-size:11px;margin-left:auto;" onclick="event.stopPropagation();abrirEvolucao('${r.nome}','${r.posicao||''}')">📈 Evolução</button>`:'';
-    return `<div class="hc" onclick="abrirModal('${r.id}')"><div class="hct"><div class="hcn">${r.nome||'Sem nome'}</div><div style="display:flex;align-items:center;gap:8px;"><div class="hcd">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div>${btnEvo}</div></div><div class="hct"><div class="hcn">${r.nome||'Sem nome'}</div><div class="hcd">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div></div><div class="hcm"><span class="htag ${tmap[r.tipo]||''}">${lmap[r.tipo]||r.tipo}</span>${r.posicao?`<span class="htag" style="background:var(--c7);color:var(--c2);">${r.posicao}</span>`:''} ${r.score?`<span class="htag" style="background:var(--vd);color:var(--verde);">Score: ${r.score}</span>`:''}</div><div class="hcp">${r.relatorio_ia?.substring(0,180)||''}...</div></div>`;}).join('');
+  var cont=document.getElementById('hlista');
+  if(!lista.length){cont.innerHTML='<div class="hemp"><div style="font-size:42px;margin-bottom:10px;">arquivo</div><div>Nenhum relatorio.</div></div>';return;}
+  var tmap={atleta:'ta',clube:'tc',prospeccao:'tpr'};
+  var lmap={atleta:'Atleta',clube:'Clube',prospeccao:'Prospeccao'};
+  cont.innerHTML=lista.map(function(r){
+    var btnEvo=r.tipo==='atleta'?'<button class="btn bg" style="padding:4px 9px;font-size:11px;" onclick="event.stopPropagation();abrirEvo(\''+r.nome+'\',\''+(r.posicao||'')+'\')">evolucao</button>':'';
+    return '<div class="hc" onclick="abrirM(\''+r.id+'\')"><div class="hct"><div style="display:flex;align-items:center;gap:7px;"><div class="hcn">'+(r.nome||'Sem nome')+'</div>'+btnEvo+'</div><div class="hcd">'+new Date(r.created_at).toLocaleDateString('pt-BR')+'</div></div><div class="hcm"><span class="htag '+(tmap[r.tipo]||'')+'">'+(lmap[r.tipo]||r.tipo)+'</span>'+(r.posicao?'<span class="htag" style="background:var(--c7);color:var(--c2);">'+r.posicao+'</span>':'')+(r.score?'<span class="htag" style="background:var(--vd);color:var(--v);">Score: '+r.score+'</span>':'')+'</div><div class="hcp">'+(r.relatorio_ia?r.relatorio_ia.substring(0,160):'')+'...</div></div>';
+  }).join('');
 }
-
-function abrirModal(id){
-  const rel=todosR.find(r=>r.id===id);if(!rel)return;
+function abrirM(id){
+  var rel=todosR.find(function(r){return r.id===id;});
+  if(!rel)return;
   cRid=id;
-  document.getElementById('mTtl').textContent=rel.nome||'Relatório';
+  document.getElementById('mTtl').textContent=rel.nome||'Relatorio';
   document.getElementById('mCont').textContent=rel.relatorio_ia||'';
-  const mR=document.getElementById('mR');
-  if(rel.dados?.radarData){
-    mR.classList.remove('hidden');
-    document.getElementById('mRn').textContent=rel.nome;
-    document.getElementById('mRp').textContent=rel.posicao||'';
-    const rd=rel.dados.radarData;
-    renderScores('mSc',rd.categorias,'mSn',null);
-    setTimeout(()=>desenharRadar('mRc',rd.categorias.map(c=>c.categoria),rd.categorias.map(c=>c.valor),rel.nome),150);
-  }else{mR.classList.add('hidden');}
   document.getElementById('mOv').classList.remove('hidden');
 }
 function fModal(){document.getElementById('mOv').classList.add('hidden');cRid=null;}
 async function delRel(){
   if(!cRid||!confirm('Excluir permanentemente?'))return;
   await supa.from('relatorios').delete().eq('id',cRid);
-  todosR=todosR.filter(r=>r.id!==cRid);fModal();renderHist();showToast('Excluído.');
+  todosR=todosR.filter(function(r){return r.id!==cRid;});
+  fModal();renderHist();showToast('Excluido.');
 }
 
-
-
-
-
-
-
-// ===== UPLOAD DE DADOS =====
-let uploadImagem = null;
-let uploadImagemBase64 = null;
-let dadosExtraidos = {};
-let upPlatVal = 'Sofascore';
-let upExtrairVal = 'tudo';
-
-// URL do proxy — trocar pela URL do Cloudflare Worker quando estiver ativo
-const PROXY_URL = 'https://potencial-sports-api.douglas-augusto-marques2.workers.dev';
-
-function selPlat(el, val){
-  document.querySelectorAll('#up-plat-chips .plat-chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');
-  upPlatVal = val;
-  document.getElementById('up-plat-val').value = val;
-}
-
-function selExtrair(el, val){
-  el.closest('.plat-chips').querySelectorAll('.plat-chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');
-  upExtrairVal = val;
-  document.getElementById('up-extrair-val').value = val;
-}
-
-function handleFileSelect(event){
-  const file = event.target.files[0];
-  if(file) processarArquivo(file);
-}
-
-function handleDrop(event){
-  event.preventDefault();
-  document.getElementById('up-dropzone').classList.remove('drag');
-  const file = event.dataTransfer.files[0];
-  if(file && file.type.startsWith('image/')) processarArquivo(file);
-  else showToast('⚠ Selecione uma imagem (PNG, JPG ou WEBP).');
-}
-
-function processarArquivo(file){
-  if(file.size > 10 * 1024 * 1024){ showToast('⚠ Imagem muito grande. Máximo 10MB.'); return; }
-  uploadImagem = file;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    uploadImagemBase64 = e.target.result.split(',')[1];
-    const mediaType = file.type;
-    document.getElementById('up-preview-img').src = e.target.result;
-    document.getElementById('up-preview-nome').textContent = file.name;
-    document.getElementById('up-preview').classList.remove('hidden');
-    document.getElementById('up-dropzone').style.display = 'none';
-    showToast('✓ Imagem carregada! Vá para o Passo 3.');
-  };
-  reader.readAsDataURL(file);
-}
-
-function removerImagem(){
-  uploadImagem = null;
-  uploadImagemBase64 = null;
-  document.getElementById('up-preview').classList.add('hidden');
-  document.getElementById('up-dropzone').style.display = 'block';
-  document.getElementById('up-file-input').value = '';
-}
-
-async function extrairDados(){
-  if(!uploadImagemBase64){
-    showToast('⚠ Faça o upload de uma imagem primeiro.');
-    gt('up-img');
-    return;
-  }
-
-  const btn = document.getElementById('up-btn-extrair');
-  const loading = document.getElementById('up-extraindo');
-  btn.classList.add('hidden');
-  loading.classList.remove('hidden');
-
-  const tipo = v('up-tipo');
-  const plat = upPlatVal;
-  const extrair = upExtrairVal;
-  const ctx = v('up-contexto');
-  const nomeAtleta = v('up-atleta-nome');
-
-  const instrucoes = {
-    tudo: 'Extraia TODOS os dados visíveis na imagem',
-    tecnicas: 'Extraia apenas as métricas técnicas (gols, passes, dribles, duelos, etc.)',
-    fisicas: 'Extraia apenas as métricas físicas (distância, velocidade, sprints, acelerações, etc.)',
-    scores: 'Extraia apenas scores, ratings e notas de desempenho',
-  };
-
-  const prompt = `Você é um especialista em análise de desempenho no futebol e extração de dados de plataformas esportivas.
-
-Analise a imagem enviada, que é um print da plataforma ${plat}.
-${nomeAtleta ? `O atleta principal é: ${nomeAtleta}` : ''}
-${ctx ? `Contexto: ${ctx}` : ''}
-
-Instrução: ${instrucoes[extrair]}.
-
-Retorne APENAS um objeto JSON válido, sem texto antes ou depois, sem backticks, no seguinte formato:
-{
-  "atleta": "Nome do atleta (se identificado)",
-  "posicao": "Posição (se identificada)",
-  "clube": "Clube (se identificado)",
-  "plataforma": "${plat}",
-  "metricas": {
-    "Nome da métrica": "valor",
-    "Nome da métrica 2": "valor2"
-  },
-  "observacoes": "Observações relevantes sobre o que foi identificado na imagem"
-}
-
-Seja preciso. Se um dado não estiver claramente visível, não o inclua. Não invente valores.`;
-
-  try {
-    const res = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: {
-                type: 'base64',
-                media_type: uploadImagem.type,
-                data: uploadImagemBase64,
-              }
-            },
-            { type: 'text', text: prompt }
-          ]
-        }]
-      })
-    });
-
-    const data = await res.json();
-    const texto = data.content?.[0]?.text || '';
-
-    try {
-      const clean = texto.replace(/```json|```/g, '').trim();
-      dadosExtraidos = JSON.parse(clean);
-      renderDadosExtraidos(dadosExtraidos);
-      document.getElementById('up-resultado').classList.remove('hidden');
-      gt('up-resultado');
-      showToast('✓ Dados extraídos com sucesso!');
-    } catch(e) {
-      // Se não for JSON, mostra o texto bruto
-      dadosExtraidos = {metricas:{}, observacoes: texto};
-      renderDadosExtraidos(dadosExtraidos);
-      document.getElementById('up-resultado').classList.remove('hidden');
-      gt('up-resultado');
-    }
-
-  } catch(err) {
-    showToast('⚠ Proxy não configurado ainda. Ative o Cloudflare Worker primeiro.');
-    // Simulação para demonstração
-    dadosExtraidos = {
-      atleta: nomeAtleta || 'Atleta identificado',
-      posicao: 'Não identificada',
-      clube: 'Não identificado',
-      plataforma: plat,
-      metricas: {
-        'Status': 'Aguardando Cloudflare Worker',
-        'Plataforma': plat,
-        'Tipo': tipo,
-      },
-      observacoes: 'Configure o Cloudflare Worker para ativar a extração automática de dados.'
-    };
-    renderDadosExtraidos(dadosExtraidos);
-    document.getElementById('up-resultado').classList.remove('hidden');
-    gt('up-resultado');
-  } finally {
-    btn.classList.remove('hidden');
-    loading.classList.add('hidden');
-  }
-}
-
-function renderDadosExtraidos(dados){
-  // Status da extração
-  const statusCont = document.getElementById('up-campos-extraidos');
-  const mets = dados.metricas || {};
-  const totalMets = Object.keys(mets).length;
-
-  statusCont.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <span style="font-size:13px;font-weight:600;color:var(--b);">${dados.atleta||'Atleta'}</span>
-      <span style="font-size:11px;background:var(--vd);color:var(--verde);padding:3px 10px;border-radius:20px;">${totalMets} campos extraídos</span>
-    </div>
-    ${dados.posicao?`<div class="extracao-item"><span class="extracao-campo">Posição</span><span class="extracao-status-icon">✅</span><span class="extracao-valor">${dados.posicao}</span></div>`:''}
-    ${dados.clube?`<div class="extracao-item"><span class="extracao-campo">Clube</span><span class="extracao-status-icon">✅</span><span class="extracao-valor">${dados.clube}</span></div>`:''}
-    ${Object.entries(mets).map(([k,v])=>`
-      <div class="extracao-item">
-        <span class="extracao-campo">${k}</span>
-        <span class="extracao-status-icon">✅</span>
-        <span class="extracao-valor">${v}</span>
-      </div>`).join('')}
-    ${dados.observacoes?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--c7);font-size:12px;color:var(--c4);">${dados.observacoes}</div>`:''}`;
-
-  // Campos editáveis
-  const editCont = document.getElementById('up-campos-editaveis');
-  editCont.innerHTML = `
-    <div class="fg">
-      <div class="fgrp"><label class="flbl">Nome do atleta</label><input class="finp" id="ue-nome" value="${dados.atleta||''}" placeholder="Nome do atleta"></div>
-      <div class="fgrp"><label class="flbl">Posição</label><input class="finp" id="ue-pos" value="${dados.posicao||''}" placeholder="Posição"></div>
-      <div class="fgrp"><label class="flbl">Clube</label><input class="finp" id="ue-clube" value="${dados.clube||''}" placeholder="Clube"></div>
-      <div class="fgrp"><label class="flbl">Plataforma de origem</label><input class="finp" id="ue-plat" value="${dados.plataforma||upPlatVal}" placeholder="Plataforma"></div>
-    </div>
-    <div class="fgrp" style="margin-top:8px;">
-      <label class="flbl">Métricas extraídas (edite se necessário)</label>
-      <textarea class="ftxt" id="ue-mets" style="min-height:120px;">${Object.entries(mets).map(([k,v])=>`${k}: ${v}`).join('
-')}</textarea>
-    </div>
-    <div class="fgrp" style="margin-top:8px;">
-      <label class="flbl">Observações adicionais</label>
-      <textarea class="ftxt" id="ue-obs" placeholder="Adicione contexto ou corrija algo...">${dados.observacoes||''}</textarea>
-    </div>`;
-}
-
-function usarDadosExtraidos(){
-  // Preenche os campos da aba de atleta com os dados extraídos
-  const nome = document.getElementById('ue-nome')?.value || '';
-  const pos = document.getElementById('ue-pos')?.value || '';
-  const clube = document.getElementById('ue-clube')?.value || '';
-  const metsTexto = document.getElementById('ue-mets')?.value || '';
-
-  // Ir para a aba de atleta e preencher
-  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.mc').forEach(t=>t.classList.add('hidden'));
-  document.querySelectorAll('.sidebar').forEach(s=>s.classList.add('hidden'));
-  document.getElementById('tab-atleta').classList.remove('hidden');
-  document.getElementById('sb-atleta').classList.remove('hidden');
-  document.querySelector('.mtab').classList.add('active');
-
-  // Preencher campos básicos
-  const nomeEl = document.getElementById('a-nome');
-  const clubeEl = document.getElementById('a-clube');
-  if(nomeEl) nomeEl.value = nome;
-  if(clubeEl) clubeEl.value = clube;
-
-  // Preencher posição se identificada
-  if(pos){
-    const posEl = document.getElementById('a-pos');
-    if(posEl){
-      // Tentar match com as opções disponíveis
-      const opts = Array.from(posEl.options);
-      const match = opts.find(o=>o.value.toLowerCase().includes(pos.toLowerCase().split(' ')[0]));
-      if(match){ posEl.value = match.value; onPosAtleta(); }
-    }
-  }
-
-  // Preencher observações com as métricas extraídas
-  const obsEl = document.getElementById('a-obs');
-  if(obsEl && metsTexto){
-    obsEl.value = `Dados extraídos de ${upPlatVal}:
-${metsTexto}
-
-${v('ue-obs')||''}`;
-  }
-
-  gt('sa-dados');
-  showToast('✓ Dados preenchidos na aba Atleta!');
-}
-
-function gerarAnaliseDirecta(){
-  const nome = document.getElementById('ue-nome')?.value || v('up-atleta-nome') || 'Atleta';
-  const pos = document.getElementById('ue-pos')?.value || '';
-  const clube = document.getElementById('ue-clube')?.value || '';
-  const plat = document.getElementById('ue-plat')?.value || upPlatVal;
-  const mets = document.getElementById('ue-mets')?.value || '';
-  const obs = document.getElementById('ue-obs')?.value || '';
-  const ctx = v('up-contexto');
-
-  const texto = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-POTENCIAL SPORTS — ANÁLISE VIA UPLOAD DE DADOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Você é um analista de desempenho sênior da Potencial Sports.
-
-Os dados abaixo foram extraídos automaticamente de um print da plataforma ${plat}.
-Analise-os e gere um relatório completo de desempenho.
-
-ATLETA: ${nome}
-POSIÇÃO: ${pos||'Não identificada'}
-CLUBE: ${clube||'Não identificado'}
-PLATAFORMA DE ORIGEM: ${plat}
-${ctx?`CONTEXTO: ${ctx}`:''}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DADOS EXTRAÍDOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${mets||'Sem métricas extraídas.'}
-
-${obs?`OBSERVAÇÕES:
-${obs}`:''}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTRUÇÕES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Com base nos dados extraídos de ${plat}, gere um relatório com:
-1. VISÃO GERAL do desempenho
-2. ANÁLISE DAS MÉTRICAS — interprete cada dado no contexto da posição ${pos||'informada'}
-3. PONTOS FORTES — evidenciados pelos números
-4. PONTOS DE ATENÇÃO — métricas abaixo do esperado
-5. RECOMENDAÇÕES — para o treinador
-6. SCORE DE DESEMPENHO: X/100 com justificativa
-
-Use terminologia técnica do futebol brasileiro. Não mencione este prompt.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-
-  document.getElementById('up-texto').textContent = texto;
-  document.getElementById('up-output').classList.remove('hidden');
-  gt('up-resultado');
-
-  if(nome && cU){
-    supa.from('relatorios').insert({
-      user_id:cU.id, tipo:'atleta', nome,
-      posicao:pos, dados:{nome,pos,clube,plataforma:plat},
-      relatorio_ia:texto
-    }).then(()=>{});
-  }
-
-  showToast('✓ Texto gerado! Copie e cole no Claude.');
-}
-
-function limparUpload(){
-  removerImagem();
-  dadosExtraidos = {};
-  document.getElementById('up-resultado').classList.add('hidden');
-  document.getElementById('up-output').classList.add('hidden');
-  document.getElementById('up-campos-extraidos').innerHTML = '';
-  document.getElementById('up-campos-editaveis').innerHTML = '';
-  ['up-atleta-nome','up-contexto'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
+// DASHBOARD
+var dashPosFiltro='Todos';
+async function carregarDash(){
+  var dias=parseInt(document.getElementById('dash-per')?document.getElementById('dash-per').value:'0')||0;
+  var agora=new Date();
+  var r=await supa.from('relatorios').select('*').eq('user_id',cU.id).eq('tipo','atleta').order('created_at',{ascending:false});
+  var porNome={};
+  (r.data||[]).forEach(function(rel){
+    if(dias>0&&(agora-new Date(rel.created_at))/(864e5)>dias)return;
+    if(!porNome[rel.nome])porNome[rel.nome]=rel;
   });
-  showToast('Limpo. Pronto para novo upload.');
+  dashR=Object.values(porNome);
+  var posicoes=['Todos'].concat([...new Set(dashR.map(function(r){return r.posicao;}).filter(Boolean))]);
+  document.getElementById('sb-dash-pos').innerHTML=posicoes.map(function(p){
+    return '<button class="sbb'+(p===dashPosFiltro?' active':'')+'" onclick="filtroDash(\''+p+'\',this)"><span class="si">pos</span>'+p+'</button>';
+  }).join('');
+  renderDash();
 }
-
-
-
-// ===== PLANOS =====
-let billingAnual = false;
-
-// Plano do usuário — durante beta todos são Pro
-const PLANOS = {
-  gratuito: {
-    nome: 'Gratuito',
-    limiteRels: 5,
-    limiteDias: 30,
-    abas: ['atleta','clube','prosp'],
-    pdf: false,
-  },
-  pro: {
-    nome: 'Pro',
-    limiteRels: Infinity,
-    limiteDias: Infinity,
-    abas: ['atleta','clube','prosp','hist','dashboard','lesao','video','bolaparada','prejogo'],
-    pdf: true,
-  },
-  clube: {
-    nome: 'Clube',
-    limiteRels: Infinity,
-    limiteDias: Infinity,
-    abas: ['atleta','clube','prosp','hist','dashboard','lesao','video','bolaparada','prejogo'],
-    pdf: true,
-    multiUser: true,
-  }
-};
-
-// Durante o beta, todos têm Pro
-function getPlanoAtual(){ return 'pro'; }
-
-function toggleBilling(){
-  billingAnual = !billingAnual;
-  const track = document.getElementById('billing-toggle');
-  track.classList.toggle('on', billingAnual);
-  document.getElementById('lbl-mensal').classList.toggle('active', !billingAnual);
-  document.getElementById('lbl-anual').classList.toggle('active', billingAnual);
-
-  // Atualizar preços
-  document.getElementById('pr-preco-pro').textContent = billingAnual ? 'R$ 39' : 'R$ 49';
-  document.getElementById('pr-per-pro').textContent = billingAnual ? 'por mês (cobrado anualmente)' : 'por mês';
-  document.getElementById('pr-anual-pro').style.display = billingAnual ? 'block' : 'none';
-
-  document.getElementById('pr-preco-clube').textContent = billingAnual ? 'R$ 119' : 'R$ 149';
-  document.getElementById('pr-per-clube').textContent = billingAnual ? 'por mês (cobrado anualmente)' : 'por mês';
-  document.getElementById('pr-anual-clube').style.display = billingAnual ? 'block' : 'none';
-}
-
-async function carregarPlanos(){
-  const plano = getPlanoAtual();
-  const cfg = PLANOS[plano];
-
-  // Card do plano atual
-  document.getElementById('pl-plano-atual').innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-          <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--b);">${cfg.nome}</span>
-          <span class="risco-badge rb-baixo" style="font-size:11px;">Beta — Acesso Pro liberado</span>
-        </div>
-        <div style="font-size:13px;color:var(--c4);">Relatórios ilimitados • Todas as abas • PDF com logo • Histórico completo</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--verde);">R$ 0</div>
-        <div style="font-size:11px;color:var(--c4);">durante o beta</div>
-      </div>
-    </div>`;
-
-  // Carregar uso do período
-  const agora = new Date();
-  const inicioMes = new Date(agora.getFullYear(), agora.getMonth(), 1);
-  const{data} = await supa.from('relatorios').select('id,tipo,created_at')
-    .eq('user_id', cU.id)
-    .gte('created_at', inicioMes.toISOString());
-
-  const totalMes = data?.length || 0;
-  const atletas = data?.filter(r=>r.tipo==='atleta').length || 0;
-  const clubes = data?.filter(r=>r.tipo==='clube').length || 0;
-  const prosps = data?.filter(r=>r.tipo==='prospeccao').length || 0;
-
-  document.getElementById('pl-uso-stats').innerHTML = `
-    <div class="uso-stat">
-      <div class="uso-stat-n">${totalMes}</div>
-      <div class="uso-stat-l">Relatórios este mês</div>
-      <div class="uso-bar-wrap"><div class="uso-bar" style="width:${Math.min((totalMes/100)*100,100)}%"></div></div>
-    </div>
-    <div class="uso-stat">
-      <div class="uso-stat-n">${atletas}</div>
-      <div class="uso-stat-l">Análises de atleta</div>
-    </div>
-    <div class="uso-stat">
-      <div class="uso-stat-n">${clubes + prosps}</div>
-      <div class="uso-stat-l">Clube + Prospecção</div>
-    </div>`;
-}
-
-function interesseClube(){
-  const msg = encodeURIComponent(
-    'Olá! Tenho interesse no plano Clube da Potencial Sports para meu departamento de análise. Podem me passar mais informações?'
-  );
-  window.open('https://wa.me/5535999999999?text='+msg, '_blank');
-}
-
-// Verificar limites do plano (para usar quando ativar cobrança)
-async function verificarLimite(){
-  const plano = getPlanoAtual();
-  const cfg = PLANOS[plano];
-  if(cfg.limiteRels === Infinity) return true; // Pro/Clube — sem limite
-
-  const agora = new Date();
-  const inicioMes = new Date(agora.getFullYear(), agora.getMonth(), 1);
-  const{count} = await supa.from('relatorios').select('id', {count:'exact',head:true})
-    .eq('user_id', cU.id)
-    .gte('created_at', inicioMes.toISOString());
-
-  if((count||0) >= cfg.limiteRels){
-    mostrarLimitePlano(count, cfg.limiteRels);
-    return false;
-  }
-  return true;
-}
-
-function mostrarLimitePlano(usado, limite){
-  const modal = document.createElement('div');
-  modal.className = 'mov';
-  modal.style.cssText = 'position:fixed;inset:0;background:#000000CC;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;';
-  modal.innerHTML = `
-    <div style="background:var(--c9);border:1px solid var(--c7);border-radius:16px;padding:32px;max-width:420px;width:100%;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">⚡</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--b);margin-bottom:8px;">Limite do plano atingido</div>
-      <div style="font-size:13px;color:var(--c4);margin-bottom:24px;line-height:1.7;">
-        Você usou <strong style="color:var(--b);">${usado} de ${limite}</strong> relatórios este mês no plano Gratuito.<br>
-        Faça upgrade para continuar gerando análises ilimitadas.
-      </div>
-      <div style="display:flex;gap:10px;justify-content:center;">
-        <button class="btn bp" onclick="swTab('planos',document.querySelector('.mtab:nth-child(9)'));this.closest('.mov').remove();" style="font-size:13px;">
-          💎 Ver planos
-        </button>
-        <button class="btn bg" onclick="this.closest('.mov').remove();" style="font-size:13px;">
-          Fechar
-        </button>
-      </div>
-    </div>`;
-  document.body.appendChild(modal);
-}
-
-// ===== PRÉ-JOGO =====
-let pjJogadores = [];
-let pjImagemBase64 = null;
-let pjInputMode = 'manual';
-
-function swPJInput(mode, btn){
-  pjInputMode = mode;
-  document.querySelectorAll('.pj-input-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.pj-input-sec').forEach(s=>s.classList.remove('active'));
+function filtroDash(pos,btn){
+  dashPosFiltro=pos;
+  document.querySelectorAll('#sb-dashboard .sbb').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  document.getElementById('pj-sec-'+mode).classList.add('active');
+  renderDash();
 }
-
-// Upload de imagem
-function dragOver(e, id){ e.preventDefault(); document.getElementById(id)?.classList.add('dragover'); }
-function dragLeave(id){ document.getElementById(id)?.classList.remove('dragover'); }
-function dropFile(e){
-  e.preventDefault();
-  dragLeave('pj-upload-area');
-  const file = e.dataTransfer.files[0];
-  if(file && file.type.startsWith('image/')) processImagem(file);
-}
-
-function previewImagem(input){
-  const file = input.files[0];
-  if(file) processImagem(file);
-}
-
-function processImagem(file){
-  const reader = new FileReader();
-  reader.onload = (e)=>{
-    pjImagemBase64 = e.target.result.split(',')[1];
-    document.getElementById('pj-preview-img').src = e.target.result;
-    document.getElementById('pj-preview').style.display = 'block';
-    document.getElementById('pj-upload-area').style.display = 'none';
-    showToast('✓ Imagem carregada!');
-  };
-  reader.readAsDataURL(file);
-}
-
-function removerImagem(){
-  pjImagemBase64 = null;
-  document.getElementById('pj-preview').style.display = 'none';
-  document.getElementById('pj-upload-area').style.display = 'block';
-  document.getElementById('pj-file-input').value = '';
-}
-
-// Jogadores perigosos
-function addJogador(){
-  const id = Date.now();
-  pjJogadores.push({id, nome:'', pos:'', pe:'', caract:'', como:''});
-  renderJogadores();
-  setTimeout(()=>document.getElementById('jog-nome-'+id)?.focus(), 50);
-}
-
-function removeJogador(id){
-  pjJogadores = pjJogadores.filter(j=>j.id!==id);
-  renderJogadores();
-}
-
-function updJog(id, campo, val){
-  const j = pjJogadores.find(j=>j.id===id);
-  if(j) j[campo] = val;
-}
-
-function renderJogadores(){
-  const cont = document.getElementById('pj-jogadores-lista');
-  if(!pjJogadores.length){
-    cont.innerHTML = '<p style="color:var(--c4);font-size:13px;padding:8px 0;">Nenhum jogador cadastrado ainda.</p>';
-    return;
-  }
-  cont.innerHTML = pjJogadores.map((j,i)=>`
-    <div class="jogador-card">
-      <div class="jogador-card-top">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="jogador-num">${i+1}</div>
-          <span style="font-size:13px;font-weight:600;color:var(--b);">Jogador perigoso ${i+1}</span>
-        </div>
-        <button class="jogador-del" onclick="removeJogador(${j.id})">×</button>
-      </div>
-      <div class="fg3">
-        <div class="fgrp"><label class="flbl">Nome</label>
-          <input class="finp" id="jog-nome-${j.id}" value="${j.nome}" placeholder="Nome do jogador" oninput="updJog(${j.id},'nome',this.value)">
-        </div>
-        <div class="fgrp"><label class="flbl">Posição</label>
-          <select class="fsel" oninput="updJog(${j.id},'pos',this.value)">
-            <option value="">Selecione...</option>
-            <option ${j.pos==='Goleiro'?'selected':''}>Goleiro</option>
-            <option ${j.pos==='Zagueiro'?'selected':''}>Zagueiro</option>
-            <option ${j.pos==='Lateral direito'?'selected':''}>Lateral direito</option>
-            <option ${j.pos==='Lateral esquerdo'?'selected':''}>Lateral esquerdo</option>
-            <option ${j.pos==='Volante'?'selected':''}>Volante</option>
-            <option ${j.pos==='Meia central'?'selected':''}>Meia central</option>
-            <option ${j.pos==='Meia-atacante'?'selected':''}>Meia-atacante</option>
-            <option ${j.pos==='Ponta direita'?'selected':''}>Ponta direita</option>
-            <option ${j.pos==='Ponta esquerda'?'selected':''}>Ponta esquerda</option>
-            <option ${j.pos==='Centroavante'?'selected':''}>Centroavante</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Pé dominante</label>
-          <select class="fsel" oninput="updJog(${j.id},'pe',this.value)">
-            <option value="">Selecione...</option>
-            <option ${j.pe==='Direito'?'selected':''}>Direito</option>
-            <option ${j.pe==='Esquerdo'?'selected':''}>Esquerdo</option>
-            <option ${j.pe==='Ambidestro'?'selected':''}>Ambidestro</option>
-          </select>
-        </div>
-      </div>
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Características principais <i class="tip-icon">?<span class="tip-box">O que esse jogador faz bem? Velocidade, drible, finalização, passes longos...</span></i></label>
-          <textarea class="ftxt" style="min-height:70px;" placeholder="Ex: Velocidade acima da média, dribla bem no 1x1, finaliza com o pé esquerdo de dentro da área..." oninput="updJog(${j.id},'caract',this.value)">${j.caract}</textarea>
-        </div>
-        <div class="fgrp"><label class="flbl">Como neutralizá-lo <i class="tip-icon">?<span class="tip-box">Sua observação de como marcar esse jogador. A IA vai complementar com sugestões táticas.</span></i></label>
-          <textarea class="ftxt" style="min-height:70px;" placeholder="Ex: Fechar o corredor com o lateral e forçar para o lado direito dele. Evitar espaço nas costas..." oninput="updJog(${j.id},'como',this.value)">${j.como}</textarea>
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-function limparPJ(){
-  pjJogadores=[];pjImagemBase64=null;pjInputMode='manual';
-  renderJogadores();removerImagem();
-  document.querySelectorAll('#tab-prejogo input,#tab-prejogo select,#tab-prejogo textarea').forEach(el=>{
-    if(el.type!=='file')el.value='';
-  });
-  document.getElementById('pj-output').classList.add('hidden');
-  showToast('Formulário limpo.');
-}
-
-async function gerarPJ(){
-  const nos = v('pj-nos-time')||'Nosso time';
-  const adv = v('pj-adv-nome')||'Adversário';
-  const out = document.getElementById('pj-output');
-  const resEl = document.getElementById('pj-texto');
-
-  // Montar dados dos jogadores perigosos
-  const jogsStr = pjJogadores.filter(j=>j.nome).map((j,i)=>`
-Jogador ${i+1}: ${j.nome} | ${j.pos||'—'} | Pé: ${j.pe||'—'}
-Características: ${j.caract||'Não informado'}
-Como neutralizar (observação do analista): ${j.como||'Não informado'}`).join('
-') || 'Nenhum jogador cadastrado.';
-
-  // Montar dados do adversário conforme modo
-  let dadosAdv = '';
-  if(pjInputMode==='manual'){
-    dadosAdv = `Formação principal: ${v('pj-adv-form')||'—'}
-Formação alternativa: ${v('pj-adv-form2')||'—'}
-Estilo ofensivo: ${v('pj-adv-of')||'—'}
-Estilo defensivo: ${v('pj-adv-def')||'—'}
-Posse de bola média: ${v('pj-adv-posse')||'—'}%
-xG médio / jogo: ${v('pj-adv-xg')||'—'}
-xGA médio / jogo: ${v('pj-adv-xga')||'—'}
-PPDA: ${v('pj-adv-ppda')||'—'}
-Gols marcados (últ. 5): ${v('pj-adv-gm')||'—'}
-Gols sofridos (últ. 5): ${v('pj-adv-gs')||'—'}
-
-Padrões ofensivos:
-${v('pj-adv-pad-of')||'Não informado'}
-
-Vulnerabilidades:
-${v('pj-adv-vuln')||'Não informado'}
-
-Bola parada:
-${v('pj-adv-bp')||'Não informado'}
-
-Momento atual:
-${v('pj-adv-momento')||'Não informado'}`;
-  } else {
-    dadosAdv = `[DADOS VIA IMAGEM — ver imagem anexada]
-Observações do analista sobre a imagem: ${v('pj-img-obs')||'Analisar todos os dados disponíveis na imagem.'}`;
-  }
-
-  // Se tiver imagem, instrução especial
-  const temImagem = pjInputMode==='imagem' && pjImagemBase64;
-
-  const promptTexto = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-POTENCIAL SPORTS — PLANO DE PRÉ-JOGO COM IA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Você é um analista de desempenho e scout sênior da Potencial Sports.
-Gere um PLANO DE PRÉ-JOGO completo e profissional para o confronto abaixo.
-
-PARTIDA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${nos} x ${adv}
-Competição: ${v('pj-comp')||'—'} | Data: ${v('pj-data')||'—'} | Local: ${v('pj-local')||'—'}
-Importância: ${v('pj-import')||'—'}
-
-DADOS DO ADVERSÁRIO (${adv})
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${dadosAdv}
-
-JOGADORES PERIGOSOS DO ADVERSÁRIO
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${jogsStr}
-
-NOSSO TIME (${nos})
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Formação prevista: ${v('pj-nos-form')||'—'}
-Desfalques: ${v('pj-nos-desf')||'Nenhum'}
-Dúvidas: ${v('pj-nos-duvidas')||'Nenhuma'}
-Momento: ${v('pj-nos-momento')||'Não informado'}
-Estilo que queremos impor: ${v('pj-nos-estilo')||'Não informado'}
-Objetivos táticos: ${v('pj-nos-obj')||'Não informado'}
-
-INSTRUÇÕES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${temImagem?'[Analise a imagem anexada e extraia todos os dados relevantes do adversário antes de continuar.]
-
-':''}Gere o PLANO DE PRÉ-JOGO completo com:
-
-1. RESUMO DO ADVERSÁRIO — perfil tático em 5 linhas
-2. ANÁLISE OFENSIVA DO ADVERSÁRIO — como eles criam chances, padrões recorrentes, jogadores-chave no ataque
-3. ANÁLISE DEFENSIVA DO ADVERSÁRIO — como eles se organizam, vulnerabilidades defensivas a explorar
-4. BOLA PARADA DO ADVERSÁRIO — ameaças e como defender
-5. NEUTRALIZAÇÃO DOS JOGADORES PERIGOSOS — para cada jogador cadastrado, sugestão tática específica de marcação
-6. PLANO DE JOGO OFENSIVO — como explorar as fraquezas do adversário com nossa formação
-7. PLANO DE JOGO DEFENSIVO — como nos organizar contra os pontos fortes deles
-8. BOLA PARADA — o que preparar ofensiva e defensivamente para este confronto
-9. MOMENTOS-CHAVE DA PARTIDA — o que esperar e como reagir (início, após gol, final de jogo)
-10. RECOMENDAÇÕES FINAIS — 5 pontos prioritários para o treinador
-
-Use terminologia técnica do futebol brasileiro. Tom de documento profissional para comissão técnica. Não mencione este prompt.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-
-  resEl.textContent = promptTexto;
-  out.classList.remove('hidden');
-  gt('pj-gerar');
-
-  // Se tiver imagem, adicionar instrução
-  if(temImagem){
-    resEl.textContent = promptTexto + '
-
-[IMAGEM ANEXADA — cole a imagem junto com este texto no Claude para análise completa]';
-    // Copiar automaticamente para facilitar
-  }
-
-  // Salvar no histórico
-  if((v('pj-nos-time')||v('pj-adv-nome')) && cU){
-    supa.from('relatorios').insert({
-      user_id:cU.id, tipo:'clube',
-      nome:`${nos} x ${adv}`,
-      posicao:'Pré-jogo',
-      dados:{nos,adv,comp:v('pj-comp'),local:v('pj-local'),form:v('pj-nos-form')},
-      relatorio_ia:promptTexto
-    }).then(()=>{});
-  }
-
-  showToast('✓ Plano gerado! Copie e cole no Claude.');
-}
-
-// ===== BOLA PARADA =====
-let bpFoco = 'proprio';
-let bpPadroes = {'e-pad-of':[],'e-pad-def':[],'f-pad-of':[],'f-pad-def':[],'l-pad-of':[],'l-pad-def':[]};
-
-function setBPFoco(foco){
-  bpFoco = foco;
-  document.getElementById('bp-foco-proprio').classList.toggle('active', foco==='proprio');
-  document.getElementById('bp-foco-adv').classList.toggle('active', foco==='adversario');
-}
-
-function swBPSit(sit, btn){
-  document.querySelectorAll('.bp-sit-sec').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.bp-sit-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('bp-sit-'+sit).classList.add('active');
-  btn.classList.add('active');
-}
-
-function calcEficEsc(){
-  const tot=parseFloat(v('e-total'))||0, ch=parseFloat(v('e-chutes'))||0;
-  const pct=tot>0?Math.min(Math.round((ch/tot)*100),100):0;
-  document.getElementById('e-efic-bar').style.width=pct+'%';
-  document.getElementById('e-efic-pct').textContent=pct+'%';
-}
-
-function calcEficFal(){
-  const tot=parseFloat(v('f-total'))||0, per=parseFloat(v('f-perig'))||0;
-  const pct=tot>0?Math.min(Math.round((per/tot)*100),100):0;
-  document.getElementById('f-efic-bar').style.width=pct+'%';
-  document.getElementById('f-efic-pct').textContent=pct+'%';
-}
-
-function addPadrao(key){
-  const id=Date.now();
-  bpPadroes[key]=bpPadroes[key]||[];
-  bpPadroes[key].push({id,txt:''});
-  renderPadroes(key);
-  setTimeout(()=>{
-    const el=document.getElementById('bp-pad-'+id);
-    if(el){el.focus();}
-  },50);
-}
-
-function removePadrao(key,id){
-  bpPadroes[key]=bpPadroes[key].filter(p=>p.id!==id);
-  renderPadroes(key);
-}
-
-function updatePadrao(key,id,val){
-  const p=bpPadroes[key]?.find(p=>p.id===id);
-  if(p)p.txt=val;
-}
-
-function renderPadroes(key){
-  const cont=document.getElementById(key+'-lista');
-  if(!cont)return;
-  if(!bpPadroes[key]?.length){
-    cont.innerHTML='<p style="color:var(--c4);font-size:12px;padding:8px 0;">Nenhum padrão registrado.</p>';
-    return;
-  }
-  cont.innerHTML=bpPadroes[key].map((p,i)=>`
-    <div class="bp-padrao-row">
-      <div class="bp-padrao-num">${i+1}</div>
-      <textarea class="bp-padrao-txt ftxt" id="bp-pad-${p.id}" rows="1"
-        style="min-height:36px;resize:none;flex:1;"
-        placeholder="Descreva o padrão observado..."
-        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';updatePadrao('${key}',${p.id},this.value)">${p.txt}</textarea>
-      <button class="bp-padrao-del" onclick="removePadrao('${key}',${p.id})">×</button>
-    </div>`).join('');
-}
-
-function getPadroes(key){
-  return (bpPadroes[key]||[]).filter(p=>p.txt.trim()).map((p,i)=>`${i+1}. ${p.txt}`).join('\n');
-}
-
-function limparBP(){
-  ['bp-time','bp-adv','bp-comp','bp-data','bp-res','bp-min',
-   'e-total','e-chutes','e-gols','e-cobrador','e-zona','e-tipo','e-obs',
-   'f-total','f-perig','f-gols-dir','f-gols-ind','f-cobrador','f-cobrador2','f-barreira','f-ref-barreira','f-obs',
-   'l-total','l-of','l-gols','l-estrat','l-exec','l-zona','l-obs'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  Object.keys(bpPadroes).forEach(k=>{bpPadroes[k]=[];renderPadroes(k);});
-  calcEficEsc();calcEficFal();
-  document.getElementById('bp-output').classList.add('hidden');
-  showToast('Formulário limpo.');
-}
-
-function gerarBP(){
-  const foco = bpFoco==='proprio'?'Próprio time':'Adversário';
-  const time = v('bp-time')||'Não informado';
-  const adv = v('bp-adv')||'Não informado';
-
-  // Escanteios
-  const eTot=v('e-total'),eChut=v('e-chutes'),eGols=v('e-gols');
-  const eEfic=eTot&&eChut?Math.round((parseFloat(eChut)/parseFloat(eTot))*100)+'%':'—';
-  const ePadOf=getPadroes('e-pad-of'), ePadDef=getPadroes('e-pad-def');
-
-  // Faltas
-  const fTot=v('f-total'),fPer=v('f-perig'),fGDir=v('f-gols-dir'),fGInd=v('f-gols-ind');
-  const fEfic=fTot&&fPer?Math.round((parseFloat(fPer)/parseFloat(fTot))*100)+'%':'—';
-  const fPadOf=getPadroes('f-pad-of'), fPadDef=getPadroes('f-pad-def');
-
-  // Laterais
-  const lTot=v('l-total'),lOf=v('l-of'),lGols=v('l-gols');
-  const lPadOf=getPadroes('l-pad-of'), lPadDef=getPadroes('l-pad-def');
-
-  const texto=`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-POTENCIAL SPORTS — ANÁLISE DE BOLA PARADA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Você é um analista de desempenho sênior da Potencial Sports, especializado em situações de bola parada no futebol brasileiro.
-
-IDENTIFICAÇÃO
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Foco da análise: ${foco}
-Time analisado: ${time}
-Adversário: ${adv}
-Competição: ${v('bp-comp')||'—'}
-Data: ${v('bp-data')||'—'}
-Resultado: ${v('bp-res')||'—'}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ESCANTEIOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total cobrados: ${eTot||'—'}
-Que geraram chute: ${eChut||'—'} (eficiência: ${eEfic})
-Gols de escanteio: ${eGols||'0'}
-Cobrador principal: ${v('e-cobrador')||'—'}
-Zona preferida: ${v('e-zona')||'—'}
-Tipo de cobrança: ${v('e-tipo')||'—'}
-
-Padrões ofensivos identificados:
-${ePadOf||'Nenhum padrão registrado.'}
-
-Padrões defensivos identificados:
-${ePadDef||'Nenhum padrão registrado.'}
-
-Observações: ${v('e-obs')||'—'}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FALTAS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total cobradas: ${fTot||'—'}
-Na área de finalização: ${fPer||'—'} (${fEfic} do total)
-Gols de falta direta: ${fGDir||'0'}
-Gols de falta indireta: ${fGInd||'0'}
-Cobrador principal: ${v('f-cobrador')||'—'}
-Cobrador secundário: ${v('f-cobrador2')||'—'}
-Estratégia de barreira: ${v('f-barreira')||'—'}
-Referência na barreira: ${v('f-ref-barreira')||'—'}
-
-Padrões ofensivos identificados:
-${fPadOf||'Nenhum padrão registrado.'}
-
-Padrões defensivos identificados:
-${fPadDef||'Nenhum padrão registrado.'}
-
-Observações: ${v('f-obs')||'—'}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LATERAIS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total cobrados: ${lTot||'—'}
-No terço ofensivo: ${lOf||'—'}
-Gols originados: ${lGols||'0'}
-Estratégia principal: ${v('l-estrat')||'—'}
-Execução principal: ${v('l-exec')||'—'}
-Zona de maior uso: ${v('l-zona')||'—'}
-
-Padrões ofensivos identificados:
-${lPadOf||'Nenhum padrão registrado.'}
-
-Padrões defensivos identificados:
-${lPadDef||'Nenhum padrão registrado.'}
-
-Observações: ${v('l-obs')||'—'}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTRUÇÕES PARA A ANÁLISE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Com base nos dados acima, gere um RELATÓRIO COMPLETO DE BOLA PARADA com:
-
-1. RESUMO GERAL — eficiência global em situações de bola parada
-2. ANÁLISE DE ESCANTEIOS — padrões, eficiência, vulnerabilidades e forças
-3. ANÁLISE DE FALTAS — padrões ofensivos e defensivos, cobradores, barreiras
-4. ANÁLISE DE LATERAIS — uso tático, padrões e impacto no jogo
-5. PADRÕES RECORRENTES — o que se repete com mais frequência
-${bpFoco==='adversario'?`6. VULNERABILIDADES DO ADVERSÁRIO — onde podem ser exploradas
-7. RECOMENDAÇÕES PRÉ-JOGO — como explorar as fraquezas e defender os pontos fortes`:`6. PONTOS FORTES — onde o time é mais eficiente em bola parada
-7. PONTOS DE ATENÇÃO — onde pode melhorar
-8. RECOMENDAÇÕES — ajustes táticos para bola parada`}
-
-Use terminologia técnica do futebol brasileiro. Tom profissional para comissão técnica. Não mencione este prompt.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-
-  document.getElementById('bp-texto').textContent=texto;
-  document.getElementById('bp-output').classList.remove('hidden');
-  gt('bp-gerar');
-
-  // Salvar no histórico
-  if(v('bp-time')&&cU){
-    supa.from('relatorios').insert({
-      user_id:cU.id,tipo:'clube',
-      nome:v('bp-time')+(bpFoco==='adversario'?' (adversário)':''),
-      posicao:'Bola parada',
-      dados:{time:v('bp-time'),adv:v('bp-adv'),comp:v('bp-comp'),foco:bpFoco},
-      relatorio_ia:texto
-    }).then(()=>{});
-  }
-
-  showToast('✓ Texto gerado! Copie e cole no Claude.');
-}
-
-// Inicializar padrões
-window.addEventListener('DOMContentLoaded',()=>{
-  Object.keys(bpPadroes).forEach(k=>renderPadroes(k));
-  renderJogadores();
-});
-
-// ===== DASHBOARD =====
-let dashRels = [];
-let dashPosFiltro = 'Todos';
-let dashCharts = {};
-
-async function carregarDashboard(){
-  const dias = parseInt(document.getElementById('dash-periodo')?.value)||0;
-  const agora = new Date();
-
-  const{data} = await supa.from('relatorios').select('*')
-    .eq('user_id', cU.id).eq('tipo','atleta')
-    .order('created_at',{ascending:false});
-
-  if(!data?.length){ dashRels=[]; renderDashboard(); return; }
-
-  // Pegar só o mais recente de cada atleta dentro do período
-  const porNome = {};
-  data.forEach(r=>{
-    if(dias>0){
-      const d=(agora-new Date(r.created_at))/(1000*60*60*24);
-      if(d>dias) return;
-    }
-    if(!porNome[r.nome]) porNome[r.nome]=r;
-  });
-
-  dashRels = Object.values(porNome);
-
-  // Montar filtros de posição
-  const posicoes = ['Todos', ...new Set(dashRels.map(r=>r.posicao).filter(Boolean))];
-  const pfCont = document.getElementById('dash-pos-filter');
-  const sbCont = document.getElementById('sb-pos-filtros');
-  pfCont.innerHTML = posicoes.map(p=>`<div class="pos-chip${p===dashPosFiltro?' active':''}" onclick="filtroDashPos('${p}',this)">${p}</div>`).join('');
-  sbCont.innerHTML = posicoes.map(p=>`<button class="sbb${p===dashPosFiltro?' active':''}" style="font-size:12px;" onclick="filtroDashPos('${p}',this)"><span class="si">📍</span>${p}</button>`).join('');
-
-  renderDashboard();
-}
-
-function filtroDashPos(pos, el){
-  dashPosFiltro = pos;
-  document.querySelectorAll('.pos-chip').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('#sb-pos-filtros .sbb').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderDashboard();
-}
-
-function renderDashboard(){
-  const busca = document.getElementById('dash-busca')?.value?.toLowerCase()||'';
-  let lista = dashRels.filter(r=>{
-    if(dashPosFiltro!=='Todos' && r.posicao!==dashPosFiltro) return false;
-    if(busca && !r.nome?.toLowerCase().includes(busca)) return false;
+function renderDash(){
+  var busca=document.getElementById('dash-busca')?document.getElementById('dash-busca').value.toLowerCase():'';
+  var lista=dashR.filter(function(r){
+    if(dashPosFiltro!=='Todos'&&r.posicao!==dashPosFiltro)return false;
+    if(busca&&(!r.nome||r.nome.toLowerCase().indexOf(busca)===-1))return false;
     return true;
   });
-
-  if(!lista.length){
-    document.getElementById('dash-stats').innerHTML='';
-    document.getElementById('dash-cards-grid').innerHTML=`<div class="dash-empty" style="grid-column:1/-1;"><div style="font-size:48px;margin-bottom:12px;">👥</div><div>Nenhum atleta encontrado.</div><div style="font-size:12px;margin-top:8px;">Registre análises na aba Atleta para ver o dashboard.</div></div>`;
-    document.getElementById('dash-charts-pos').innerHTML='';
-    return;
-  }
-
-  // Stats resumo
-  const totalAtletas = lista.length;
-  const mediaScore = lista.filter(r=>r.score).length
-    ? Math.round(lista.filter(r=>r.score).reduce((a,r)=>a+r.score,0)/lista.filter(r=>r.score).length)
-    : '—';
-  const riscos = lista.map(r=>calcularRiscoAtleta(r,null,null));
-  const altosRisco = riscos.filter(r=>r.nivel==='ALTO'||r.nivel==='CRÍTICO').length;
-  const posicoes = [...new Set(lista.map(r=>r.posicao).filter(Boolean))].length;
-
-  document.getElementById('dash-stats').innerHTML=`
-    <div class="dash-stat"><div class="dash-stat-num">${totalAtletas}</div><div class="dash-stat-lbl">Atletas registrados</div></div>
-    <div class="dash-stat"><div class="dash-stat-num">${mediaScore}</div><div class="dash-stat-lbl">Score médio do elenco</div></div>
-    <div class="dash-stat"><div class="dash-stat-num" style="color:${altosRisco>0?'#FF4444':'#00C853'}">${altosRisco}</div><div class="dash-stat-lbl">Em risco elevado</div></div>
-    <div class="dash-stat"><div class="dash-stat-num">${posicoes}</div><div class="dash-stat-lbl">Posições cobertas</div></div>`;
-
-  // Cards do elenco
-  const cardsCont = document.getElementById('dash-cards-grid');
-  cardsCont.innerHTML = lista.map(r=>{
-    const risco = calcularRiscoAtleta(r,null,null);
-    const mets = r.dados?.metricas||{};
-    const metKeys = Object.keys(mets).slice(0,4);
-    const rBadge = risco.nivel==='CRÍTICO'?'rb-critico':risco.nivel==='ALTO'?'rb-alto':risco.nivel==='MÉDIO'?'rb-medio':'rb-baixo';
-    const scoreColor = (r.score||0)>=75?'#00C853':(r.score||0)>=50?'#FFB300':'#FF4444';
-    return `
-      <div class="dash-card" onclick="abrirEvolucao('${r.nome}','${r.posicao||''}')">
-        <div class="dc-top">
-          <div><div class="dc-nome">${r.nome}</div><div class="dc-pos">${r.posicao||'—'}</div></div>
-          <div style="text-align:right;">
-            <div class="dc-score" style="color:${scoreColor}">${r.score||'—'}</div>
-            <div class="dc-score-lbl">Score</div>
-          </div>
-        </div>
-        <div class="dc-mets">
-          ${metKeys.map(k=>`<div class="dc-met"><span class="dc-met-lbl">${k}</span><span class="dc-met-val">${mets[k]}</span></div>`).join('')}
-          ${!metKeys.length?'<span style="font-size:11px;color:var(--c4);">Sem métricas registradas</span>':''}
-        </div>
-        <div class="dc-footer">
-          <span class="dc-data">${new Date(r.created_at).toLocaleDateString('pt-BR')}</span>
-          <span class="dc-risco risco-badge ${rBadge}" style="font-size:10px;padding:2px 8px;">${risco.nivel}</span>
-        </div>
-      </div>`;
+  var med=lista.filter(function(r){return r.score;}).length?Math.round(lista.filter(function(r){return r.score;}).reduce(function(a,r){return a+r.score;},0)/lista.filter(function(r){return r.score;}).length):'--';
+  var riscos=lista.map(function(r){return calcRisco(r.dados&&r.dados.metricas?r.dados.metricas:{},null);});
+  var altos=riscos.filter(function(r){return r.nivel==='ALTO'||r.nivel==='CRITICO';}).length;
+  document.getElementById('dash-stats').innerHTML='<div class="stcard"><div class="stnum">'+lista.length+'</div><div class="stlbl">Atletas</div></div><div class="stcard"><div class="stnum">'+med+'</div><div class="stlbl">Score medio</div></div><div class="stcard"><div class="stnum" style="color:'+(altos>0?'#FF4444':'#00C853')+'">'+altos+'</div><div class="stlbl">Em risco elevado</div></div><div class="stcard"><div class="stnum">'+[...new Set(lista.map(function(r){return r.posicao;}).filter(Boolean))].length+'</div><div class="stlbl">Posicoes</div></div>';
+  var cards=document.getElementById('dash-cards');
+  if(!lista.length){cards.innerHTML='<div style="grid-column:1/-1;" class="hemp"><div style="font-size:42px;">equipe</div><div style="margin-top:10px;">Nenhum atleta. Registre analises na aba Atleta.</div></div>';document.getElementById('dash-charts').innerHTML='';return;}
+  cards.innerHTML=lista.map(function(r){
+    var risco=calcRisco(r.dados&&r.dados.metricas?r.dados.metricas:{},null);
+    var mets=r.dados&&r.dados.metricas?r.dados.metricas:{};
+    var mk=Object.keys(mets).slice(0,4);
+    var sc=r.score||0;
+    var scClr=sc>=75?'#00C853':sc>=50?'#FFB300':'#FF4444';
+    return '<div class="dcard" onclick="abrirEvo(\''+r.nome+'\',\''+(r.posicao||'')+'\')"><div class="dct"><div><div class="dcn">'+r.nome+'</div><div class="dcp">'+(r.posicao||'--')+'</div></div><div style="text-align:right;"><div class="dcs" style="color:'+scClr+'">'+(sc||'--')+'</div><div class="dcsl">Score</div></div></div><div style="margin-bottom:8px;">'+mk.map(function(k){return '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span style="color:var(--c4);">'+k+'</span><span style="font-weight:600;">'+mets[k]+'</span></div>';}).join('')+(mk.length?'':'<span style="font-size:11px;color:var(--c4);">Sem metricas</span>')+'</div><div class="dcf"><span style="font-size:10px;color:var(--c4);">'+new Date(r.created_at).toLocaleDateString('pt-BR')+'</span><span class="rbdg '+risco.bclr+'" style="font-size:10px;padding:2px 7px;">'+risco.nivel+'</span></div></div>';
   }).join('');
-
-  // Comparativo por posição
-  renderChartsPosicao(lista);
+  renderDashCharts(lista);
 }
-
-function renderChartsPosicao(lista){
-  // Destruir charts anteriores
-  Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});
+function renderDashCharts(lista){
+  Object.values(dashCharts).forEach(function(c){try{c.destroy();}catch(e){}});
   dashCharts={};
-
-  const cont = document.getElementById('dash-charts-pos');
-  const porPos = {};
-  lista.forEach(r=>{
-    const pos = r.posicao||'Sem posição';
-    if(!porPos[pos]) porPos[pos]=[];
-    porPos[pos].push(r);
-  });
-
-  // Só mostrar posições com 2+ atletas
-  const posComDados = Object.entries(porPos).filter(([,rl])=>rl.length>=2);
-  if(!posComDados.length){
-    cont.innerHTML=`<div class="dash-empty"><div style="font-size:32px;margin-bottom:10px;">📊</div><div>Registre pelo menos 2 atletas na mesma posição para ver o comparativo.</div></div>`;
-    return;
-  }
-
-  cont.innerHTML = posComDados.map(([pos])=>`
-    <div class="dash-chart-wrap">
-      <div class="dash-chart-title">${pos}</div>
-      <canvas id="chart-pos-${pos.replace(/\s/g,'_')}" height="60"></canvas>
-    </div>`).join('');
-
-  posComDados.forEach(([pos,rels])=>{
-    const canvasId = 'chart-pos-'+pos.replace(/\s/g,'_');
-    const ctx = document.getElementById(canvasId)?.getContext('2d');
-    if(!ctx) return;
-
-    const nomes = rels.map(r=>r.nome);
-    const scores = rels.map(r=>r.score||0);
-    const colors = scores.map(s=>s>=75?'#00C853':s>=50?'#FFB300':'#FF4444');
-
-    dashCharts[canvasId] = new Chart(ctx,{
-      type:'bar',
-      data:{
-        labels:nomes,
-        datasets:[{
-          label:'Score',
-          data:scores,
-          backgroundColor:colors.map(c=>c+'44'),
-          borderColor:colors,
-          borderWidth:2,
-          borderRadius:6,
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{
-          legend:{display:false},
-          tooltip:{callbacks:{label:c=>`Score: ${c.raw}/100`}}
-        },
-        scales:{
-          y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#666',font:{size:11}}},
-          x:{grid:{display:false},ticks:{color:'#aaa',font:{size:11}}}
-        }
-      }
-    });
+  var cont=document.getElementById('dash-charts');
+  var porPos={};
+  lista.forEach(function(r){var p=r.posicao||'Sem posicao';if(!porPos[p])porPos[p]=[];porPos[p].push(r);});
+  var comDados=Object.entries(porPos).filter(function(e){return e[1].length>=2;});
+  if(!comDados.length){cont.innerHTML='';return;}
+  cont.innerHTML=comDados.map(function(e){return '<div class="sblk"><div class="stitle">'+e[0]+'</div><canvas id="dc-'+e[0].replace(/\s/g,'_')+'" height="60"></canvas></div>';}).join('');
+  comDados.forEach(function(e){
+    var pos=e[0],rels=e[1];
+    var cid='dc-'+pos.replace(/\s/g,'_');
+    var ctx=document.getElementById(cid)?document.getElementById(cid).getContext('2d'):null;
+    if(!ctx)return;
+    var nomes=rels.map(function(r){return r.nome;});
+    var scores=rels.map(function(r){return r.score||0;});
+    var colors=scores.map(function(s){return s>=75?'#00C853':s>=50?'#FFB300':'#FF4444';});
+    dashCharts[cid]=new Chart(ctx,{type:'bar',data:{labels:nomes,datasets:[{label:'Score',data:scores,backgroundColor:colors.map(function(c){return c+'44';}),borderColor:colors,borderWidth:2,borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#666',font:{size:11}}},x:{grid:{display:false},ticks:{color:'#aaa',font:{size:11}}}}}});
   });
 }
 
-// ===== ANÁLISE DE VÍDEO =====
-let videoFoco = 'atleta';
-let eventosVideo = [];
-
-function setFoco(foco){
-  videoFoco = foco;
-  document.getElementById('foco-atleta').classList.toggle('active', foco==='atleta');
-  document.getElementById('foco-time').classList.toggle('active', foco==='time');
-  document.getElementById('cfg-atleta').style.display = foco==='atleta'?'block':'none';
-  document.getElementById('cfg-time').style.display = foco==='time'?'block':'none';
-}
-
-const TIPOS_EVENTO_ATLETA = [
-  'Passe progressivo','Passe errado','Drible completo','Drible perdido',
-  'Finalização no alvo','Finalização para fora','Gol','Assistência',
-  'Duelo ganho','Duelo perdido','Duelo aéreo ganho','Duelo aéreo perdido',
-  'Interceptação','Corte defensivo','Recuperação de bola','Falta cometida',
-  'Falta sofrida','Cruzamento certo','Cruzamento errado','Movimentação sem bola',
-  'Erro posicional','Pressão efetiva','Sprint ofensivo','Sprint defensivo',
-  'Bola parada','Outro',
-];
-
-const TIPOS_EVENTO_TIME = [
-  'Gol marcado','Gol sofrido','Chance criada','Chance sofrida',
-  'Pressão alta','Bloco defensivo','Transição ofensiva','Transição defensiva',
-  'Saída de bola','Bola longa','Escanteio ofensivo','Escanteio defensivo',
-  'Falta estratégica','Falta perigosa sofrida','Substituição','Ajuste tático',
-  'Desorganização defensiva','Superioridade numérica','Bola parada ofensiva',
-  'Bola parada defensiva','Outro',
-];
-
-function getTipos(){ return videoFoco==='atleta' ? TIPOS_EVENTO_ATLETA : TIPOS_EVENTO_TIME; }
-
-function addEvento(){
-  const id = Date.now();
-  eventosVideo.push({id, minuto:'', tipo:'', descricao:''});
-  renderEventos();
-  // Focar no campo de minuto do novo evento
-  setTimeout(()=>{
-    const el = document.getElementById('ev-min-'+id);
-    if(el) el.focus();
-  }, 50);
-}
-
-function removeEvento(id){
-  eventosVideo = eventosVideo.filter(e=>e.id!==id);
-  renderEventos();
-}
-
-function updateEvento(id, campo, valor){
-  const ev = eventosVideo.find(e=>e.id===id);
-  if(ev) ev[campo] = valor;
-  atualizarContador();
-}
-
-function renderEventos(){
-  const tipos = getTipos();
-  const cont = document.getElementById('eventos-lista');
-  if(!eventosVideo.length){
-    cont.innerHTML = '<p style="color:var(--c4);font-size:13px;text-align:center;padding:16px 0;">Nenhum evento anotado. Clique em "Adicionar evento" para começar.</p>';
-    atualizarContador();
-    return;
-  }
-  cont.innerHTML = eventosVideo.map(ev=>`
-    <div class="evento-row" id="ev-row-${ev.id}">
-      <input class="evento-min finp" id="ev-min-${ev.id}" type="number" placeholder="00'" value="${ev.minuto}" min="0" max="120"
-        oninput="updateEvento(${ev.id},'minuto',this.value)">
-      <select class="evento-tipo fsel" oninput="updateEvento(${ev.id},'tipo',this.value)">
-        <option value="">Tipo de ação...</option>
-        ${tipos.map(t=>`<option value="${t}" ${ev.tipo===t?'selected':''}>${t}</option>`).join('')}
-      </select>
-      <textarea class="evento-desc" placeholder="Descreva o que aconteceu..." rows="1"
-        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';updateEvento(${ev.id},'descricao',this.value)">${ev.descricao}</textarea>
-      <button class="evento-del" onclick="removeEvento(${ev.id})" title="Remover">×</button>
-    </div>
-  `).join('');
-  atualizarContador();
-}
-
-function atualizarContador(){
-  const total = eventosVideo.length;
-  const preenchidos = eventosVideo.filter(e=>e.tipo||e.descricao).length;
-  const cont = document.getElementById('eventos-count');
-  if(cont) cont.textContent = total>0 ? `${preenchidos} de ${total} eventos preenchidos` : '';
-}
-
-function limparVideo(){
-  eventosVideo = [];
-  renderEventos();
-  ['v-nome','v-pos','v-clube','v-adv','v-comp','v-data','v-res','v-min',
-   'v-time','v-form','v-adv-t','v-form-adv','v-comp-t','v-data-t','v-res-t','v-local-t',
-   'v-geral','v-pontos-pos','v-pontos-neg','v-bola-parada','v-contexto'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.value='';
-  });
-  document.getElementById('video-output').classList.add('hidden');
-  showToast('Formulário limpo.');
-}
-
-function gerarVideo(){
-  const foco = videoFoco;
-  const eventos = eventosVideo.filter(e=>e.tipo||e.descricao);
-
-  let cabecalho = '';
-  if(foco==='atleta'){
-    const nome=v('v-nome'),pos=v('v-pos'),clube=v('v-clube'),adv=v('v-adv'),comp=v('v-comp'),data=v('v-data'),res=v('v-res'),min=v('v-min');
-    cabecalho = `FOCO: Atleta individual
-Nome: ${nome||'Não informado'}
-Posição: ${pos||'Não informada'}
-Clube: ${clube||'Não informado'}
-Adversário: ${adv||'Não informado'}
-Competição: ${comp||'Não informada'}
-Data: ${data||'Não informada'}
-Resultado: ${res||'Não informado'}
-Minutos jogados: ${min||'Não informado'}`;
-  } else {
-    const time=v('v-time'),form=v('v-form'),adv=v('v-adv-t'),formAdv=v('v-form-adv'),comp=v('v-comp-t'),data=v('v-data-t'),res=v('v-res-t'),local=v('v-local-t');
-    cabecalho = `FOCO: Análise coletiva do time
-Time: ${time||'Não informado'}
-Formação: ${form||'Não informada'}
-Adversário: ${adv||'Não informado'} ${formAdv?'('+formAdv+')':''}
-Competição: ${comp||'Não informada'}
-Data: ${data||'Não informada'}
-Resultado: ${res||'Não informado'}
-Local: ${local||'Não informado'}`;
-  }
-
-  let eventosStr = '';
-  if(eventos.length){
-    eventosStr = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EVENTOS REGISTRADOS (${eventos.length} eventos)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-`;
-    eventosStr += eventos.map(e=>`Min. ${e.minuto||'?'}' | ${e.tipo||'Ação'}: ${e.descricao||'Sem descrição'}`).join('
-');
-  } else {
-    eventosStr = '
-[Nenhum evento estruturado registrado]';
-  }
-
-  const geral=v('v-geral'), pos_obs=v('v-pontos-pos'), neg_obs=v('v-pontos-neg'), bp=v('v-bola-parada'), ctx=v('v-contexto');
-
-  const instrucao = foco==='atleta'
-    ? `Gere um RELATÓRIO DE ANÁLISE DE VÍDEO completo do atleta com:
-1. RESUMO DA PARTIDA
-2. DESEMPENHO TÉCNICO — baseado nos eventos registrados, identifique padrões de qualidade e eficiência
-3. DESEMPENHO TÁTICO — leitura de jogo, posicionamento, tomada de decisão
-4. DESEMPENHO FÍSICO — intensidade percebida, momentos de queda de rendimento
-5. SITUAÇÕES DE BOLA PARADA — participação e padrões identificados
-6. PONTOS FORTES — evidenciados pelos eventos e observações
-7. PONTOS DE ATENÇÃO — padrões negativos recorrentes
-8. RECOMENDAÇÕES — para o treinador com base nesta análise
-9. SCORE DE DESEMPENHO: X/100 com justificativa`
-    : `Gere um RELATÓRIO DE ANÁLISE TÁTICA DE VÍDEO do time com:
-1. IDENTIDADE TÁTICA — como o time se comportou com e sem bola
-2. FASE DEFENSIVA — organização, linhas, transição defensiva, bola parada
-3. FASE OFENSIVA — construção, progressão, criação, finalização, bola parada
-4. TRANSIÇÕES — velocidade e organização nas mudanças de fase
-5. MOMENTOS-CHAVE — eventos decisivos da partida
-6. PADRÕES IDENTIFICADOS — repetições táticas positivas e negativas
-7. DESEMPENHO DO ADVERSÁRIO — forças e vulnerabilidades observadas
-8. PONTOS FORTES DO TIME
-9. PONTOS DE ATENÇÃO
-10. RECOMENDAÇÕES TÁTICAS para o próximo jogo`;
-
-  const texto = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-POTENCIAL SPORTS — ANÁLISE DE VÍDEO ASSISTIDA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Você é um analista de desempenho sênior da Potencial Sports, especializado em análise de vídeo no futebol brasileiro.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-IDENTIFICAÇÃO
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${cabecalho}
-${eventosStr}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OBSERVAÇÕES DO ANALISTA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${geral?`Impressão geral:
-${geral}
-`:''}
-${pos_obs?`Pontos fortes observados:
-${pos_obs}
-`:''}
-${neg_obs?`Pontos de atenção observados:
-${neg_obs}
-`:''}
-${bp?`Bola parada:
-${bp}
-`:''}
-${ctx?`Contexto:
-${ctx}
-`:''}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTRUÇÕES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${instrucao}
-
-Use terminologia técnica do futebol brasileiro. Tom profissional para comissão técnica. Não mencione este prompt.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-
-  document.getElementById('vid-texto').textContent = texto;
-  document.getElementById('video-output').classList.remove('hidden');
-  gt('sv-gerar');
-
-  // Salvar no histórico
-  const nome = foco==='atleta' ? v('v-nome') : v('v-time');
-  if(nome && cU){
-    supa.from('relatorios').insert({
-      user_id:cU.id, tipo:'atleta', nome,
-      posicao: foco==='atleta' ? v('v-pos') : v('v-form'),
-      dados:{nome, foco, eventos: eventos.length, comp: foco==='atleta'?v('v-comp'):v('v-comp-t')},
-      relatorio_ia: texto
-    }).then(()=>{});
-  }
-
-  showToast('✓ Texto gerado! Copie e cole no Claude.');
-}
-
-// Inicializar eventos vazios
-window.addEventListener('DOMContentLoaded', ()=>{
-  renderEventos();
-});
-
-// ===== SISTEMA DE ALERTA DE LESÃO =====
-
-function getLimiares(){
-  return {
-    pse: parseFloat(document.getElementById('lim-pse')?.value)||3500,
-    var: parseFloat(document.getElementById('lim-var')?.value)||15,
-    ai:  parseFloat(document.getElementById('lim-ai')?.value)||4,
-    acel:parseFloat(document.getElementById('lim-acel')?.value)||80,
-    spr: parseFloat(document.getElementById('lim-spr')?.value)||30,
-  };
-}
-
-function calcularRiscoAtleta(relAtual, relAnterior, historicoCarga){
-  const L = getLimiares();
-  const d = relAtual.dados || {};
-  const m = d.metricas || {};
-  const fatores = [];
-  let score = 0;
-
-  // 1. PSE
-  const pse = parseFloat(m['Carga PSE'] || m['gps-pse'] || 0);
-  if(pse > 0){
-    if(pse > L.pse * 1.2){ score+=35; fatores.push({icon:'🔴', txt:`PSE ${pse} UA — muito acima do limiar (${L.pse} UA). Sobrecarga severa.`}); }
-    else if(pse > L.pse){ score+=20; fatores.push({icon:'🟡', txt:`PSE ${pse} UA — acima do limiar (${L.pse} UA). Monitorar.`}); }
-  }
-
-  // 2. Alta intensidade
-  const ai = parseFloat(m['Alta intensidade (km)'] || m['gps-ai'] || 0);
-  if(ai > 0){
-    if(ai > L.ai * 1.3){ score+=25; fatores.push({icon:'🔴', txt:`Alta intensidade: ${ai}km — muito acima do limiar (${L.ai}km).`}); }
-    else if(ai > L.ai){ score+=15; fatores.push({icon:'🟡', txt:`Alta intensidade: ${ai}km — acima do limiar (${L.ai}km).`}); }
-  }
-
-  // 3. Acelerações
-  const acel = parseFloat(m['Acelerações'] || m['gps-acel'] || 0);
-  if(acel > 0){
-    if(acel > L.acel * 1.3){ score+=20; fatores.push({icon:'🔴', txt:`Acelerações: ${acel} — sobrecarga neuromuscular elevada.`}); }
-    else if(acel > L.acel){ score+=10; fatores.push({icon:'🟡', txt:`Acelerações: ${acel} — próximo do limite recomendado.`}); }
-  }
-
-  // 4. Sprints
-  const spr = parseFloat(m['Número de sprints'] || m['gps-nspr'] || 0);
-  if(spr > 0){
-    if(spr > L.spr * 1.3){ score+=15; fatores.push({icon:'🔴', txt:`Sprints: ${spr} — volume muito alto de esforços máximos.`}); }
-    else if(spr > L.spr){ score+=8; fatores.push({icon:'🟡', txt:`Sprints: ${spr} — volume elevado de esforços máximos.`}); }
-  }
-
-  // 5. Variação em relação ao período anterior
-  if(relAnterior){
-    const mAnt = relAnterior.dados?.metricas || {};
-    const pseAnt = parseFloat(mAnt['Carga PSE'] || mAnt['gps-pse'] || 0);
-    if(pse > 0 && pseAnt > 0){
-      const varPct = ((pse - pseAnt) / pseAnt) * 100;
-      if(varPct > L.var * 2){ score+=30; fatores.push({icon:'🔴', txt:`Carga aumentou ${varPct.toFixed(0)}% em relação ao período anterior — pico de carga crítico (ACWR).`}); }
-      else if(varPct > L.var){ score+=15; fatores.push({icon:'🟡', txt:`Carga aumentou ${varPct.toFixed(0)}% — variação acima do recomendado (máx ${L.var}%).`}); }
-      else if(varPct < 0){ fatores.push({icon:'🟢', txt:`Carga reduziu ${Math.abs(varPct).toFixed(0)}% em relação ao período anterior — recuperação adequada.`}); }
-    }
-  }
-
-  // 6. Histórico de lesões (campo risco preenchido na ficha)
-  const riscoHist = d.risco || '';
-  if(riscoHist === 'Alto'){ score+=20; fatores.push({icon:'⚠️', txt:'Histórico de lesões de risco alto registrado na ficha do atleta.'}); }
-  else if(riscoHist === 'Médio'){ score+=10; fatores.push({icon:'⚠️', txt:'Histórico de lesões de risco moderado registrado na ficha do atleta.'}); }
-
-  // Score máximo: 100
-  score = Math.min(score, 100);
-
-  // Classificação
-  let nivel, badge, cor, recomendacao;
-  if(score >= 70){
-    nivel='CRÍTICO'; badge='rb-critico'; cor='#FF0000';
-    recomendacao='⛔ Ação imediata recomendada. Consultar fisioterapeuta e reduzir carga significativamente. Considerar repouso ativo.';
-  } else if(score >= 45){
-    nivel='ALTO'; badge='rb-alto'; cor='#FF4444';
-    recomendacao='⚠️ Reduzir volume de treino nos próximos dias. Priorizar recuperação ativa. Acompanhar evolução diariamente.';
-  } else if(score >= 20){
-    nivel='MÉDIO'; badge='rb-medio'; cor='#FFB300';
-    recomendacao='🟡 Monitorar de perto. Manter carga atual mas evitar aumentos. Atenção à qualidade do sono e nutrição.';
-  } else {
-    nivel='BAIXO'; badge='rb-baixo'; cor='#00C853';
-    recomendacao='✅ Carga dentro do esperado. Atleta apto para treino normal. Manter monitoramento semanal.';
-  }
-
-  if(!fatores.length) fatores.push({icon:'✅', txt:'Nenhum fator de risco identificado com os dados disponíveis.'});
-
-  return {score, nivel, badge, cor, recomendacao, fatores};
-}
-
-function renderAlertaCard(resultado, nome, containerId){
-  const {score, nivel, badge, cor, recomendacao, fatores} = resultado;
-  const barColor = nivel==='CRÍTICO'?'#FF0000':nivel==='ALTO'?'#FF4444':nivel==='MÉDIO'?'#FFB300':'#00C853';
-  const cardClass = nivel==='CRÍTICO'?'risco-critico':nivel==='ALTO'?'risco-alto':nivel==='MÉDIO'?'risco-medio':'risco-baixo';
-
-  const html = `
-    <div class="risco-card ${cardClass}">
-      <div class="risco-header">
-        <div class="risco-nome">${nome||'Atleta'}</div>
-        <span class="risco-badge ${badge}">${nivel}</span>
-      </div>
-      <div class="risco-score-bar">
-        <span style="font-size:11px;color:var(--c4);min-width:80px;">Índice de risco</span>
-        <div class="risco-score-track"><div class="risco-score-fill" style="width:${score}%;background:${barColor};"></div></div>
-        <span class="risco-score-num" style="color:${barColor};">${score}/100</span>
-      </div>
-      <div class="risco-fatores">
-        ${fatores.map(f=>`<div class="risco-fator"><span class="risco-fator-icon">${f.icon}</span><span>${f.txt}</span></div>`).join('')}
-      </div>
-      <div class="risco-rec">${recomendacao}</div>
-    </div>`;
-
-  document.getElementById(containerId).innerHTML = html;
-}
-
-async function calcularRisco(){
-  const nome = v('a-nome');
-  const cont = document.getElementById('alerta-inline-result');
-  document.getElementById('sa-alerta').style.display = 'block';
-
-  if(!nome){ cont.innerHTML='<p style="color:var(--c4);font-size:13px;">Preencha o nome do atleta primeiro.</p>'; return; }
-
-  // Buscar período anterior do mesmo atleta
-  const{data:rels}=await supa.from('relatorios').select('*')
-    .eq('user_id',cU.id).eq('tipo','atleta').eq('nome',nome)
-    .order('created_at',{ascending:false}).limit(2);
-
-  const relAtual = {dados:{metricas: coletarMetricasAtleta(), risco: v('p-risco')||''}};
-  const relAnterior = rels && rels.length > 0 ? rels[0] : null;
-
-  const resultado = calcularRiscoAtleta(relAtual, relAnterior, null);
-  renderAlertaCard(resultado, nome, 'alerta-inline-result');
-  gt('sa-alerta');
-}
-
-async function carregarPainelLesao(){
-  const cont = document.getElementById('lesao-lista');
-  cont.innerHTML = '<div class="hemp"><div class="dp" style="justify-content:center;"><span></span><span></span><span></span></div><p style="margin-top:12px;color:var(--c4);">Calculando...</p></div>';
-
-  // Buscar último relatório de cada atleta
-  const{data:rels}=await supa.from('relatorios').select('*')
-    .eq('user_id',cU.id).eq('tipo','atleta')
-    .order('created_at',{ascending:false});
-
-  if(!rels?.length){ cont.innerHTML='<div class="hemp"><div style="font-size:48px;">🏃</div><div style="margin-top:12px;">Nenhum atleta registrado ainda.</div></div>'; return; }
-
-  // Agrupar por nome — pegar o mais recente de cada um
-  const porNome = {};
-  rels.forEach(r=>{
-    if(!porNome[r.nome]) porNome[r.nome] = [];
-    porNome[r.nome].push(r);
-  });
-
-  // Calcular risco de cada atleta
-  const resultados = Object.entries(porNome).map(([nome, lista])=>{
-    const atual = lista[0];
-    const anterior = lista[1] || null;
-    const resultado = calcularRiscoAtleta(atual, anterior, null);
-    return {nome, resultado, data: atual.created_at, posicao: atual.posicao||''};
-  });
-
-  // Ordenar por score (maior risco primeiro)
-  resultados.sort((a,b)=>b.resultado.score - a.resultado.score);
-
-  // Resumo por nível
-  const criticos = resultados.filter(r=>r.resultado.nivel==='CRÍTICO').length;
-  const altos = resultados.filter(r=>r.resultado.nivel==='ALTO').length;
-  const medios = resultados.filter(r=>r.resultado.nivel==='MÉDIO').length;
-  const baixos = resultados.filter(r=>r.resultado.nivel==='BAIXO').length;
-
-  let html = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-      <div class="fb-stat" style="border-left:3px solid #FF0000;"><div class="fb-stat-num" style="color:#FF0000;">${criticos}</div><div class="fb-stat-lbl">Crítico</div></div>
-      <div class="fb-stat" style="border-left:3px solid #FF4444;"><div class="fb-stat-num" style="color:#FF4444;">${altos}</div><div class="fb-stat-lbl">Alto</div></div>
-      <div class="fb-stat" style="border-left:3px solid #FFB300;"><div class="fb-stat-num" style="color:#FFB300;">${medios}</div><div class="fb-stat-lbl">Médio</div></div>
-      <div class="fb-stat" style="border-left:3px solid #00C853;"><div class="fb-stat-num" style="color:#00C853;">${baixos}</div><div class="fb-stat-lbl">Baixo</div></div>
-    </div>`;
-
-  resultados.forEach(({nome, resultado, data, posicao})=>{
-    const {score, nivel, badge, cor, fatores} = resultado;
-    html += `
-      <div class="painel-atleta">
-        <div class="pa-top">
-          <div>
-            <div class="pa-nome">${nome}</div>
-            ${posicao?`<div style="font-size:11px;color:var(--c4);">${posicao}</div>`:''}
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="risco-badge ${badge}">${nivel}</span>
-            <span style="font-size:13px;font-weight:700;color:${cor};">${score}/100</span>
-            <div class="pa-data">${new Date(data).toLocaleDateString('pt-BR')}</div>
-          </div>
-        </div>
-        <div class="risco-score-bar" style="margin-bottom:8px;">
-          <div class="risco-score-track"><div class="risco-score-fill" style="width:${score}%;background:${cor};"></div></div>
-        </div>
-        <div class="pa-fatores">${fatores.slice(0,2).map(f=>`${f.icon} ${f.txt}`).join('<br>')}</div>
-      </div>`;
-  });
-
-  cont.innerHTML = html;
-}
-
-// Mostrar aba de lesão para admin
-function mostrarAbaLesao(){
-  const btn = document.getElementById('tab-lesao-btn');
-  if(btn) btn.style.display = 'flex';
-}
-
-// Calcular risco automaticamente ao preencher GPS
-function autoRisco(){
-  const nome = v('a-nome');
-  const pse = v('gps-pse');
-  if(nome && pse){
-    document.getElementById('sa-alerta').style.display = 'block';
-    calcularRisco();
-  }
-}
-
-// ===== EVOLUÇÃO =====
-let evoChartScore=null,evoChartMet=null,evoAtleta=null,evoPos=null,evoRels=[];
-const MET_LABELS={
-  'a-duel':'Duelos (%)', 'a-aer':'Aéreos (%)', 'a-int':'Interceptações',
-  'a-paspct':'Passes (%)', 'a-gols':'Gols', 'a-assis':'Assistências',
-  'a-dist':'Distância (km)', 'a-vel':'Vel. máx (km/h)', 'a-spr':'Sprints',
-  'gps-dist':'Dist. GPS (km)', 'gps-vel':'Vel. GPS (km/h)', 'gps-pse':'PSE',
-};
-
-async function abrirEvolucao(nome, pos){
-  evoAtleta=nome; evoPos=pos;
+// EVOLUCAO
+async function abrirEvo(nome,pos){
   document.getElementById('eNome').textContent=nome;
   document.getElementById('ePos').textContent=pos||'Atleta';
-  // Buscar todos os relatórios desse atleta
-  const{data}=await supa.from('relatorios').select('*')
-    .eq('user_id',cU.id).eq('tipo','atleta').eq('nome',nome)
-    .order('created_at',{ascending:true});
-  evoRels=data||[];
+  var r=await supa.from('relatorios').select('*').eq('user_id',cU.id).eq('tipo','atleta').eq('nome',nome).order('created_at',{ascending:true});
+  evoR=r.data||[];
   document.getElementById('mEvo').classList.remove('hidden');
-  swEvo('grafico',document.querySelector('.evo-tab'));
-  renderEvoGrafico();
-  popularSelects();
-  renderHistEvo();
+  swEvo('grafico',document.querySelector('.etab'));
+  renderEvoScore();
+  renderEvoComp();
+  renderEvoPeriodos();
 }
-
 function fEvo(){document.getElementById('mEvo').classList.add('hidden');}
-
 function swEvo(sec,btn){
-  document.querySelectorAll('.evo-section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.evo-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('evo-'+sec).classList.add('active');
-  btn.classList.add('active');
+  document.querySelectorAll('.esec').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.etab').forEach(function(b){b.classList.remove('active');});
+  var el=document.getElementById('evo-'+sec);if(el)el.classList.add('active');
+  if(btn)btn.classList.add('active');
 }
-
-function renderEvoGrafico(){
-  if(!evoRels.length) return;
-  const labels=evoRels.map(r=>new Date(r.created_at).toLocaleDateString('pt-BR'));
-  const scores=evoRels.map(r=>r.score||0);
-
-  // Gráfico de score
-  const ctx1=document.getElementById('evo-chart-score').getContext('2d');
-  if(evoChartScore)evoChartScore.destroy();
-  evoChartScore=new Chart(ctx1,{
-    type:'line',
-    data:{labels,datasets:[{
-      label:'Score geral',data:scores,
-      borderColor:'#00C853',backgroundColor:'rgba(0,200,83,0.1)',
-      borderWidth:2.5,pointBackgroundColor:'#00C853',pointRadius:5,
-      pointHoverRadius:7,tension:0.3,fill:true,
-    }]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Score: ${c.raw}/100`}}},
-      scales:{y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:11}}},
-        x:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:10}}}}}
-  });
-
-  // Seletor de métricas
-  const mets=Object.keys(MET_LABELS);
-  const selCont=document.getElementById('evo-met-sel');
-  selCont.innerHTML=mets.map((k,i)=>`<div class="msel${i===0?' active':''}" onclick="selMet(this,'${k}')">${MET_LABELS[k]}</div>`).join('');
-  renderEvoMet(mets[0]);
+function renderEvoScore(){
+  if(!evoR.length)return;
+  var labels=evoR.map(function(r){return new Date(r.created_at).toLocaleDateString('pt-BR');});
+  var scores=evoR.map(function(r){return r.score||0;});
+  var ctx=document.getElementById('evo-score').getContext('2d');
+  if(evoChScore)evoChScore.destroy();
+  evoChScore=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'Score',data:scores,borderColor:'#00C853',backgroundColor:'rgba(0,200,83,0.1)',borderWidth:2.5,pointBackgroundColor:'#00C853',pointRadius:5,tension:0.3,fill:true}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:11}}},x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#666',font:{size:10}}}}}});
 }
-
-function selMet(el,key){
-  document.querySelectorAll('.msel').forEach(m=>m.classList.remove('active'));
-  el.classList.add('active');
-  renderEvoMet(key);
+function renderEvoComp(){
+  if(evoR.length<2)return;
+  var opts=evoR.map(function(r,i){return '<option value="'+i+'">'+new Date(r.created_at).toLocaleDateString('pt-BR')+'</option>';}).join('');
+  var pa=document.getElementById('evo-pA'),pb=document.getElementById('evo-pB');
+  if(pa)pa.innerHTML=opts;
+  if(pb)pb.innerHTML=opts;
+  if(pa)pa.value='0';
+  if(pb)pb.value=String(evoR.length-1);
+  renderComp();
 }
-
-function renderEvoMet(key){
-  const labels=evoRels.map(r=>new Date(r.created_at).toLocaleDateString('pt-BR'));
-  const valores=evoRels.map(r=>{
-    const d=r.dados?.metricas||{};
-    const lbl=MET_LABELS[key];
-    return parseFloat(d[lbl])||0;
-  });
-  const ctx2=document.getElementById('evo-chart-met').getContext('2d');
-  if(evoChartMet)evoChartMet.destroy();
-  evoChartMet=new Chart(ctx2,{
-    type:'line',
-    data:{labels,datasets:[{
-      label:MET_LABELS[key],data:valores,
-      borderColor:'#00BCD4',backgroundColor:'rgba(0,188,212,0.1)',
-      borderWidth:2.5,pointBackgroundColor:'#00BCD4',pointRadius:5,
-      tension:0.3,fill:true,
-    }]},
-    options:{responsive:true,plugins:{legend:{display:false}},
-      scales:{y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:11}}},
-        x:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#666',font:{size:10}}}}}
-  });
-}
-
-function popularSelects(){
-  const opts=evoRels.map((r,i)=>`<option value="${i}">${new Date(r.created_at).toLocaleDateString('pt-BR')} — ${r.dados?.periodo||'Período '+(i+1)}</option>`).join('');
-  document.getElementById('evo-perA').innerHTML=opts;
-  document.getElementById('evo-perB').innerHTML=opts;
-  if(evoRels.length>1){
-    document.getElementById('evo-perA').value='0';
-    document.getElementById('evo-perB').value=String(evoRels.length-1);
-  }
-  renderComparativo();
-}
-
-function renderComparativo(){
-  const ia=parseInt(document.getElementById('evo-perA')?.value||'0');
-  const ib=parseInt(document.getElementById('evo-perB')?.value||'0');
-  const ra=evoRels[ia],rb=evoRels[ib];
-  if(!ra||!rb){document.getElementById('evo-comp-result').innerHTML='<p style="color:var(--c4);font-size:13px;">Selecione dois períodos.</p>';return;}
-  const ma=ra.dados?.metricas||{}, mb=rb.dados?.metricas||{};
-  const todasKeys=[...new Set([...Object.keys(ma),...Object.keys(mb)])];
-
-  let html=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">`;
-  // Cards de score
-  html+=`<div class="evo-periodo"><div class="evo-periodo-hdr"><div class="evo-periodo-nome">Período A</div><div class="evo-periodo-data">${new Date(ra.created_at).toLocaleDateString('pt-BR')}</div></div><div style="font-size:32px;font-weight:700;color:var(--verde);font-family:'Space Grotesk',sans-serif;">${ra.score||'—'}<span style="font-size:14px;color:var(--c4);font-weight:400;">/100</span></div></div>`;
-  html+=`<div class="evo-periodo"><div class="evo-periodo-hdr"><div class="evo-periodo-nome">Período B</div><div class="evo-periodo-data">${new Date(rb.created_at).toLocaleDateString('pt-BR')}</div></div><div style="font-size:32px;font-weight:700;color:var(--verde);font-family:'Space Grotesk',sans-serif;">${rb.score||'—'}<span style="font-size:14px;color:var(--c4);font-weight:400;">/100</span></div></div>`;
-  html+=`</div>`;
-
-  // Tabela comparativa
-  html+=`<div class="chart-wrap"><div class="chart-title">Comparativo de métricas</div>`;
-  if(!todasKeys.length){html+='<p style="color:var(--c4);font-size:12px;">Nenhuma métrica registrada nestes períodos.</p>';}
+function renderComp(){
+  var ia=parseInt(document.getElementById('evo-pA')?document.getElementById('evo-pA').value:'0')||0;
+  var ib=parseInt(document.getElementById('evo-pB')?document.getElementById('evo-pB').value:'0')||0;
+  var ra=evoR[ia],rb=evoR[ib];
+  if(!ra||!rb)return;
+  var ma=ra.dados&&ra.dados.metricas?ra.dados.metricas:{};
+  var mb=rb.dados&&rb.dados.metricas?rb.dados.metricas:{};
+  var keys=[].concat(Object.keys(ma),Object.keys(mb)).filter(function(k,i,a){return a.indexOf(k)===i;});
+  var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;"><div class="sblk"><div style="font-size:11px;color:var(--c4);margin-bottom:4px;">Periodo A - '+new Date(ra.created_at).toLocaleDateString('pt-BR')+'</div><div style="font-family:\'Space Grotesk\',sans-serif;font-size:28px;font-weight:700;color:var(--v);">'+(ra.score||'--')+'/100</div></div><div class="sblk"><div style="font-size:11px;color:var(--c4);margin-bottom:4px;">Periodo B - '+new Date(rb.created_at).toLocaleDateString('pt-BR')+'</div><div style="font-family:\'Space Grotesk\',sans-serif;font-size:28px;font-weight:700;color:var(--v);">'+(rb.score||'--')+'/100</div></div></div><div class="sblk">';
+  if(!keys.length){html+='<p style="color:var(--c4);font-size:12px;">Sem metricas para comparar.</p>';}
   else{
-    todasKeys.forEach(k=>{
-      const va=parseFloat(ma[k])||0, vb=parseFloat(mb[k])||0;
+    keys.forEach(function(k){
+      var va=parseFloat(ma[k])||0,vb=parseFloat(mb[k])||0;
       if(!va&&!vb)return;
-      const max=Math.max(va,vb,1);
-      const diff=vb-va;
-      const pct=va>0?Math.round((diff/va)*100):0;
-      const seta=diff>0?'↑':diff<0?'↓':'→';
-      const cor=diff>0?'#00C853':diff<0?'#FF4444':'#666';
-      html+=`<div class="comp-row">
-        <div class="comp-lbl">${k}</div>
-        <div style="flex:1;">
-          <div style="display:flex;gap:4px;margin-bottom:4px;">
-            <div class="comp-bar-wrap"><div class="comp-bar" style="width:${(va/max)*100}%;background:#00BCD4;"></div></div>
-            <span class="comp-val" style="color:#00BCD4;">${va||'—'}</span>
-          </div>
-          <div style="display:flex;gap:4px;">
-            <div class="comp-bar-wrap"><div class="comp-bar" style="width:${(vb/max)*100}%;background:#00C853;"></div></div>
-            <span class="comp-val" style="color:#00C853;">${vb||'—'}</span>
-          </div>
-        </div>
-        <div class="comp-arrow" style="color:${cor};">${seta}${Math.abs(pct)>0?` ${Math.abs(pct)}%`:''}</div>
-      </div>`;
+      var max=Math.max(va,vb,1);
+      var diff=vb-va;
+      var seta=diff>0?'subiu':diff<0?'caiu':'igual';
+      var cor=diff>0?'#00C853':diff<0?'#FF4444':'#666';
+      var pct=va>0?Math.abs(Math.round((diff/va)*100)):0;
+      html+='<div class="cmprow"><div class="cmplbl">'+k+'</div><div style="flex:1;"><div style="display:flex;gap:4px;margin-bottom:3px;"><div class="cmpbw"><div class="cmpbar" style="width:'+((va/max)*100)+'%;background:#00BCD4;"></div></div><span style="font-size:11px;font-weight:600;color:#00BCD4;min-width:36px;">'+(va||'--')+'</span></div><div style="display:flex;gap:4px;"><div class="cmpbw"><div class="cmpbar" style="width:'+((vb/max)*100)+'%;background:#00C853;"></div></div><span style="font-size:11px;font-weight:600;color:#00C853;min-width:36px;">'+(vb||'--')+'</span></div></div><span style="font-size:12px;font-weight:700;color:'+cor+';min-width:50px;text-align:right;">'+seta+(pct>0?' '+pct+'%':'')+'</span></div>';
     });
-    html+=`<div style="display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--c7);">
-      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--c2);"><div style="width:10px;height:6px;background:#00BCD4;border-radius:2px;"></div>Período A</span>
-      <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--c2);"><div style="width:10px;height:6px;background:#00C853;border-radius:2px;"></div>Período B</span>
-    </div>`;
   }
-  html+=`</div>`;
-  document.getElementById('evo-comp-result').innerHTML=html;
+  html+='</div>';
+  document.getElementById('evo-comp-res').innerHTML=html;
+}
+function renderEvoPeriodos(){
+  var cont=document.getElementById('evo-per-lista');
+  if(!evoR.length){cont.innerHTML='<p style="color:var(--c4);font-size:13px;">Nenhum periodo registrado.</p>';return;}
+  cont.innerHTML=[].concat(evoR).reverse().map(function(r,i){
+    var mets=r.dados&&r.dados.metricas?r.dados.metricas:{};
+    var metHtml=Object.keys(mets).slice(0,8).map(function(k){return '<span style="font-size:11px;background:var(--c7);padding:2px 9px;border-radius:14px;color:var(--c2);">'+k+': <strong style="color:var(--b);">'+mets[k]+'</strong></span>';}).join('');
+    return '<div class="sblk" style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><div style="font-weight:600;font-size:13px;">'+(r.dados&&r.dados.periodo?r.dados.periodo:'Periodo '+(evoR.length-i))+(r.dados&&r.dados.comp?' -- '+r.dados.comp:'')+'</div><div style="display:flex;align-items:center;gap:8px;">'+(r.score?'<span style="font-size:13px;font-weight:700;color:var(--v);">'+r.score+'/100</span>':'')+'<span style="font-size:11px;color:var(--c4);">'+new Date(r.created_at).toLocaleDateString('pt-BR')+'</span></div></div>'+(metHtml?'<div style="display:flex;flex-wrap:wrap;gap:6px;">'+metHtml+'</div>':'<span style="font-size:12px;color:var(--c4);">Sem metricas registradas.</span>')+'</div>';
+  }).join('');
 }
 
-function renderHistEvo(){
-  const cont=document.getElementById('evo-hist-lista');
-  if(!evoRels.length){cont.innerHTML='<p style="color:var(--c4);text-align:center;padding:40px;">Nenhum período registrado ainda.</p>';return;}
-  cont.innerHTML=[...evoRels].reverse().map((r,i)=>`
-    <div class="evo-periodo">
-      <div class="evo-periodo-hdr">
-        <div class="evo-periodo-nome">${r.dados?.periodo||'Período '+(evoRels.length-i)} ${r.dados?.comp?'— '+r.dados.comp:''}</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          ${r.score?`<span style="font-size:13px;font-weight:700;color:var(--verde);">Score: ${r.score}/100</span>`:''}
-          <div class="evo-periodo-data">${new Date(r.created_at).toLocaleDateString('pt-BR')}</div>
-        </div>
-      </div>
-      ${r.dados?.metricas?`<div style="display:flex;flex-wrap:wrap;gap:8px;">${Object.entries(r.dados.metricas).slice(0,8).map(([k,v])=>`<span style="font-size:11px;background:var(--c7);padding:3px 10px;border-radius:20px;color:var(--c2);">${k}: <strong style="color:var(--b);">${v}</strong></span>`).join('')}</div>`:'<p style="font-size:12px;color:var(--c4);">Métricas não registradas neste período.</p>'}
-    </div>`).join('');
+// PLANOS
+async function loadPlanos(){
+  var agora=new Date();
+  var inicio=new Date(agora.getFullYear(),agora.getMonth(),1);
+  var r=await supa.from('relatorios').select('id',{count:'exact',head:true}).eq('user_id',cU.id).gte('created_at',inicio.toISOString());
+  var count=r.count||0;
+  document.getElementById('pl-uso').innerHTML='<div style="display:flex;align-items:center;gap:14px;"><div style="font-family:\'Space Grotesk\',sans-serif;font-size:36px;font-weight:700;color:var(--v);">'+count+'</div><div><div style="font-size:13px;color:var(--b);">relatorios gerados este mes</div><div style="font-size:12px;color:var(--c4);">Plano Pro -- ilimitado durante o beta</div></div></div>';
 }
+function intClube(){window.open('https://wa.me/5535999999999?text='+encodeURIComponent('Ola! Tenho interesse no plano Clube da Potencial Sports.'),'_blank');}
 
-// ===== EXPORTAR =====
-function cpIA(id){const t=document.getElementById(id)?.textContent;if(!t)return;navigator.clipboard.writeText(t).then(()=>showToast('✓ Copiado!'));}
+// EXPORTAR
+function cpIA(id){var t=document.getElementById(id)?document.getElementById(id).textContent:'';if(!t)return;navigator.clipboard.writeText(t).then(function(){showToast('Copiado!');});}
 function expTXT(id,nome){
-  const t=document.getElementById(id)?.textContent;if(!t)return;
-  const b=new Blob([`POTENCIAL SPORTS\n${'='.repeat(40)}\n\n${t}`],{type:'text/plain'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`PS_${(nome||'relatorio').replace(/\s/g,'_')}.txt`;a.click();
-  showToast('✓ TXT baixado!');
+  var t=document.getElementById(id)?document.getElementById(id).textContent:'';if(!t)return;
+  var b=new Blob(['POTENCIAL SPORTS\n========================================\n\n'+t],{type:'text/plain'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='PS_'+(nome||'relatorio').replace(/\s/g,'_')+'.txt';a.click();
+  showToast('TXT baixado!');
+}
+function expPDF(id,nome,titulo){
+  var t=document.getElementById(id)?document.getElementById(id).textContent:'';if(!t)return;
+  var linhas=t.split('\n');
+  var win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;font-size:12px;color:#111;padding:40px;max-width:820px;margin:0 auto;}.hdr{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #00C853;padding-bottom:14px;margin-bottom:22px;}.lgo{font-size:19px;font-weight:900;}.lgo span{color:#00C853;}p{margin:2px 0;line-height:1.8;}.ftr{margin-top:36px;padding-top:10px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center;}</style></head><body><div class="hdr"><div><div class="lgo">Potencial <span>Sports</span></div><div style="font-size:11px;color:#666;">'+(titulo||'Relatorio')+'</div></div><div style="text-align:right"><div style="font-weight:700;font-size:14px;">'+(nome||'Relatorio')+'</div><div style="font-size:11px;color:#666;">'+new Date().toLocaleDateString('pt-BR')+'</div></div></div>'+linhas.map(function(l){return '<p>'+l.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p>';}).join('')+'<div class="ftr">Potencial Sports -- potencialsports.com.br -- '+new Date().toLocaleDateString('pt-BR')+'</div></body></html>');
+  win.document.close();setTimeout(function(){win.print();},400);
 }
 
-function mkRadarHTML(rd,nome,pos){
-  if(!rd?.categorias)return'';
-  const lbs=JSON.stringify(rd.categorias.map(c=>c.categoria));
-  const vs=JSON.stringify(rd.categorias.map(c=>c.valor));
-  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;"><div style="background:#f8f8f8;border-radius:12px;padding:16px;"><p style="font-weight:700;font-size:14px;margin-bottom:4px;">${nome}</p><p style="font-size:12px;color:#666;margin-bottom:12px;">${pos||''}</p><canvas id="pdf-r" width="280" height="240"></canvas></div><div style="background:#f8f8f8;border-radius:12px;padding:16px;"><p style="font-weight:700;font-size:13px;margin-bottom:12px;">Scores por categoria</p>${rd.categorias.map(c=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="width:8px;height:8px;border-radius:50%;background:#00C853;flex-shrink:0;"></div><span style="font-size:12px;flex:1;">${c.categoria}</span><div style="flex:2;background:#e0e0e0;border-radius:4px;height:6px;"><div style="width:${c.valor}%;height:100%;background:#00C853;border-radius:4px;"></div></div><span style="font-size:12px;font-weight:700;color:#00C853;min-width:28px;text-align:right;">${c.valor}</span></div>`).join('')}<div style="text-align:center;margin-top:12px;padding-top:12px;border-top:1px solid #ddd;"><div style="font-size:36px;font-weight:900;color:#00C853;">${rd.score_global||'—'}</div><div style="font-size:11px;color:#666;text-transform:uppercase;">Score geral</div></div></div></div><script>(function(){const ctx=document.getElementById('pdf-r').getContext('2d');new Chart(ctx,{type:'radar',data:{labels:${lbs},datasets:[{data:${vs},backgroundColor:'rgba(0,200,83,0.15)',borderColor:'#00C853',borderWidth:2,pointBackgroundColor:'#00C853',pointRadius:4}]},options:{responsive:false,scales:{r:{min:0,max:100,ticks:{display:false},grid:{color:'rgba(0,0,0,0.1)'},pointLabels:{font:{size:10}},angleLines:{color:'rgba(0,0,0,0.1)'}}},plugins:{legend:{display:false}}}});})()\<\/script>`;
-}
+// INIT
+window.addEventListener('DOMContentLoaded',function(){
+  renderPads();
+  renderJogs();
+  renderEvs();
+  swBP('escanteios',null);
+});
 
-function mkPDFwin(titulo,subtitulo,nome,data,radarHtml,texto){
-  const linhas=texto.split('\n');
-  const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script><style>body{font-family:Arial,sans-serif;font-size:12px;color:#111;padding:40px;max-width:820px;margin:0 auto;}.hdr{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #00C853;padding-bottom:16px;margin-bottom:24px;}.lgo{font-size:20px;font-weight:900;}.lgo span{color:#00C853;}.content{line-height:1.8;white-space:pre-wrap;}.ftr{margin-top:40px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center;}</style></head><body><div class="hdr"><div><div class="lgo">Potencial <span>Sports</span></div><div style="font-size:11px;color:#666;">${subtitulo}</div></div><div style="text-align:right"><div style="font-weight:700;font-size:15px;">${nome||'Relatório'}</div><div style="font-size:11px;color:#666;">${data}</div></div></div>${radarHtml}<div class="content">${linhas.map(l=>`<p style="margin:2px 0;">${l.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`).join('')}</div><div class="ftr">Potencial Sports — potencialsports.com.br — ${data}</div></body></html>`);
-  win.document.close();setTimeout(()=>win.print(),900);
-}
-
-function expPDF(tipo){
-  const nome=v('a-nome')||'Atleta',pos=v('a-pos');
-  const texto=document.getElementById('ia-a')?.textContent||'';
-  const rh=lastRD?mkRadarHTML(lastRD,nome,pos):'';
-  mkPDFwin('Análise de Atleta','Análise de Atleta',nome,new Date().toLocaleDateString('pt-BR'),rh,texto);
-}
-function expPDFs(id,nome,tipo){
-  const texto=document.getElementById(id)?.textContent||'';
-  const lmap={clube:'Análise de Clube',prospeccao:'Prospecção de Atleta'};
-  mkPDFwin(lmap[tipo]||'Relatório',lmap[tipo]||'Relatório',nome,new Date().toLocaleDateString('pt-BR'),'',texto);
-}
-function expPDFM(){
-  const rel=todosR.find(r=>r.id===cRid);if(!rel)return;
-  if(rel.dados?.radarData){const rh=mkRadarHTML(rel.dados.radarData,rel.nome,rel.posicao);mkPDFwin('Análise de Atleta','Análise de Atleta',rel.nome,new Date(rel.created_at).toLocaleDateString('pt-BR'),rh,rel.relatorio_ia||'');}
-  else{const lmap={atleta:'Análise de Atleta',clube:'Análise de Clube',prospeccao:'Prospecção'};mkPDFwin(lmap[rel.tipo]||'Relatório',lmap[rel.tipo]||'Relatório',rel.nome,new Date(rel.created_at).toLocaleDateString('pt-BR'),'',rel.relatorio_ia||'');}
-}
 </script>
 </body>
 </html>
