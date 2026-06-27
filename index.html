@@ -326,6 +326,28 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 .bp-efic-fill{height:100%;border-radius:4px;background:var(--verde);transition:width .5s ease;}
 .bp-efic-pct{font-size:12px;font-weight:600;color:var(--verde);min-width:36px;}
 
+
+/* UPLOAD DE DADOS */
+.upload-zone{border:2px dashed var(--c6);border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--c8);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--verde);background:var(--vd);}
+.upload-icon{font-size:48px;margin-bottom:12px;}
+.upload-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--b);margin-bottom:6px;}
+.upload-sub{font-size:13px;color:var(--c4);}
+.upload-preview{background:var(--c9);border:1px solid var(--c7);border-radius:10px;overflow:hidden;margin-top:16px;}
+.upload-preview img{width:100%;max-height:400px;object-fit:contain;display:block;}
+.upload-preview-header{padding:10px 16px;border-bottom:1px solid var(--c7);display:flex;align-items:center;justify-content:space-between;}
+.upload-preview-nome{font-size:12px;color:var(--c2);}
+.plat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.plat-chip{padding:6px 14px;border-radius:20px;border:1px solid var(--c6);background:var(--c7);color:var(--c2);font-size:12px;cursor:pointer;transition:all .15s;font-weight:500;}
+.plat-chip.sel{background:var(--verde);border-color:var(--verde);color:var(--p);font-weight:600;}
+.extracao-status{background:var(--c9);border:1px solid var(--c7);border-radius:10px;padding:16px;margin-top:16px;}
+.extracao-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--c7);}
+.extracao-item:last-child{border-bottom:none;}
+.extracao-campo{font-size:12px;color:var(--c4);min-width:160px;}
+.extracao-valor{font-size:13px;font-weight:600;color:var(--verde);}
+.extracao-status-icon{font-size:14px;min-width:20px;}
+.upload-aviso{background:#FFB30018;border:1px solid var(--av);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--c1);margin-bottom:16px;line-height:1.6;}
+
 .toast{position:fixed;bottom:28px;right:28px;background:var(--verde);color:var(--p);font-weight:600;font-size:13px;padding:12px 20px;border-radius:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 .hidden{display:none!important;}
@@ -373,6 +395,7 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   <button class="mtab" onclick="swTab('prosp',this)">🔍 Prospecção <span class="tbdg">IA</span></button>
   <button class="mtab" onclick="swTab('hist',this)">📂 Histórico</button>
   <button class="mtab" onclick="swTab('dashboard',this)">📊 Dashboard</button>
+  <button class="mtab" onclick="swTab('upload',this)">📸 Upload de Dados</button>
   <button class="mtab" onclick="swTab('bolaparada',this)">🎯 Bola Parada</button>
   <button class="mtab" onclick="swTab('video',this)">🎬 Análise de Vídeo</button>
   <button class="mtab" id="tab-lesao-btn" onclick="swTab('lesao',this)" style="display:none;">🚨 Risco de Lesão</button>
@@ -443,6 +466,23 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 
 
 
+
+<!-- SB UPLOAD -->
+<div class="sidebar hidden" id="sb-upload">
+  <div class="sbs">
+    <div class="sbl">Etapas</div>
+    <button class="sbb active" onclick="gt('up-plat')"><span class="si">📱</span>Plataforma</button>
+    <button class="sbb" onclick="gt('up-img')"><span class="si">📸</span>Upload da imagem</button>
+    <button class="sbb" onclick="gt('up-extrair')"><span class="si">🤖</span>Extrair dados</button>
+    <button class="sbb" onclick="gt('up-resultado')"><span class="si">✅</span>Resultado</button>
+  </div>
+  <div class="sbs">
+    <div class="sbl">Plataformas suportadas</div>
+    <div style="padding:0 8px;">
+      <p style="font-size:11px;color:var(--c4);line-height:1.8;">Sofascore • Wyscout<br>InStat • FlashScore<br>Planilha Excel<br>Qualquer screenshot</p>
+    </div>
+  </div>
+</div>
 <!-- SB BOLA PARADA -->
 <div class="sidebar hidden" id="sb-bolaparada">
   <div class="sbs">
@@ -826,6 +866,140 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 
 
 
+
+
+<!-- ===== ABA UPLOAD ===== -->
+<div class="mc hidden" id="tab-upload">
+  <div class="ph">
+    <div class="pt">Upload de Dados</div>
+    <div class="ps">Faça upload de um print de qualquer plataforma — a IA extrai e preenche os campos automaticamente.</div>
+  </div>
+
+  <div class="upload-aviso">
+    ⚠️ <strong>Feature em preparação.</strong> O upload com extração automática por IA requer o proxy Cloudflare configurado. Assim que estiver ativo, essa aba vai funcionar completamente. Você já pode explorar a interface.
+  </div>
+
+  <!-- Passo 1: Plataforma -->
+  <div class="sblk" id="up-plat">
+    <div class="stitle">📱 Passo 1 — Selecione a plataforma</div>
+    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">Informe de onde vem o print para que a IA saiba como interpretar os dados.</p>
+    <div class="plat-chips" id="up-plat-chips">
+      <div class="plat-chip sel" onclick="selPlat(this,'Sofascore')">Sofascore</div>
+      <div class="plat-chip" onclick="selPlat(this,'Wyscout')">Wyscout</div>
+      <div class="plat-chip" onclick="selPlat(this,'InStat')">InStat</div>
+      <div class="plat-chip" onclick="selPlat(this,'FlashScore')">FlashScore</div>
+      <div class="plat-chip" onclick="selPlat(this,'Catapult GPS')">Catapult GPS</div>
+      <div class="plat-chip" onclick="selPlat(this,'STATSports')">STATSports</div>
+      <div class="plat-chip" onclick="selPlat(this,'Planilha Excel')">Planilha Excel</div>
+      <div class="plat-chip" onclick="selPlat(this,'Outro')">Outro</div>
+    </div>
+    <input type="hidden" id="up-plat-val" value="Sofascore">
+    <div class="fg" style="margin-top:16px;">
+      <div class="fgrp">
+        <label class="flbl">Tipo de dado no print <i class="tip-icon">?<span class="tip-box">O que aparece na imagem? Métricas de um atleta específico, estatísticas coletivas, dados de GPS...</span></i></label>
+        <select class="fsel" id="up-tipo">
+          <option value="atleta">Métricas de atleta individual</option>
+          <option value="time">Estatísticas coletivas do time</option>
+          <option value="gps">Dados de GPS / carga física</option>
+          <option value="comparativo">Comparativo entre atletas</option>
+          <option value="scout">Perfil de scouting</option>
+        </select>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Nome do atleta (se aplicável)</label>
+        <input class="finp" id="up-atleta-nome" placeholder="Nome do atleta no print">
+      </div>
+    </div>
+  </div>
+
+  <!-- Passo 2: Upload -->
+  <div class="sblk" id="up-img">
+    <div class="stitle">📸 Passo 2 — Faça o upload do print</div>
+    <div class="upload-zone" id="up-dropzone"
+      onclick="document.getElementById('up-file-input').click()"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event)">
+      <div class="upload-icon">📸</div>
+      <div class="upload-title">Clique para selecionar ou arraste a imagem aqui</div>
+      <div class="upload-sub">PNG, JPG, JPEG ou WEBP — até 10MB</div>
+    </div>
+    <input type="file" id="up-file-input" accept="image/*" style="display:none;" onchange="handleFileSelect(event)">
+
+    <div class="upload-preview hidden" id="up-preview">
+      <div class="upload-preview-header">
+        <span class="upload-preview-nome" id="up-preview-nome">imagem.png</span>
+        <button class="btn bg" style="padding:5px 12px;font-size:11px;" onclick="removerImagem()">✕ Remover</button>
+      </div>
+      <img id="up-preview-img" src="" alt="Preview da imagem">
+    </div>
+
+    <div style="margin-top:14px;">
+      <label class="flbl">Contexto adicional (opcional) <i class="tip-icon">?<span class="tip-box">Informe algo que pode ajudar a IA a interpretar melhor: "dados da última rodada", "estatísticas dos últimos 5 jogos", etc.</span></i></label>
+      <textarea class="ftxt" id="up-contexto" style="margin-top:6px;min-height:70px;" placeholder="Ex: Estatísticas do Campeonato Paulista — últimas 5 partidas. Atleta é lateral direito em sistema 4-3-3..."></textarea>
+    </div>
+  </div>
+
+  <!-- Passo 3: Extrair -->
+  <div class="sblk" id="up-extrair">
+    <div class="stitle">🤖 Passo 3 — Extrair dados com IA</div>
+    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">A IA vai analisar a imagem, identificar os dados e preencher os campos automaticamente.</p>
+
+    <div class="fg" style="margin-bottom:16px;">
+      <div class="fgrp">
+        <label class="flbl">O que extrair da imagem</label>
+        <div class="plat-chips">
+          <div class="plat-chip sel" onclick="selExtrair(this,'tudo')">Tudo que encontrar</div>
+          <div class="plat-chip" onclick="selExtrair(this,'tecnicas')">Só métricas técnicas</div>
+          <div class="plat-chip" onclick="selExtrair(this,'fisicas')">Só métricas físicas</div>
+          <div class="plat-chip" onclick="selExtrair(this,'scores')">Scores e ratings</div>
+        </div>
+        <input type="hidden" id="up-extrair-val" value="tudo">
+      </div>
+    </div>
+
+    <button class="btn bp" id="up-btn-extrair" onclick="extrairDados()" style="width:100%;justify-content:center;">
+      🤖 Extrair dados da imagem
+    </button>
+
+    <div id="up-extraindo" class="hidden" style="text-align:center;padding:24px;">
+      <div class="ia-loading" style="justify-content:center;">
+        <div class="dp"><span></span><span></span><span></span></div>
+        <span>Analisando imagem...</span>
+      </div>
+      <p style="font-size:12px;color:var(--c4);margin-top:8px;">A IA está lendo os dados do print. Pode levar alguns segundos.</p>
+    </div>
+  </div>
+
+  <!-- Passo 4: Resultado -->
+  <div class="sblk hidden" id="up-resultado">
+    <div class="stitle">✅ Dados extraídos</div>
+
+    <div class="extracao-status" id="up-campos-extraidos"></div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--c7);">
+      <p style="font-size:13px;color:var(--c2);margin-bottom:14px;">Revise os dados extraídos abaixo. Você pode editar antes de usar.</p>
+      <div id="up-campos-editaveis"></div>
+    </div>
+
+    <div class="br" style="margin-top:16px;">
+      <button class="btn bp" onclick="usarDadosExtraidos()">✅ Usar esses dados na análise de atleta</button>
+      <button class="btn bs" onclick="gerarAnaliseDirecta()">⚡ Gerar análise direto</button>
+      <button class="btn bg" onclick="limparUpload()">🗑️ Limpar e recomeçar</button>
+    </div>
+
+    <div class="vid-output-box hidden" id="up-output">
+      <div class="vid-output-title">📋 Análise gerada — copie e cole no Claude</div>
+      <div class="vid-output-text" id="up-texto"></div>
+      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--c7);">
+        <div style="display:flex;gap:8px;margin-left:auto;">
+          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('up-texto',v('up-atleta-nome')||'upload')">⬇ TXT</button>
+          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('up-texto')">📋 Copiar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== ABA BOLA PARADA ===== -->
 <div class="mc hidden" id="tab-bolaparada">
@@ -1551,7 +1725,7 @@ supa.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.use
 
 // ===== NAV =====
 function swTab(t,btn){
-  ['atleta','clube','prosp','hist','feedback','lesao','video','dashboard','bolaparada'].forEach(x=>{
+  ['atleta','clube','prosp','hist','feedback','lesao','video','dashboard','bolaparada','upload'].forEach(x=>{
     const el=document.getElementById('tab-'+x);if(el)el.classList.add('hidden');
     const sb=document.getElementById('sb-'+x);if(sb)sb.classList.add('hidden');
   });
@@ -1851,6 +2025,342 @@ async function delRel(){
 
 
 
+
+
+// ===== UPLOAD DE DADOS =====
+let uploadImagem = null;
+let uploadImagemBase64 = null;
+let dadosExtraidos = {};
+let upPlatVal = 'Sofascore';
+let upExtrairVal = 'tudo';
+
+// URL do proxy — trocar pela URL do Cloudflare Worker quando estiver ativo
+const PROXY_URL = 'https://potencial-sports-api.douglas-augusto-marques2.workers.dev';
+
+function selPlat(el, val){
+  document.querySelectorAll('#up-plat-chips .plat-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  upPlatVal = val;
+  document.getElementById('up-plat-val').value = val;
+}
+
+function selExtrair(el, val){
+  el.closest('.plat-chips').querySelectorAll('.plat-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  upExtrairVal = val;
+  document.getElementById('up-extrair-val').value = val;
+}
+
+function handleFileSelect(event){
+  const file = event.target.files[0];
+  if(file) processarArquivo(file);
+}
+
+function handleDrop(event){
+  event.preventDefault();
+  document.getElementById('up-dropzone').classList.remove('drag');
+  const file = event.dataTransfer.files[0];
+  if(file && file.type.startsWith('image/')) processarArquivo(file);
+  else showToast('⚠ Selecione uma imagem (PNG, JPG ou WEBP).');
+}
+
+function processarArquivo(file){
+  if(file.size > 10 * 1024 * 1024){ showToast('⚠ Imagem muito grande. Máximo 10MB.'); return; }
+  uploadImagem = file;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    uploadImagemBase64 = e.target.result.split(',')[1];
+    const mediaType = file.type;
+    document.getElementById('up-preview-img').src = e.target.result;
+    document.getElementById('up-preview-nome').textContent = file.name;
+    document.getElementById('up-preview').classList.remove('hidden');
+    document.getElementById('up-dropzone').style.display = 'none';
+    showToast('✓ Imagem carregada! Vá para o Passo 3.');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removerImagem(){
+  uploadImagem = null;
+  uploadImagemBase64 = null;
+  document.getElementById('up-preview').classList.add('hidden');
+  document.getElementById('up-dropzone').style.display = 'block';
+  document.getElementById('up-file-input').value = '';
+}
+
+async function extrairDados(){
+  if(!uploadImagemBase64){
+    showToast('⚠ Faça o upload de uma imagem primeiro.');
+    gt('up-img');
+    return;
+  }
+
+  const btn = document.getElementById('up-btn-extrair');
+  const loading = document.getElementById('up-extraindo');
+  btn.classList.add('hidden');
+  loading.classList.remove('hidden');
+
+  const tipo = v('up-tipo');
+  const plat = upPlatVal;
+  const extrair = upExtrairVal;
+  const ctx = v('up-contexto');
+  const nomeAtleta = v('up-atleta-nome');
+
+  const instrucoes = {
+    tudo: 'Extraia TODOS os dados visíveis na imagem',
+    tecnicas: 'Extraia apenas as métricas técnicas (gols, passes, dribles, duelos, etc.)',
+    fisicas: 'Extraia apenas as métricas físicas (distância, velocidade, sprints, acelerações, etc.)',
+    scores: 'Extraia apenas scores, ratings e notas de desempenho',
+  };
+
+  const prompt = `Você é um especialista em análise de desempenho no futebol e extração de dados de plataformas esportivas.
+
+Analise a imagem enviada, que é um print da plataforma ${plat}.
+${nomeAtleta ? `O atleta principal é: ${nomeAtleta}` : ''}
+${ctx ? `Contexto: ${ctx}` : ''}
+
+Instrução: ${instrucoes[extrair]}.
+
+Retorne APENAS um objeto JSON válido, sem texto antes ou depois, sem backticks, no seguinte formato:
+{
+  "atleta": "Nome do atleta (se identificado)",
+  "posicao": "Posição (se identificada)",
+  "clube": "Clube (se identificado)",
+  "plataforma": "${plat}",
+  "metricas": {
+    "Nome da métrica": "valor",
+    "Nome da métrica 2": "valor2"
+  },
+  "observacoes": "Observações relevantes sobre o que foi identificado na imagem"
+}
+
+Seja preciso. Se um dado não estiver claramente visível, não o inclua. Não invente valores.`;
+
+  try {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: uploadImagem.type,
+                data: uploadImagemBase64,
+              }
+            },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    const data = await res.json();
+    const texto = data.content?.[0]?.text || '';
+
+    try {
+      const clean = texto.replace(/```json|```/g, '').trim();
+      dadosExtraidos = JSON.parse(clean);
+      renderDadosExtraidos(dadosExtraidos);
+      document.getElementById('up-resultado').classList.remove('hidden');
+      gt('up-resultado');
+      showToast('✓ Dados extraídos com sucesso!');
+    } catch(e) {
+      // Se não for JSON, mostra o texto bruto
+      dadosExtraidos = {metricas:{}, observacoes: texto};
+      renderDadosExtraidos(dadosExtraidos);
+      document.getElementById('up-resultado').classList.remove('hidden');
+      gt('up-resultado');
+    }
+
+  } catch(err) {
+    showToast('⚠ Proxy não configurado ainda. Ative o Cloudflare Worker primeiro.');
+    // Simulação para demonstração
+    dadosExtraidos = {
+      atleta: nomeAtleta || 'Atleta identificado',
+      posicao: 'Não identificada',
+      clube: 'Não identificado',
+      plataforma: plat,
+      metricas: {
+        'Status': 'Aguardando Cloudflare Worker',
+        'Plataforma': plat,
+        'Tipo': tipo,
+      },
+      observacoes: 'Configure o Cloudflare Worker para ativar a extração automática de dados.'
+    };
+    renderDadosExtraidos(dadosExtraidos);
+    document.getElementById('up-resultado').classList.remove('hidden');
+    gt('up-resultado');
+  } finally {
+    btn.classList.remove('hidden');
+    loading.classList.add('hidden');
+  }
+}
+
+function renderDadosExtraidos(dados){
+  // Status da extração
+  const statusCont = document.getElementById('up-campos-extraidos');
+  const mets = dados.metricas || {};
+  const totalMets = Object.keys(mets).length;
+
+  statusCont.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-size:13px;font-weight:600;color:var(--b);">${dados.atleta||'Atleta'}</span>
+      <span style="font-size:11px;background:var(--vd);color:var(--verde);padding:3px 10px;border-radius:20px;">${totalMets} campos extraídos</span>
+    </div>
+    ${dados.posicao?`<div class="extracao-item"><span class="extracao-campo">Posição</span><span class="extracao-status-icon">✅</span><span class="extracao-valor">${dados.posicao}</span></div>`:''}
+    ${dados.clube?`<div class="extracao-item"><span class="extracao-campo">Clube</span><span class="extracao-status-icon">✅</span><span class="extracao-valor">${dados.clube}</span></div>`:''}
+    ${Object.entries(mets).map(([k,v])=>`
+      <div class="extracao-item">
+        <span class="extracao-campo">${k}</span>
+        <span class="extracao-status-icon">✅</span>
+        <span class="extracao-valor">${v}</span>
+      </div>`).join('')}
+    ${dados.observacoes?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--c7);font-size:12px;color:var(--c4);">${dados.observacoes}</div>`:''}`;
+
+  // Campos editáveis
+  const editCont = document.getElementById('up-campos-editaveis');
+  editCont.innerHTML = `
+    <div class="fg">
+      <div class="fgrp"><label class="flbl">Nome do atleta</label><input class="finp" id="ue-nome" value="${dados.atleta||''}" placeholder="Nome do atleta"></div>
+      <div class="fgrp"><label class="flbl">Posição</label><input class="finp" id="ue-pos" value="${dados.posicao||''}" placeholder="Posição"></div>
+      <div class="fgrp"><label class="flbl">Clube</label><input class="finp" id="ue-clube" value="${dados.clube||''}" placeholder="Clube"></div>
+      <div class="fgrp"><label class="flbl">Plataforma de origem</label><input class="finp" id="ue-plat" value="${dados.plataforma||upPlatVal}" placeholder="Plataforma"></div>
+    </div>
+    <div class="fgrp" style="margin-top:8px;">
+      <label class="flbl">Métricas extraídas (edite se necessário)</label>
+      <textarea class="ftxt" id="ue-mets" style="min-height:120px;">${Object.entries(mets).map(([k,v])=>`${k}: ${v}`).join('
+')}</textarea>
+    </div>
+    <div class="fgrp" style="margin-top:8px;">
+      <label class="flbl">Observações adicionais</label>
+      <textarea class="ftxt" id="ue-obs" placeholder="Adicione contexto ou corrija algo...">${dados.observacoes||''}</textarea>
+    </div>`;
+}
+
+function usarDadosExtraidos(){
+  // Preenche os campos da aba de atleta com os dados extraídos
+  const nome = document.getElementById('ue-nome')?.value || '';
+  const pos = document.getElementById('ue-pos')?.value || '';
+  const clube = document.getElementById('ue-clube')?.value || '';
+  const metsTexto = document.getElementById('ue-mets')?.value || '';
+
+  // Ir para a aba de atleta e preencher
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mc').forEach(t=>t.classList.add('hidden'));
+  document.querySelectorAll('.sidebar').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('tab-atleta').classList.remove('hidden');
+  document.getElementById('sb-atleta').classList.remove('hidden');
+  document.querySelector('.mtab').classList.add('active');
+
+  // Preencher campos básicos
+  const nomeEl = document.getElementById('a-nome');
+  const clubeEl = document.getElementById('a-clube');
+  if(nomeEl) nomeEl.value = nome;
+  if(clubeEl) clubeEl.value = clube;
+
+  // Preencher posição se identificada
+  if(pos){
+    const posEl = document.getElementById('a-pos');
+    if(posEl){
+      // Tentar match com as opções disponíveis
+      const opts = Array.from(posEl.options);
+      const match = opts.find(o=>o.value.toLowerCase().includes(pos.toLowerCase().split(' ')[0]));
+      if(match){ posEl.value = match.value; onPosAtleta(); }
+    }
+  }
+
+  // Preencher observações com as métricas extraídas
+  const obsEl = document.getElementById('a-obs');
+  if(obsEl && metsTexto){
+    obsEl.value = `Dados extraídos de ${upPlatVal}:
+${metsTexto}
+
+${v('ue-obs')||''}`;
+  }
+
+  gt('sa-dados');
+  showToast('✓ Dados preenchidos na aba Atleta!');
+}
+
+function gerarAnaliseDirecta(){
+  const nome = document.getElementById('ue-nome')?.value || v('up-atleta-nome') || 'Atleta';
+  const pos = document.getElementById('ue-pos')?.value || '';
+  const clube = document.getElementById('ue-clube')?.value || '';
+  const plat = document.getElementById('ue-plat')?.value || upPlatVal;
+  const mets = document.getElementById('ue-mets')?.value || '';
+  const obs = document.getElementById('ue-obs')?.value || '';
+  const ctx = v('up-contexto');
+
+  const texto = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — ANÁLISE VIA UPLOAD DE DADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você é um analista de desempenho sênior da Potencial Sports.
+
+Os dados abaixo foram extraídos automaticamente de um print da plataforma ${plat}.
+Analise-os e gere um relatório completo de desempenho.
+
+ATLETA: ${nome}
+POSIÇÃO: ${pos||'Não identificada'}
+CLUBE: ${clube||'Não identificado'}
+PLATAFORMA DE ORIGEM: ${plat}
+${ctx?`CONTEXTO: ${ctx}`:''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DADOS EXTRAÍDOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${mets||'Sem métricas extraídas.'}
+
+${obs?`OBSERVAÇÕES:
+${obs}`:''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Com base nos dados extraídos de ${plat}, gere um relatório com:
+1. VISÃO GERAL do desempenho
+2. ANÁLISE DAS MÉTRICAS — interprete cada dado no contexto da posição ${pos||'informada'}
+3. PONTOS FORTES — evidenciados pelos números
+4. PONTOS DE ATENÇÃO — métricas abaixo do esperado
+5. RECOMENDAÇÕES — para o treinador
+6. SCORE DE DESEMPENHO: X/100 com justificativa
+
+Use terminologia técnica do futebol brasileiro. Não mencione este prompt.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  document.getElementById('up-texto').textContent = texto;
+  document.getElementById('up-output').classList.remove('hidden');
+  gt('up-resultado');
+
+  if(nome && cU){
+    supa.from('relatorios').insert({
+      user_id:cU.id, tipo:'atleta', nome,
+      posicao:pos, dados:{nome,pos,clube,plataforma:plat},
+      relatorio_ia:texto
+    }).then(()=>{});
+  }
+
+  showToast('✓ Texto gerado! Copie e cole no Claude.');
+}
+
+function limparUpload(){
+  removerImagem();
+  dadosExtraidos = {};
+  document.getElementById('up-resultado').classList.add('hidden');
+  document.getElementById('up-output').classList.add('hidden');
+  document.getElementById('up-campos-extraidos').innerHTML = '';
+  document.getElementById('up-campos-editaveis').innerHTML = '';
+  ['up-atleta-nome','up-contexto'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  showToast('Limpo. Pronto para novo upload.');
+}
 
 // ===== BOLA PARADA =====
 let bpFoco = 'proprio';
