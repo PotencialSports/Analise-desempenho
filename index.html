@@ -244,6 +244,88 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
 .aler-inline{background:var(--c9);border:1px solid var(--c7);border-radius:12px;padding:20px;margin-top:16px;}
 .aler-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--verde);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 
+
+/* ANÁLISE DE VÍDEO */
+.vid-tabs{display:flex;gap:4px;background:var(--c8);border-radius:8px;padding:4px;margin-bottom:20px;}
+.vid-tab{flex:1;padding:9px;border:none;background:none;color:var(--c4);font-size:13px;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;text-align:center;}
+.vid-tab.active{background:var(--verde);color:var(--p);font-weight:600;}
+.vid-section{display:none;}
+.vid-section.active{display:block;}
+.evento-row{display:grid;grid-template-columns:70px 160px 1fr 36px;gap:8px;align-items:start;margin-bottom:8px;}
+.evento-min{background:var(--c8);border:1px solid var(--c6);border-radius:8px;color:var(--b);font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;width:100%;text-align:center;}
+.evento-tipo{background:var(--c8);border:1px solid var(--c6);border-radius:8px;color:var(--b);font-family:'Inter',sans-serif;font-size:12px;padding:8px 10px;width:100%;}
+.evento-desc{background:var(--c8);border:1px solid var(--c6);border-radius:8px;color:var(--b);font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;width:100%;resize:none;min-height:36px;}
+.evento-del{background:none;border:1px solid var(--c6);border-radius:8px;color:var(--err);font-size:16px;cursor:pointer;padding:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.evento-del:hover{background:var(--err);color:#fff;border-color:var(--err);}
+.eventos-header{display:grid;grid-template-columns:70px 160px 1fr 36px;gap:8px;margin-bottom:6px;}
+.eventos-hlbl{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--c4);}
+.add-evento-btn{display:flex;align-items:center;gap:8px;background:var(--c7);border:1px dashed var(--c6);border-radius:8px;color:var(--c4);font-size:13px;cursor:pointer;padding:10px 16px;width:100%;transition:all .15s;margin-top:4px;}
+.add-evento-btn:hover{border-color:var(--verde);color:var(--verde);background:var(--vd);}
+.vid-output-box{background:var(--c9);border:1px solid var(--verde);border-radius:12px;padding:20px;margin-top:16px;}
+.vid-output-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--verde);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.vid-output-text{background:var(--c8);border-radius:8px;padding:16px;font-size:13px;color:var(--c1);line-height:1.9;white-space:pre-wrap;min-height:80px;max-height:500px;overflow-y:auto;}
+.foco-sel{display:flex;gap:8px;margin-bottom:20px;}
+.foco-btn{flex:1;padding:10px;border:2px solid var(--c6);border-radius:10px;background:none;color:var(--c2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;}
+.foco-btn.active{border-color:var(--verde);color:var(--verde);background:var(--vd);font-weight:600;}
+.contador-eventos{font-size:11px;color:var(--c4);margin-bottom:8px;}
+
+
+/* DASHBOARD */
+.dash-filtros{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
+.dash-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:28px;}
+.dash-card{background:var(--c8);border:1px solid var(--c7);border-radius:12px;padding:16px;transition:all .2s;cursor:pointer;}
+.dash-card:hover{border-color:var(--verde);transform:translateY(-2px);}
+.dc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.dc-nome{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--b);}
+.dc-pos{font-size:11px;color:var(--c4);margin-top:2px;}
+.dc-score{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--verde);line-height:1;}
+.dc-score-lbl{font-size:9px;color:var(--c4);text-align:right;letter-spacing:.5px;text-transform:uppercase;}
+.dc-mets{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.dc-met{display:flex;justify-content:space-between;align-items:center;}
+.dc-met-lbl{font-size:11px;color:var(--c4);}
+.dc-met-val{font-size:11px;font-weight:600;color:var(--b);}
+.dc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--c7);}
+.dc-data{font-size:10px;color:var(--c4);}
+.dc-risco{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.dash-section-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--b);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.dash-pos-group{margin-bottom:28px;}
+.dash-pos-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--verde);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--c7);}
+.dash-chart-wrap{background:var(--c8);border:1px solid var(--c7);border-radius:12px;padding:20px;margin-bottom:20px;}
+.dash-chart-title{font-size:13px;font-weight:600;color:var(--b);margin-bottom:14px;}
+.dash-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.dash-stat{background:var(--c8);border:1px solid var(--c7);border-radius:10px;padding:14px 16px;}
+.dash-stat-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--verde);}
+.dash-stat-lbl{font-size:11px;color:var(--c4);margin-top:2px;}
+.dash-empty{text-align:center;padding:60px 20px;color:var(--c4);}
+.pos-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.pos-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--c6);background:none;color:var(--c2);font-size:11px;cursor:pointer;transition:all .15s;}
+.pos-chip.active{background:var(--verde);border-color:var(--verde);color:var(--p);font-weight:600;}
+
+
+/* BOLA PARADA */
+.bp-foco-sel{display:flex;gap:8px;margin-bottom:20px;}
+.bp-foco-btn{flex:1;padding:10px;border:2px solid var(--c6);border-radius:10px;background:none;color:var(--c2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;}
+.bp-foco-btn.active{border-color:var(--verde);color:var(--verde);background:var(--vd);font-weight:600;}
+.bp-sit-tabs{display:flex;gap:4px;background:var(--c8);border-radius:8px;padding:4px;margin-bottom:20px;}
+.bp-sit-tab{flex:1;padding:9px;border:none;background:none;color:var(--c4);font-size:13px;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;text-align:center;}
+.bp-sit-tab.active{background:var(--verde);color:var(--p);font-weight:600;}
+.bp-sit-sec{display:none;}
+.bp-sit-sec.active{display:block;}
+.bp-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.bp-stat{background:var(--c9);border:1px solid var(--c7);border-radius:10px;padding:12px 14px;text-align:center;}
+.bp-stat-n{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--verde);}
+.bp-stat-l{font-size:10px;color:var(--c4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.bp-padrao-row{background:var(--c9);border:1px solid var(--c7);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+.bp-padrao-num{background:var(--verde);color:var(--p);font-weight:700;font-size:11px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.bp-padrao-txt{font-size:13px;color:var(--c1);line-height:1.6;flex:1;}
+.bp-padrao-del{background:none;border:none;color:var(--err);font-size:16px;cursor:pointer;padding:2px;flex-shrink:0;}
+.add-padrao-btn{display:flex;align-items:center;gap:8px;background:var(--c7);border:1px dashed var(--c6);border-radius:8px;color:var(--c4);font-size:12px;cursor:pointer;padding:8px 14px;width:100%;transition:all .15s;margin-top:4px;}
+.add-padrao-btn:hover{border-color:var(--verde);color:var(--verde);background:var(--vd);}
+.bp-efic{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.bp-efic-bar{flex:1;background:var(--c7);border-radius:4px;height:8px;overflow:hidden;}
+.bp-efic-fill{height:100%;border-radius:4px;background:var(--verde);transition:width .5s ease;}
+.bp-efic-pct{font-size:12px;font-weight:600;color:var(--verde);min-width:36px;}
+
 .toast{position:fixed;bottom:28px;right:28px;background:var(--verde);color:var(--p);font-weight:600;font-size:13px;padding:12px 20px;border-radius:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 .hidden{display:none!important;}
@@ -290,6 +372,9 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   <button class="mtab" onclick="swTab('clube',this)">🏟️ Clube</button>
   <button class="mtab" onclick="swTab('prosp',this)">🔍 Prospecção <span class="tbdg">IA</span></button>
   <button class="mtab" onclick="swTab('hist',this)">📂 Histórico</button>
+  <button class="mtab" onclick="swTab('dashboard',this)">📊 Dashboard</button>
+  <button class="mtab" onclick="swTab('bolaparada',this)">🎯 Bola Parada</button>
+  <button class="mtab" onclick="swTab('video',this)">🎬 Análise de Vídeo</button>
   <button class="mtab" id="tab-lesao-btn" onclick="swTab('lesao',this)" style="display:none;">🚨 Risco de Lesão</button>
   <button class="mtab" id="tab-fb-btn" onclick="swTab('feedback',this)" style="display:none;">📊 Feedback</button>
 </div>
@@ -353,6 +438,48 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
     <div class="sbl">Visão</div>
     <button class="sbb active" onclick="gt('lesao-painel')"><span class="si">📊</span>Painel geral</button>
     <button class="sbb" onclick="gt('lesao-config')"><span class="si">⚙️</span>Limiares</button>
+  </div>
+</div>
+
+
+
+<!-- SB BOLA PARADA -->
+<div class="sidebar hidden" id="sb-bolaparada">
+  <div class="sbs">
+    <div class="sbl">Situações</div>
+    <button class="sbb active" onclick="gt('bp-config')"><span class="si">⚙️</span>Configuração</button>
+    <button class="sbb" onclick="gt('bp-escanteios')"><span class="si">⛳</span>Escanteios</button>
+    <button class="sbb" onclick="gt('bp-faltas')"><span class="si">🦵</span>Faltas</button>
+    <button class="sbb" onclick="gt('bp-laterais')"><span class="si">📐</span>Laterais</button>
+    <button class="sbb" onclick="gt('bp-gerar')"><span class="si">⚡</span>Gerar análise</button>
+  </div>
+  <div class="sbs">
+    <button class="sbb" onclick="limparBP()"><span class="si">🗑️</span>Limpar tudo</button>
+  </div>
+</div>
+<!-- SB DASHBOARD -->
+<div class="sidebar hidden" id="sb-dashboard">
+  <div class="sbs">
+    <div class="sbl">Visão</div>
+    <button class="sbb active" onclick="gt('dash-elenco')"><span class="si">👥</span>Elenco completo</button>
+    <button class="sbb" onclick="gt('dash-comparativo')"><span class="si">📈</span>Comparativo</button>
+  </div>
+  <div class="sbs">
+    <div class="sbl">Filtrar posição</div>
+    <div id="sb-pos-filtros" style="padding:0 8px;"></div>
+  </div>
+</div>
+<!-- SB VÍDEO -->
+<div class="sidebar hidden" id="sb-video">
+  <div class="sbs">
+    <div class="sbl">Seções</div>
+    <button class="sbb active" onclick="gt('sv-config')"><span class="si">⚙️</span>Configuração</button>
+    <button class="sbb" onclick="gt('sv-eventos')"><span class="si">📋</span>Eventos</button>
+    <button class="sbb" onclick="gt('sv-livre')"><span class="si">📝</span>Texto livre</button>
+    <button class="sbb" onclick="gt('sv-gerar')"><span class="si">⚡</span>Gerar análise</button>
+  </div>
+  <div class="sbs">
+    <button class="sbb" onclick="limparVideo()"><span class="si">🗑️</span>Limpar tudo</button>
   </div>
 </div>
 <!-- SB FEEDBACK -->
@@ -696,6 +823,353 @@ canvas.rc{width:100%;max-width:320px;display:block;margin:0 auto;}
   <div id="hlista"></div>
 </div>
 
+
+
+
+
+<!-- ===== ABA BOLA PARADA ===== -->
+<div class="mc hidden" id="tab-bolaparada">
+  <div class="ph"><div class="pt">Análise de Bola Parada</div><div class="ps">Escanteios, faltas e laterais — padrões ofensivos e defensivos.</div></div>
+
+  <!-- Config -->
+  <div class="sblk" id="bp-config">
+    <div class="stitle">⚙️ Configuração</div>
+    <div class="bp-foco-sel">
+      <button class="bp-foco-btn active" id="bp-foco-proprio" onclick="setBPFoco('proprio')">🏟️ Próprio time</button>
+      <button class="bp-foco-btn" id="bp-foco-adv" onclick="setBPFoco('adversario')">🆚 Adversário</button>
+    </div>
+    <div class="fg">
+      <div class="fgrp"><label class="flbl">Nome do time</label><input class="finp" id="bp-time" placeholder="Nome do time analisado"></div>
+      <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="bp-adv" placeholder="Nome do adversário"></div>
+      <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="bp-comp" placeholder="Ex: Brasileiro Série A"></div>
+      <div class="fgrp"><label class="flbl">Data / Rodada</label><input class="finp" id="bp-data" type="date"></div>
+      <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="bp-res" placeholder="Ex: 2 x 1"></div>
+      <div class="fgrp"><label class="flbl">Minutos analisados</label><input class="finp" id="bp-min" type="number" placeholder="90"></div>
+    </div>
+    <div class="ibanner">
+      💡 Preencha as estatísticas e padrões de cada situação. Quanto mais detalhes nos padrões, mais rica será a análise gerada pela IA.
+    </div>
+  </div>
+
+  <!-- TABS das situações -->
+  <div class="bp-sit-tabs">
+    <button class="bp-sit-tab active" onclick="swBPSit('escanteios',this)">⛳ Escanteios</button>
+    <button class="bp-sit-tab" onclick="swBPSit('faltas',this)">🦵 Faltas</button>
+    <button class="bp-sit-tab" onclick="swBPSit('laterais',this)">📐 Laterais</button>
+  </div>
+
+  <!-- ESCANTEIOS -->
+  <div class="bp-sit-sec active" id="bp-sit-escanteios">
+    <div class="sblk" id="bp-escanteios">
+      <div class="stitle">⛳ Escanteios</div>
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Total de escanteios <i class="tip-icon">?<span class="tip-box">Número total de escanteios cobrados no jogo ou período analisado.</span></i></label><input class="finp" id="e-total" type="number" placeholder="0" oninput="calcEficEsc()"></div>
+        <div class="fgrp"><label class="flbl">Escanteios que geraram chute <i class="tip-icon">?<span class="tip-box">Quantos escanteios resultaram diretamente em finalização.</span></i></label><input class="finp" id="e-chutes" type="number" placeholder="0" oninput="calcEficEsc()"></div>
+        <div class="fgrp"><label class="flbl">Gols de escanteio</label><input class="finp" id="e-gols" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Cobrador principal</label><input class="finp" id="e-cobrador" placeholder="Nome e pé dominante"></div>
+        <div class="fgrp"><label class="flbl">Zona preferida <i class="tip-icon">?<span class="tip-box">Onde a maioria dos escanteios são direcionados: primeiro pau, segundo pau, área do goleiro, curto...</span></i></label>
+          <select class="fsel" id="e-zona">
+            <option value="">Selecione...</option>
+            <option>Primeiro pau</option><option>Segundo pau</option><option>Área do goleiro</option>
+            <option>Curto (para o companheiro)</option><option>Variado</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Tipo de cobrança preferida</label>
+          <select class="fsel" id="e-tipo">
+            <option value="">Selecione...</option>
+            <option>Aberto (com efeito para fora)</option><option>Fechado (com efeito para dentro)</option>
+            <option>Cobrança curta</option><option>Lançamento direto</option><option>Variado</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgrp" style="margin-bottom:14px;">
+        <label class="flbl">Eficiência <i class="tip-icon">?<span class="tip-box">% de escanteios que geraram chute. Calculado automaticamente.</span></i></label>
+        <div class="bp-efic">
+          <div class="bp-efic-bar"><div class="bp-efic-fill" id="e-efic-bar" style="width:0%"></div></div>
+          <span class="bp-efic-pct" id="e-efic-pct">0%</span>
+        </div>
+      </div>
+      <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
+        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
+        <div id="e-pad-of-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('e-pad-of')">+ Adicionar padrão ofensivo</button>
+      </div>
+      <div class="sblk" style="background:var(--c9);">
+        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
+        <div id="e-pad-def-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('e-pad-def')">+ Adicionar padrão defensivo</button>
+      </div>
+      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="e-obs" placeholder="Outras observações sobre os escanteios..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- FALTAS -->
+  <div class="bp-sit-sec" id="bp-sit-faltas">
+    <div class="sblk" id="bp-faltas">
+      <div class="stitle">🦵 Faltas</div>
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Total de faltas cobradas</label><input class="finp" id="f-total" type="number" placeholder="0" oninput="calcEficFal()"></div>
+        <div class="fgrp"><label class="flbl">Faltas na área de finalização <i class="tip-icon">?<span class="tip-box">Faltas cobradas dentro do raio de finalização (até 30m do gol).</span></i></label><input class="finp" id="f-perig" type="number" placeholder="0" oninput="calcEficFal()"></div>
+        <div class="fgrp"><label class="flbl">Gols de falta direta</label><input class="finp" id="f-gols-dir" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Gols de falta indireta</label><input class="finp" id="f-gols-ind" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Cobrador principal</label><input class="finp" id="f-cobrador" placeholder="Nome e pé dominante"></div>
+        <div class="fgrp"><label class="flbl">Cobrador secundário</label><input class="finp" id="f-cobrador2" placeholder="Nome e pé dominante"></div>
+        <div class="fgrp"><label class="flbl">Estratégia de barreira <i class="tip-icon">?<span class="tip-box">Como a barreira é formada defensivamente: número de jogadores, posicionamento, etc.</span></i></label>
+          <select class="fsel" id="f-barreira">
+            <option value="">Selecione...</option>
+            <option>Barreira simples (linha reta)</option><option>Barreira dupla (dois blocos)</option>
+            <option>Barreira com corredor</option><option>Barreira com jogador deitado</option><option>Variado</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Referência na barreira</label><input class="finp" id="f-ref-barreira" placeholder="Jogador que organiza a barreira"></div>
+      </div>
+      <div class="fgrp" style="margin-bottom:14px;">
+        <label class="flbl">% Faltas perigosas</label>
+        <div class="bp-efic">
+          <div class="bp-efic-bar"><div class="bp-efic-fill" id="f-efic-bar" style="width:0%"></div></div>
+          <span class="bp-efic-pct" id="f-efic-pct">0%</span>
+        </div>
+      </div>
+      <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
+        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
+        <div id="f-pad-of-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('f-pad-of')">+ Adicionar padrão ofensivo</button>
+      </div>
+      <div class="sblk" style="background:var(--c9);">
+        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
+        <div id="f-pad-def-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('f-pad-def')">+ Adicionar padrão defensivo</button>
+      </div>
+      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="f-obs" placeholder="Outras observações sobre as faltas..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- LATERAIS -->
+  <div class="bp-sit-sec" id="bp-sit-laterais">
+    <div class="sblk" id="bp-laterais">
+      <div class="stitle">📐 Laterais</div>
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Total de laterais cobrados</label><input class="finp" id="l-total" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Laterais no terço ofensivo <i class="tip-icon">?<span class="tip-box">Laterais cobrados no terço final do campo, onde o time tem mais opções táticas.</span></i></label><input class="finp" id="l-of" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Gols originados de lateral</label><input class="finp" id="l-gols" type="number" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Estratégia principal</label>
+          <select class="fsel" id="l-estrat">
+            <option value="">Selecione...</option>
+            <option>Jogo curto (manutenção de posse)</option><option>Lançamento longo</option>
+            <option>Reposição para o lateral</option><option>Armadilha (simulação de ataque)</option><option>Variado</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Execução principal</label><input class="finp" id="l-exec" placeholder="Jogador que cobra a maioria"></div>
+        <div class="fgrp"><label class="flbl">Zona de maior uso</label>
+          <select class="fsel" id="l-zona">
+            <option value="">Selecione...</option>
+            <option>Terço defensivo</option><option>Terço médio</option><option>Terço ofensivo</option><option>Distribuído</option>
+          </select>
+        </div>
+      </div>
+      <div class="sblk" style="background:var(--c9);margin-bottom:12px;">
+        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
+        <div id="l-pad-of-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('l-pad-of')">+ Adicionar padrão ofensivo</button>
+      </div>
+      <div class="sblk" style="background:var(--c9);">
+        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
+        <div id="l-pad-def-lista"></div>
+        <button class="add-padrao-btn" onclick="addPadrao('l-pad-def')">+ Adicionar padrão defensivo</button>
+      </div>
+      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="l-obs" placeholder="Outras observações sobre os laterais..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- GERAR -->
+  <div class="sblk" id="bp-gerar">
+    <div class="stitle">⚡ Gerar análise</div>
+    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">O texto combina estatísticas, padrões e observações de todas as situações — pronto para colar no Claude.</p>
+    <div class="br"><button class="btn bp" onclick="gerarBP()">⚡ Gerar texto para IA</button></div>
+    <div class="vid-output-box hidden" id="bp-output">
+      <div class="vid-output-title">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
+      <div class="vid-output-text" id="bp-texto"></div>
+      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--c7);">
+        <div style="display:flex;gap:8px;margin-left:auto;">
+          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('bp-texto',v('bp-time')||'bola-parada')">⬇ TXT</button>
+          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('bp-texto')">📋 Copiar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ABA DASHBOARD ===== -->
+<div class="mc hidden" id="tab-dashboard">
+  <div class="ph"><div class="pt">Dashboard do Elenco</div><div class="ps">Visão geral de todos os atletas registrados com métricas e status de risco.</div></div>
+
+  <!-- Filtros -->
+  <div class="dash-filtros">
+    <select class="fsel" id="dash-periodo" onchange="carregarDashboard()" style="max-width:200px;">
+      <option value="0">Todos os períodos</option>
+      <option value="7">Últimos 7 dias</option>
+      <option value="30">Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="180">Últimos 180 dias</option>
+    </select>
+    <input class="finp" id="dash-busca" placeholder="🔍 Buscar atleta..." style="max-width:220px;" oninput="renderDashboard()">
+    <button class="btn bp" style="padding:9px 16px;font-size:12px;" onclick="carregarDashboard()">🔄 Atualizar</button>
+  </div>
+
+  <!-- Stats resumo -->
+  <div class="dash-stat-row" id="dash-stats"></div>
+
+  <!-- Filtro de posição -->
+  <div class="pos-filter" id="dash-pos-filter"></div>
+
+  <!-- Cards do elenco -->
+  <div id="dash-elenco">
+    <div class="dash-section-title">👥 Elenco</div>
+    <div class="dash-cards" id="dash-cards-grid"></div>
+  </div>
+
+  <!-- Comparativo por posição -->
+  <div id="dash-comparativo">
+    <div class="dash-section-title">📈 Comparativo por posição</div>
+    <div id="dash-charts-pos"></div>
+  </div>
+</div>
+
+<!-- ===== ABA VÍDEO ===== -->
+<div class="mc hidden" id="tab-video">
+  <div class="ph">
+    <div class="pt">Análise de Vídeo Assistida</div>
+    <div class="ps">Anote os eventos da partida e gere o texto estruturado para análise com IA.</div>
+  </div>
+
+  <!-- Foco: atleta ou time -->
+  <div class="sblk" id="sv-config">
+    <div class="stitle">🎯 Foco da análise</div>
+    <div class="foco-sel">
+      <button class="foco-btn active" id="foco-atleta" onclick="setFoco('atleta')">⚽ Atleta individual</button>
+      <button class="foco-btn" id="foco-time" onclick="setFoco('time')">🏟️ Time / Coletivo</button>
+    </div>
+
+    <!-- Config atleta -->
+    <div id="cfg-atleta">
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Nome do atleta</label><input class="finp" id="v-nome" placeholder="Nome do atleta analisado"></div>
+        <div class="fgrp"><label class="flbl">Posição</label>
+          <select class="fsel" id="v-pos">
+            <option value="">Selecione...</option>
+            <option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option><option>Lateral esquerdo</option>
+            <option>Volante</option><option>Meia central</option><option>Meia-atacante</option>
+            <option>Ponta direita</option><option>Ponta esquerda</option><option>Centroavante</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Clube</label><input class="finp" id="v-clube" placeholder="Clube do atleta"></div>
+        <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="v-adv" placeholder="Time adversário"></div>
+        <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="v-comp" placeholder="Ex: Campeonato Paulista"></div>
+        <div class="fgrp"><label class="flbl">Data da partida</label><input class="finp" id="v-data" type="date"></div>
+        <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="v-res" placeholder="Ex: 2 x 1"></div>
+        <div class="fgrp"><label class="flbl">Minutos jogados</label><input class="finp" id="v-min" type="number" placeholder="90"></div>
+      </div>
+    </div>
+
+    <!-- Config time -->
+    <div id="cfg-time" style="display:none;">
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Nome do time</label><input class="finp" id="v-time" placeholder="Nome do time analisado"></div>
+        <div class="fgrp"><label class="flbl">Formação</label>
+          <select class="fsel" id="v-form">
+            <option value="">Selecione...</option>
+            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="v-adv-t" placeholder="Time adversário"></div>
+        <div class="fgrp"><label class="flbl">Formação adversária</label>
+          <select class="fsel" id="v-form-adv">
+            <option value="">Selecione...</option>
+            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="v-comp-t" placeholder="Ex: Brasileiro Série A"></div>
+        <div class="fgrp"><label class="flbl">Data</label><input class="finp" id="v-data-t" type="date"></div>
+        <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="v-res-t" placeholder="Ex: 1 x 0"></div>
+        <div class="fgrp"><label class="flbl">Local</label>
+          <select class="fsel" id="v-local-t">
+            <option value="">Selecione...</option><option>Casa</option><option>Fora</option><option>Neutro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eventos estruturados -->
+  <div class="sblk" id="sv-eventos">
+    <div class="stitle">📋 Eventos da partida <span style="color:var(--c4);font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;">anote o que viu no vídeo</span></div>
+
+    <div class="ibanner" style="margin-bottom:16px;">
+      💡 Anote cada momento relevante: minuto, tipo de ação e descrição. Quanto mais detalhe, mais rica a análise. Não precisa anotar tudo — foque no que foi decisivo.
+    </div>
+
+    <div class="eventos-header">
+      <div class="eventos-hlbl">Minuto</div>
+      <div class="eventos-hlbl">Tipo de ação</div>
+      <div class="eventos-hlbl">Descrição</div>
+      <div class="eventos-hlbl"></div>
+    </div>
+
+    <div id="eventos-lista"></div>
+
+    <button class="add-evento-btn" onclick="addEvento()">
+      + Adicionar evento
+    </button>
+
+    <div class="contador-eventos" id="eventos-count" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- Texto livre -->
+  <div class="sblk" id="sv-livre">
+    <div class="stitle">📝 Observações livres</div>
+    <div class="fg1">
+      <div class="fgrp">
+        <label class="flbl">Impressão geral da partida / atleta <i class="tip-icon">?<span class="tip-box">Descreva livremente o que mais chamou atenção. Padrões táticos, comportamento físico, momentos decisivos, posicionamento.</span></i></label>
+        <textarea class="ftxt" id="v-geral" style="min-height:100px;" placeholder="Ex: O atleta demonstrou excelente leitura defensiva na primeira etapa, mas perdeu intensidade após os 65 minutos. Participou ativamente da saída de bola..."></textarea>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Pontos fortes observados</label>
+        <textarea class="ftxt" id="v-pontos-pos" style="min-height:80px;" placeholder="Ex: Boa cobertura defensiva, liderança verbal, passes progressivos com qualidade..."></textarea>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Pontos de atenção observados</label>
+        <textarea class="ftxt" id="v-pontos-neg" style="min-height:80px;" placeholder="Ex: Dificuldade no 1x1 defensivo pelo lado esquerdo, tendência a avançar sem cobertura..."></textarea>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Situações de bola parada relevantes</label>
+        <textarea class="ftxt" id="v-bola-parada" style="min-height:70px;" placeholder="Ex: Escanteio cobrado sempre no primeiro pau, falta ofensiva com bloqueio no segundo andar..."></textarea>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Contexto adicional</label>
+        <textarea class="ftxt" id="v-contexto" style="min-height:70px;" placeholder="Ex: Partida jogada em campo pesado após chuva. Atleta vinha de 3 jogos em 7 dias..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gerar -->
+  <div class="sblk" id="sv-gerar">
+    <div class="stitle">⚡ Gerar análise</div>
+    <p style="color:var(--c2);font-size:13px;margin-bottom:16px;">O texto estruturado vai combinar todos os eventos anotados com as observações livres — pronto para colar no Claude e receber a análise completa.</p>
+    <div class="br" style="margin-bottom:0;">
+      <button class="btn bp" onclick="gerarVideo()">⚡ Gerar texto para IA</button>
+    </div>
+    <div class="vid-output-box hidden" id="video-output">
+      <div class="vid-output-title">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
+      <div class="vid-output-text" id="vid-texto"></div>
+      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--c7);">
+        <div style="display:flex;gap:8px;margin-left:auto;">
+          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('vid-texto',document.getElementById('v-nome')?.value||'video')">⬇ TXT</button>
+          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('vid-texto')">📋 Copiar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== ABA LESÃO ===== -->
 <div class="mc hidden" id="tab-lesao">
@@ -1077,7 +1551,7 @@ supa.auth.getSession().then(({data})=>{if(data.session)startApp(data.session.use
 
 // ===== NAV =====
 function swTab(t,btn){
-  ['atleta','clube','prosp','hist','feedback','lesao'].forEach(x=>{
+  ['atleta','clube','prosp','hist','feedback','lesao','video','dashboard','bolaparada'].forEach(x=>{
     const el=document.getElementById('tab-'+x);if(el)el.classList.add('hidden');
     const sb=document.getElementById('sb-'+x);if(sb)sb.classList.add('hidden');
   });
@@ -1086,6 +1560,7 @@ function swTab(t,btn){
   document.getElementById('sb-'+t)?.classList.remove('hidden');
   btn.classList.add('active');
   if(t==='hist')renderHist();
+  if(t==='dashboard')carregarDashboard();
   if(t==='feedback')loadFeedbacks();
 }
 function gt(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
@@ -1373,6 +1848,625 @@ async function delRel(){
 }
 
 
+
+
+
+
+// ===== BOLA PARADA =====
+let bpFoco = 'proprio';
+let bpPadroes = {'e-pad-of':[],'e-pad-def':[],'f-pad-of':[],'f-pad-def':[],'l-pad-of':[],'l-pad-def':[]};
+
+function setBPFoco(foco){
+  bpFoco = foco;
+  document.getElementById('bp-foco-proprio').classList.toggle('active', foco==='proprio');
+  document.getElementById('bp-foco-adv').classList.toggle('active', foco==='adversario');
+}
+
+function swBPSit(sit, btn){
+  document.querySelectorAll('.bp-sit-sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.bp-sit-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('bp-sit-'+sit).classList.add('active');
+  btn.classList.add('active');
+}
+
+function calcEficEsc(){
+  const tot=parseFloat(v('e-total'))||0, ch=parseFloat(v('e-chutes'))||0;
+  const pct=tot>0?Math.min(Math.round((ch/tot)*100),100):0;
+  document.getElementById('e-efic-bar').style.width=pct+'%';
+  document.getElementById('e-efic-pct').textContent=pct+'%';
+}
+
+function calcEficFal(){
+  const tot=parseFloat(v('f-total'))||0, per=parseFloat(v('f-perig'))||0;
+  const pct=tot>0?Math.min(Math.round((per/tot)*100),100):0;
+  document.getElementById('f-efic-bar').style.width=pct+'%';
+  document.getElementById('f-efic-pct').textContent=pct+'%';
+}
+
+function addPadrao(key){
+  const id=Date.now();
+  bpPadroes[key]=bpPadroes[key]||[];
+  bpPadroes[key].push({id,txt:''});
+  renderPadroes(key);
+  setTimeout(()=>{
+    const el=document.getElementById('bp-pad-'+id);
+    if(el){el.focus();}
+  },50);
+}
+
+function removePadrao(key,id){
+  bpPadroes[key]=bpPadroes[key].filter(p=>p.id!==id);
+  renderPadroes(key);
+}
+
+function updatePadrao(key,id,val){
+  const p=bpPadroes[key]?.find(p=>p.id===id);
+  if(p)p.txt=val;
+}
+
+function renderPadroes(key){
+  const cont=document.getElementById(key+'-lista');
+  if(!cont)return;
+  if(!bpPadroes[key]?.length){
+    cont.innerHTML='<p style="color:var(--c4);font-size:12px;padding:8px 0;">Nenhum padrão registrado.</p>';
+    return;
+  }
+  cont.innerHTML=bpPadroes[key].map((p,i)=>`
+    <div class="bp-padrao-row">
+      <div class="bp-padrao-num">${i+1}</div>
+      <textarea class="bp-padrao-txt ftxt" id="bp-pad-${p.id}" rows="1"
+        style="min-height:36px;resize:none;flex:1;"
+        placeholder="Descreva o padrão observado..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';updatePadrao('${key}',${p.id},this.value)">${p.txt}</textarea>
+      <button class="bp-padrao-del" onclick="removePadrao('${key}',${p.id})">×</button>
+    </div>`).join('');
+}
+
+function getPadroes(key){
+  return (bpPadroes[key]||[]).filter(p=>p.txt.trim()).map((p,i)=>`${i+1}. ${p.txt}`).join('\n');
+}
+
+function limparBP(){
+  ['bp-time','bp-adv','bp-comp','bp-data','bp-res','bp-min',
+   'e-total','e-chutes','e-gols','e-cobrador','e-zona','e-tipo','e-obs',
+   'f-total','f-perig','f-gols-dir','f-gols-ind','f-cobrador','f-cobrador2','f-barreira','f-ref-barreira','f-obs',
+   'l-total','l-of','l-gols','l-estrat','l-exec','l-zona','l-obs'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  Object.keys(bpPadroes).forEach(k=>{bpPadroes[k]=[];renderPadroes(k);});
+  calcEficEsc();calcEficFal();
+  document.getElementById('bp-output').classList.add('hidden');
+  showToast('Formulário limpo.');
+}
+
+function gerarBP(){
+  const foco = bpFoco==='proprio'?'Próprio time':'Adversário';
+  const time = v('bp-time')||'Não informado';
+  const adv = v('bp-adv')||'Não informado';
+
+  // Escanteios
+  const eTot=v('e-total'),eChut=v('e-chutes'),eGols=v('e-gols');
+  const eEfic=eTot&&eChut?Math.round((parseFloat(eChut)/parseFloat(eTot))*100)+'%':'—';
+  const ePadOf=getPadroes('e-pad-of'), ePadDef=getPadroes('e-pad-def');
+
+  // Faltas
+  const fTot=v('f-total'),fPer=v('f-perig'),fGDir=v('f-gols-dir'),fGInd=v('f-gols-ind');
+  const fEfic=fTot&&fPer?Math.round((parseFloat(fPer)/parseFloat(fTot))*100)+'%':'—';
+  const fPadOf=getPadroes('f-pad-of'), fPadDef=getPadroes('f-pad-def');
+
+  // Laterais
+  const lTot=v('l-total'),lOf=v('l-of'),lGols=v('l-gols');
+  const lPadOf=getPadroes('l-pad-of'), lPadDef=getPadroes('l-pad-def');
+
+  const texto=`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — ANÁLISE DE BOLA PARADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você é um analista de desempenho sênior da Potencial Sports, especializado em situações de bola parada no futebol brasileiro.
+
+IDENTIFICAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Foco da análise: ${foco}
+Time analisado: ${time}
+Adversário: ${adv}
+Competição: ${v('bp-comp')||'—'}
+Data: ${v('bp-data')||'—'}
+Resultado: ${v('bp-res')||'—'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESCANTEIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total cobrados: ${eTot||'—'}
+Que geraram chute: ${eChut||'—'} (eficiência: ${eEfic})
+Gols de escanteio: ${eGols||'0'}
+Cobrador principal: ${v('e-cobrador')||'—'}
+Zona preferida: ${v('e-zona')||'—'}
+Tipo de cobrança: ${v('e-tipo')||'—'}
+
+Padrões ofensivos identificados:
+${ePadOf||'Nenhum padrão registrado.'}
+
+Padrões defensivos identificados:
+${ePadDef||'Nenhum padrão registrado.'}
+
+Observações: ${v('e-obs')||'—'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FALTAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total cobradas: ${fTot||'—'}
+Na área de finalização: ${fPer||'—'} (${fEfic} do total)
+Gols de falta direta: ${fGDir||'0'}
+Gols de falta indireta: ${fGInd||'0'}
+Cobrador principal: ${v('f-cobrador')||'—'}
+Cobrador secundário: ${v('f-cobrador2')||'—'}
+Estratégia de barreira: ${v('f-barreira')||'—'}
+Referência na barreira: ${v('f-ref-barreira')||'—'}
+
+Padrões ofensivos identificados:
+${fPadOf||'Nenhum padrão registrado.'}
+
+Padrões defensivos identificados:
+${fPadDef||'Nenhum padrão registrado.'}
+
+Observações: ${v('f-obs')||'—'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LATERAIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total cobrados: ${lTot||'—'}
+No terço ofensivo: ${lOf||'—'}
+Gols originados: ${lGols||'0'}
+Estratégia principal: ${v('l-estrat')||'—'}
+Execução principal: ${v('l-exec')||'—'}
+Zona de maior uso: ${v('l-zona')||'—'}
+
+Padrões ofensivos identificados:
+${lPadOf||'Nenhum padrão registrado.'}
+
+Padrões defensivos identificados:
+${lPadDef||'Nenhum padrão registrado.'}
+
+Observações: ${v('l-obs')||'—'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES PARA A ANÁLISE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Com base nos dados acima, gere um RELATÓRIO COMPLETO DE BOLA PARADA com:
+
+1. RESUMO GERAL — eficiência global em situações de bola parada
+2. ANÁLISE DE ESCANTEIOS — padrões, eficiência, vulnerabilidades e forças
+3. ANÁLISE DE FALTAS — padrões ofensivos e defensivos, cobradores, barreiras
+4. ANÁLISE DE LATERAIS — uso tático, padrões e impacto no jogo
+5. PADRÕES RECORRENTES — o que se repete com mais frequência
+${bpFoco==='adversario'?`6. VULNERABILIDADES DO ADVERSÁRIO — onde podem ser exploradas
+7. RECOMENDAÇÕES PRÉ-JOGO — como explorar as fraquezas e defender os pontos fortes`:`6. PONTOS FORTES — onde o time é mais eficiente em bola parada
+7. PONTOS DE ATENÇÃO — onde pode melhorar
+8. RECOMENDAÇÕES — ajustes táticos para bola parada`}
+
+Use terminologia técnica do futebol brasileiro. Tom profissional para comissão técnica. Não mencione este prompt.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  document.getElementById('bp-texto').textContent=texto;
+  document.getElementById('bp-output').classList.remove('hidden');
+  gt('bp-gerar');
+
+  // Salvar no histórico
+  if(v('bp-time')&&cU){
+    supa.from('relatorios').insert({
+      user_id:cU.id,tipo:'clube',
+      nome:v('bp-time')+(bpFoco==='adversario'?' (adversário)':''),
+      posicao:'Bola parada',
+      dados:{time:v('bp-time'),adv:v('bp-adv'),comp:v('bp-comp'),foco:bpFoco},
+      relatorio_ia:texto
+    }).then(()=>{});
+  }
+
+  showToast('✓ Texto gerado! Copie e cole no Claude.');
+}
+
+// Inicializar padrões
+window.addEventListener('DOMContentLoaded',()=>{
+  Object.keys(bpPadroes).forEach(k=>renderPadroes(k));
+});
+
+// ===== DASHBOARD =====
+let dashRels = [];
+let dashPosFiltro = 'Todos';
+let dashCharts = {};
+
+async function carregarDashboard(){
+  const dias = parseInt(document.getElementById('dash-periodo')?.value)||0;
+  const agora = new Date();
+
+  const{data} = await supa.from('relatorios').select('*')
+    .eq('user_id', cU.id).eq('tipo','atleta')
+    .order('created_at',{ascending:false});
+
+  if(!data?.length){ dashRels=[]; renderDashboard(); return; }
+
+  // Pegar só o mais recente de cada atleta dentro do período
+  const porNome = {};
+  data.forEach(r=>{
+    if(dias>0){
+      const d=(agora-new Date(r.created_at))/(1000*60*60*24);
+      if(d>dias) return;
+    }
+    if(!porNome[r.nome]) porNome[r.nome]=r;
+  });
+
+  dashRels = Object.values(porNome);
+
+  // Montar filtros de posição
+  const posicoes = ['Todos', ...new Set(dashRels.map(r=>r.posicao).filter(Boolean))];
+  const pfCont = document.getElementById('dash-pos-filter');
+  const sbCont = document.getElementById('sb-pos-filtros');
+  pfCont.innerHTML = posicoes.map(p=>`<div class="pos-chip${p===dashPosFiltro?' active':''}" onclick="filtroDashPos('${p}',this)">${p}</div>`).join('');
+  sbCont.innerHTML = posicoes.map(p=>`<button class="sbb${p===dashPosFiltro?' active':''}" style="font-size:12px;" onclick="filtroDashPos('${p}',this)"><span class="si">📍</span>${p}</button>`).join('');
+
+  renderDashboard();
+}
+
+function filtroDashPos(pos, el){
+  dashPosFiltro = pos;
+  document.querySelectorAll('.pos-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#sb-pos-filtros .sbb').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderDashboard();
+}
+
+function renderDashboard(){
+  const busca = document.getElementById('dash-busca')?.value?.toLowerCase()||'';
+  let lista = dashRels.filter(r=>{
+    if(dashPosFiltro!=='Todos' && r.posicao!==dashPosFiltro) return false;
+    if(busca && !r.nome?.toLowerCase().includes(busca)) return false;
+    return true;
+  });
+
+  if(!lista.length){
+    document.getElementById('dash-stats').innerHTML='';
+    document.getElementById('dash-cards-grid').innerHTML=`<div class="dash-empty" style="grid-column:1/-1;"><div style="font-size:48px;margin-bottom:12px;">👥</div><div>Nenhum atleta encontrado.</div><div style="font-size:12px;margin-top:8px;">Registre análises na aba Atleta para ver o dashboard.</div></div>`;
+    document.getElementById('dash-charts-pos').innerHTML='';
+    return;
+  }
+
+  // Stats resumo
+  const totalAtletas = lista.length;
+  const mediaScore = lista.filter(r=>r.score).length
+    ? Math.round(lista.filter(r=>r.score).reduce((a,r)=>a+r.score,0)/lista.filter(r=>r.score).length)
+    : '—';
+  const riscos = lista.map(r=>calcularRiscoAtleta(r,null,null));
+  const altosRisco = riscos.filter(r=>r.nivel==='ALTO'||r.nivel==='CRÍTICO').length;
+  const posicoes = [...new Set(lista.map(r=>r.posicao).filter(Boolean))].length;
+
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="dash-stat"><div class="dash-stat-num">${totalAtletas}</div><div class="dash-stat-lbl">Atletas registrados</div></div>
+    <div class="dash-stat"><div class="dash-stat-num">${mediaScore}</div><div class="dash-stat-lbl">Score médio do elenco</div></div>
+    <div class="dash-stat"><div class="dash-stat-num" style="color:${altosRisco>0?'#FF4444':'#00C853'}">${altosRisco}</div><div class="dash-stat-lbl">Em risco elevado</div></div>
+    <div class="dash-stat"><div class="dash-stat-num">${posicoes}</div><div class="dash-stat-lbl">Posições cobertas</div></div>`;
+
+  // Cards do elenco
+  const cardsCont = document.getElementById('dash-cards-grid');
+  cardsCont.innerHTML = lista.map(r=>{
+    const risco = calcularRiscoAtleta(r,null,null);
+    const mets = r.dados?.metricas||{};
+    const metKeys = Object.keys(mets).slice(0,4);
+    const rBadge = risco.nivel==='CRÍTICO'?'rb-critico':risco.nivel==='ALTO'?'rb-alto':risco.nivel==='MÉDIO'?'rb-medio':'rb-baixo';
+    const scoreColor = (r.score||0)>=75?'#00C853':(r.score||0)>=50?'#FFB300':'#FF4444';
+    return `
+      <div class="dash-card" onclick="abrirEvolucao('${r.nome}','${r.posicao||''}')">
+        <div class="dc-top">
+          <div><div class="dc-nome">${r.nome}</div><div class="dc-pos">${r.posicao||'—'}</div></div>
+          <div style="text-align:right;">
+            <div class="dc-score" style="color:${scoreColor}">${r.score||'—'}</div>
+            <div class="dc-score-lbl">Score</div>
+          </div>
+        </div>
+        <div class="dc-mets">
+          ${metKeys.map(k=>`<div class="dc-met"><span class="dc-met-lbl">${k}</span><span class="dc-met-val">${mets[k]}</span></div>`).join('')}
+          ${!metKeys.length?'<span style="font-size:11px;color:var(--c4);">Sem métricas registradas</span>':''}
+        </div>
+        <div class="dc-footer">
+          <span class="dc-data">${new Date(r.created_at).toLocaleDateString('pt-BR')}</span>
+          <span class="dc-risco risco-badge ${rBadge}" style="font-size:10px;padding:2px 8px;">${risco.nivel}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Comparativo por posição
+  renderChartsPosicao(lista);
+}
+
+function renderChartsPosicao(lista){
+  // Destruir charts anteriores
+  Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});
+  dashCharts={};
+
+  const cont = document.getElementById('dash-charts-pos');
+  const porPos = {};
+  lista.forEach(r=>{
+    const pos = r.posicao||'Sem posição';
+    if(!porPos[pos]) porPos[pos]=[];
+    porPos[pos].push(r);
+  });
+
+  // Só mostrar posições com 2+ atletas
+  const posComDados = Object.entries(porPos).filter(([,rl])=>rl.length>=2);
+  if(!posComDados.length){
+    cont.innerHTML=`<div class="dash-empty"><div style="font-size:32px;margin-bottom:10px;">📊</div><div>Registre pelo menos 2 atletas na mesma posição para ver o comparativo.</div></div>`;
+    return;
+  }
+
+  cont.innerHTML = posComDados.map(([pos])=>`
+    <div class="dash-chart-wrap">
+      <div class="dash-chart-title">${pos}</div>
+      <canvas id="chart-pos-${pos.replace(/\s/g,'_')}" height="60"></canvas>
+    </div>`).join('');
+
+  posComDados.forEach(([pos,rels])=>{
+    const canvasId = 'chart-pos-'+pos.replace(/\s/g,'_');
+    const ctx = document.getElementById(canvasId)?.getContext('2d');
+    if(!ctx) return;
+
+    const nomes = rels.map(r=>r.nome);
+    const scores = rels.map(r=>r.score||0);
+    const colors = scores.map(s=>s>=75?'#00C853':s>=50?'#FFB300':'#FF4444');
+
+    dashCharts[canvasId] = new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:nomes,
+        datasets:[{
+          label:'Score',
+          data:scores,
+          backgroundColor:colors.map(c=>c+'44'),
+          borderColor:colors,
+          borderWidth:2,
+          borderRadius:6,
+        }]
+      },
+      options:{
+        responsive:true,
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{label:c=>`Score: ${c.raw}/100`}}
+        },
+        scales:{
+          y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#666',font:{size:11}}},
+          x:{grid:{display:false},ticks:{color:'#aaa',font:{size:11}}}
+        }
+      }
+    });
+  });
+}
+
+// ===== ANÁLISE DE VÍDEO =====
+let videoFoco = 'atleta';
+let eventosVideo = [];
+
+function setFoco(foco){
+  videoFoco = foco;
+  document.getElementById('foco-atleta').classList.toggle('active', foco==='atleta');
+  document.getElementById('foco-time').classList.toggle('active', foco==='time');
+  document.getElementById('cfg-atleta').style.display = foco==='atleta'?'block':'none';
+  document.getElementById('cfg-time').style.display = foco==='time'?'block':'none';
+}
+
+const TIPOS_EVENTO_ATLETA = [
+  'Passe progressivo','Passe errado','Drible completo','Drible perdido',
+  'Finalização no alvo','Finalização para fora','Gol','Assistência',
+  'Duelo ganho','Duelo perdido','Duelo aéreo ganho','Duelo aéreo perdido',
+  'Interceptação','Corte defensivo','Recuperação de bola','Falta cometida',
+  'Falta sofrida','Cruzamento certo','Cruzamento errado','Movimentação sem bola',
+  'Erro posicional','Pressão efetiva','Sprint ofensivo','Sprint defensivo',
+  'Bola parada','Outro',
+];
+
+const TIPOS_EVENTO_TIME = [
+  'Gol marcado','Gol sofrido','Chance criada','Chance sofrida',
+  'Pressão alta','Bloco defensivo','Transição ofensiva','Transição defensiva',
+  'Saída de bola','Bola longa','Escanteio ofensivo','Escanteio defensivo',
+  'Falta estratégica','Falta perigosa sofrida','Substituição','Ajuste tático',
+  'Desorganização defensiva','Superioridade numérica','Bola parada ofensiva',
+  'Bola parada defensiva','Outro',
+];
+
+function getTipos(){ return videoFoco==='atleta' ? TIPOS_EVENTO_ATLETA : TIPOS_EVENTO_TIME; }
+
+function addEvento(){
+  const id = Date.now();
+  eventosVideo.push({id, minuto:'', tipo:'', descricao:''});
+  renderEventos();
+  // Focar no campo de minuto do novo evento
+  setTimeout(()=>{
+    const el = document.getElementById('ev-min-'+id);
+    if(el) el.focus();
+  }, 50);
+}
+
+function removeEvento(id){
+  eventosVideo = eventosVideo.filter(e=>e.id!==id);
+  renderEventos();
+}
+
+function updateEvento(id, campo, valor){
+  const ev = eventosVideo.find(e=>e.id===id);
+  if(ev) ev[campo] = valor;
+  atualizarContador();
+}
+
+function renderEventos(){
+  const tipos = getTipos();
+  const cont = document.getElementById('eventos-lista');
+  if(!eventosVideo.length){
+    cont.innerHTML = '<p style="color:var(--c4);font-size:13px;text-align:center;padding:16px 0;">Nenhum evento anotado. Clique em "Adicionar evento" para começar.</p>';
+    atualizarContador();
+    return;
+  }
+  cont.innerHTML = eventosVideo.map(ev=>`
+    <div class="evento-row" id="ev-row-${ev.id}">
+      <input class="evento-min finp" id="ev-min-${ev.id}" type="number" placeholder="00'" value="${ev.minuto}" min="0" max="120"
+        oninput="updateEvento(${ev.id},'minuto',this.value)">
+      <select class="evento-tipo fsel" oninput="updateEvento(${ev.id},'tipo',this.value)">
+        <option value="">Tipo de ação...</option>
+        ${tipos.map(t=>`<option value="${t}" ${ev.tipo===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      <textarea class="evento-desc" placeholder="Descreva o que aconteceu..." rows="1"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';updateEvento(${ev.id},'descricao',this.value)">${ev.descricao}</textarea>
+      <button class="evento-del" onclick="removeEvento(${ev.id})" title="Remover">×</button>
+    </div>
+  `).join('');
+  atualizarContador();
+}
+
+function atualizarContador(){
+  const total = eventosVideo.length;
+  const preenchidos = eventosVideo.filter(e=>e.tipo||e.descricao).length;
+  const cont = document.getElementById('eventos-count');
+  if(cont) cont.textContent = total>0 ? `${preenchidos} de ${total} eventos preenchidos` : '';
+}
+
+function limparVideo(){
+  eventosVideo = [];
+  renderEventos();
+  ['v-nome','v-pos','v-clube','v-adv','v-comp','v-data','v-res','v-min',
+   'v-time','v-form','v-adv-t','v-form-adv','v-comp-t','v-data-t','v-res-t','v-local-t',
+   'v-geral','v-pontos-pos','v-pontos-neg','v-bola-parada','v-contexto'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  document.getElementById('video-output').classList.add('hidden');
+  showToast('Formulário limpo.');
+}
+
+function gerarVideo(){
+  const foco = videoFoco;
+  const eventos = eventosVideo.filter(e=>e.tipo||e.descricao);
+
+  let cabecalho = '';
+  if(foco==='atleta'){
+    const nome=v('v-nome'),pos=v('v-pos'),clube=v('v-clube'),adv=v('v-adv'),comp=v('v-comp'),data=v('v-data'),res=v('v-res'),min=v('v-min');
+    cabecalho = `FOCO: Atleta individual
+Nome: ${nome||'Não informado'}
+Posição: ${pos||'Não informada'}
+Clube: ${clube||'Não informado'}
+Adversário: ${adv||'Não informado'}
+Competição: ${comp||'Não informada'}
+Data: ${data||'Não informada'}
+Resultado: ${res||'Não informado'}
+Minutos jogados: ${min||'Não informado'}`;
+  } else {
+    const time=v('v-time'),form=v('v-form'),adv=v('v-adv-t'),formAdv=v('v-form-adv'),comp=v('v-comp-t'),data=v('v-data-t'),res=v('v-res-t'),local=v('v-local-t');
+    cabecalho = `FOCO: Análise coletiva do time
+Time: ${time||'Não informado'}
+Formação: ${form||'Não informada'}
+Adversário: ${adv||'Não informado'} ${formAdv?'('+formAdv+')':''}
+Competição: ${comp||'Não informada'}
+Data: ${data||'Não informada'}
+Resultado: ${res||'Não informado'}
+Local: ${local||'Não informado'}`;
+  }
+
+  let eventosStr = '';
+  if(eventos.length){
+    eventosStr = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EVENTOS REGISTRADOS (${eventos.length} eventos)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+    eventosStr += eventos.map(e=>`Min. ${e.minuto||'?'}' | ${e.tipo||'Ação'}: ${e.descricao||'Sem descrição'}`).join('
+');
+  } else {
+    eventosStr = '
+[Nenhum evento estruturado registrado]';
+  }
+
+  const geral=v('v-geral'), pos_obs=v('v-pontos-pos'), neg_obs=v('v-pontos-neg'), bp=v('v-bola-parada'), ctx=v('v-contexto');
+
+  const instrucao = foco==='atleta'
+    ? `Gere um RELATÓRIO DE ANÁLISE DE VÍDEO completo do atleta com:
+1. RESUMO DA PARTIDA
+2. DESEMPENHO TÉCNICO — baseado nos eventos registrados, identifique padrões de qualidade e eficiência
+3. DESEMPENHO TÁTICO — leitura de jogo, posicionamento, tomada de decisão
+4. DESEMPENHO FÍSICO — intensidade percebida, momentos de queda de rendimento
+5. SITUAÇÕES DE BOLA PARADA — participação e padrões identificados
+6. PONTOS FORTES — evidenciados pelos eventos e observações
+7. PONTOS DE ATENÇÃO — padrões negativos recorrentes
+8. RECOMENDAÇÕES — para o treinador com base nesta análise
+9. SCORE DE DESEMPENHO: X/100 com justificativa`
+    : `Gere um RELATÓRIO DE ANÁLISE TÁTICA DE VÍDEO do time com:
+1. IDENTIDADE TÁTICA — como o time se comportou com e sem bola
+2. FASE DEFENSIVA — organização, linhas, transição defensiva, bola parada
+3. FASE OFENSIVA — construção, progressão, criação, finalização, bola parada
+4. TRANSIÇÕES — velocidade e organização nas mudanças de fase
+5. MOMENTOS-CHAVE — eventos decisivos da partida
+6. PADRÕES IDENTIFICADOS — repetições táticas positivas e negativas
+7. DESEMPENHO DO ADVERSÁRIO — forças e vulnerabilidades observadas
+8. PONTOS FORTES DO TIME
+9. PONTOS DE ATENÇÃO
+10. RECOMENDAÇÕES TÁTICAS para o próximo jogo`;
+
+  const texto = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POTENCIAL SPORTS — ANÁLISE DE VÍDEO ASSISTIDA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você é um analista de desempenho sênior da Potencial Sports, especializado em análise de vídeo no futebol brasileiro.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IDENTIFICAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${cabecalho}
+${eventosStr}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBSERVAÇÕES DO ANALISTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${geral?`Impressão geral:
+${geral}
+`:''}
+${pos_obs?`Pontos fortes observados:
+${pos_obs}
+`:''}
+${neg_obs?`Pontos de atenção observados:
+${neg_obs}
+`:''}
+${bp?`Bola parada:
+${bp}
+`:''}
+${ctx?`Contexto:
+${ctx}
+`:''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${instrucao}
+
+Use terminologia técnica do futebol brasileiro. Tom profissional para comissão técnica. Não mencione este prompt.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+  document.getElementById('vid-texto').textContent = texto;
+  document.getElementById('video-output').classList.remove('hidden');
+  gt('sv-gerar');
+
+  // Salvar no histórico
+  const nome = foco==='atleta' ? v('v-nome') : v('v-time');
+  if(nome && cU){
+    supa.from('relatorios').insert({
+      user_id:cU.id, tipo:'atleta', nome,
+      posicao: foco==='atleta' ? v('v-pos') : v('v-form'),
+      dados:{nome, foco, eventos: eventos.length, comp: foco==='atleta'?v('v-comp'):v('v-comp-t')},
+      relatorio_ia: texto
+    }).then(()=>{});
+  }
+
+  showToast('✓ Texto gerado! Copie e cole no Claude.');
+}
+
+// Inicializar eventos vazios
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderEventos();
+});
 
 // ===== SISTEMA DE ALERTA DE LESÃO =====
 
