@@ -1879,187 +1879,189 @@ function selPChip(el,hid,val){
 }
 
 // METRICAS POR POSICAO
-var METS={
+var METS = {
   'Goleiro':{g:[
     {t:'Defesa',c:[
-      {id:'a-def',l:'Defesas',tip:'Total de defesas no periodo.'},
-      {id:'a-defpct',l:'Defesas (%)',tip:'% de chutes defendidos. Ex: 78'},
-      {id:'a-xga',l:'xGA',s:'0.01',tip:'Expected Goals Against. Compare com gols sofridos reais.'},
+      {id:'a-def',l:'Defesas',tip:'Total de defesas.'},
+      {id:'a-defpct',l:'Defesas (%)',tip:'% de chutes defendidos.'},
+      {id:'a-xga',l:'xGA',s:'0.01',tip:'Expected Goals Against.'},
       {id:'a-gols-s',l:'Gols sofridos',tip:'Total de gols sofridos.'},
-      {id:'a-said',l:'Saidas de area',tip:'Vezes que saiu da area para cortar ou antecipar.'}
+      {id:'a-said',l:'Saídas de área',tip:'Vezes que saiu da área.'}
     ]},
-    {t:'Jogo com os pes',c:[
-      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 82 = 82% dos passes completados.'},
-      {id:'a-paslong',l:'Passes longos (%)',tip:'Eficiencia nos lancamentos longos.'},
-      {id:'a-toques',l:'Toques / jogo',tip:'Media de toques com os pes por partida.'}
+    {t:'Jogo com os pés',c:[
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 82%'},
+      {id:'a-paslong',l:'Passes longos (%)',tip:'Eficiência nos lançamentos.'},
+      {id:'a-toques',l:'Toques/jogo',tip:'Média de toques por partida.'}
     ]}
-  ],obs:'Observe: saidas de area, comunicacao com a zaga, comportamento em cruzamentos, distribuicao sob pressao.'},
+  ],obs:'Observe: saídas de área, comunicação com a zaga, distribuição sob pressão.'},
+
   'Zagueiro':{g:[
     {t:'Defesa',c:[
-      {id:'a-duel',l:'Duelos terrestres (%)',tip:'% de disputas no chao vencidas. Ex: 67'},
-      {id:'a-aer',l:'Duelos aereos (%)',tip:'% de disputas aereas vencidas.'},
-      {id:'a-int',l:'Interceptacoes',tip:'Reflete leitura antecipatoria do jogo.'},
-      {id:'a-cort',l:'Cortes',tip:'Afastamentos de bola dentro e fora da area.'},
-      {id:'a-bloq',l:'Bloqueios de chute',tip:'Indica disposicao e posicionamento defensivo.'}
+      {id:'a-duel',l:'Duelos terrestres (%)',tip:'% disputas no chão vencidas.'},
+      {id:'a-aer',l:'Duelos aéreos (%)',tip:'% disputas aéreas vencidas.'},
+      {id:'a-int',l:'Interceptações',tip:'Reflete leitura antecipatória.'},
+      {id:'a-cort',l:'Cortes',tip:'Afastamentos de bola.'},
+      {id:'a-bloq',l:'Bloqueios de chute',tip:'Indica posicionamento defensivo.'}
     ]},
-    {t:'Construcao',c:[
-      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 91 = 91% completados.'},
-      {id:'a-pasprog',l:'Passes progressivos',tip:'Passes que avancam o jogo para o terco final.'},
-      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Relevante para zagueiros em linha alta.'}
+    {t:'Construção',c:[
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 91%'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Passes que avançam o jogo.'},
+      {id:'a-vel',l:'Vel. máxima (km/h)',s:'0.1',tip:'Relevante para linha alta.'}
     ]}
-  ],obs:'Observe: posicionamento na linha defensiva, comunicacao com o parceiro, decisao entre fazer falta ou deixar passar, saida de bola sob pressao.'},
+  ],obs:'Observe: posicionamento na linha, comunicação com o parceiro, saída de bola.'},
+
   'Lateral direito':{g:[
     {t:'Defesa',c:[
-      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% de duelos defensivos vencidos no corredor.'},
-      {id:'a-int',l:'Interceptacoes',tip:'Indica posicionamento e antecipacao.'},
-      {id:'a-recup',l:'Recuperacoes',tip:'Total de recuperacoes no periodo.'},
-      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno apos perda de bola.'}
+      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% duelos defensivos vencidos.'},
+      {id:'a-int',l:'Interceptações',tip:'Passes cortados na zona.'},
+      {id:'a-recup',l:'Recuperações',tip:'Total de recuperações.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno.'}
     ]},
     {t:'Ataque',c:[
-      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% de cruzamentos que chegaram a um companheiro.'},
-      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% cruzamentos que chegaram.'},
+      {id:'a-assis',l:'Assistências',tip:'Passes para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações de finalização.'},
       {id:'a-drok',l:'Dribles completados',tip:'Capacidade de criar superioridade.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Laterais de alto nivel costumam passar de 11km.'},
-      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Fundamental para laterais ofensivos.'}
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'Volume físico.'},
+      {id:'a-vel',l:'Vel. máxima (km/h)',s:'0.1',tip:'Fundamental para laterais ofensivos.'}
     ]}
-  ],obs:'Observe: timing das sobreposicoes, combinacao com o ponta, retorno defensivo, posicionamento no 1x1 defensivo.'},
+  ],obs:'Observe: timing das sobreposições, combinação com o ponta, retorno defensivo.'},
+
   'Lateral esquerdo':{g:[
     {t:'Defesa',c:[
-      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% de duelos defensivos vencidos.'},
-      {id:'a-int',l:'Interceptacoes',tip:'Passes cortados na zona de marcacao.'},
-      {id:'a-recup',l:'Recuperacoes',tip:'Total de recuperacoes.'},
-      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno apos perda.'}
+      {id:'a-duel',l:'Duelos defensivos (%)',tip:'% duelos defensivos vencidos.'},
+      {id:'a-int',l:'Interceptações',tip:'Passes cortados.'},
+      {id:'a-recup',l:'Recuperações',tip:'Total de recuperações.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Sprints de retorno.'}
     ]},
     {t:'Ataque',c:[
-      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% de cruzamentos que chegaram a um companheiro.'},
-      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
-      {id:'a-drok',l:'Dribles completados',tip:'Dribles bem-sucedidos no corredor esquerdo.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Volume fisico total no periodo.'},
-      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Pico de velocidade no periodo.'}
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'% cruzamentos que chegaram.'},
+      {id:'a-assis',l:'Assistências',tip:'Passes para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações de finalização.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Dribles bem-sucedidos.'},
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'Volume físico.'},
+      {id:'a-vel',l:'Vel. máxima (km/h)',s:'0.1',tip:'Pico de velocidade.'}
     ]}
-  ],obs:'Observe: timing das sobreposicoes, combinacao com o ponta esquerdo, retorno defensivo, aproveitamento dos espacos.'},
+  ],obs:'Observe: timing das sobreposições, combinação com o ponta esquerdo.'},
+
   'Volante':{g:[
-    {t:'Defesa',c:[
-      {id:'a-int',l:'Interceptacoes',tip:'Principal metrica defensiva do volante.'},
-      {id:'a-duel',l:'Duelos ganhos (%)',tip:'% de disputas no meio-campo. Ex: 58'},
-      {id:'a-recup',l:'Recuperacoes',tip:'Inclui roubadas de bola e segundas bolas.'},
-      {id:'a-spr',l:'Sprints defensivos',tip:'Para fechar espacos ou pressionar.'}
+    {t:'Defesa e recuperação',c:[
+      {id:'a-int',l:'Interceptações',tip:'Principal métrica defensiva.'},
+      {id:'a-duel',l:'Duelos ganhos (%)',tip:'% disputas no meio-campo.'},
+      {id:'a-recup',l:'Recuperações',tip:'Inclui roubadas e segundas bolas.'},
+      {id:'a-spr',l:'Sprints defensivos',tip:'Para fechar espaços.'}
     ]},
-    {t:'Construcao',c:[
-      {id:'a-paspct',l:'Passes em pressao (%)',tip:'% de passes completados quando pressionado.'},
-      {id:'a-pasprog',l:'Passes progressivos',tip:'Para volante de ligacao, metrica central.'},
-      {id:'a-paschv',l:'Passes chave',tip:'Passes que geram diretamente uma finalizacao.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Box-to-box costumam passar de 12km.'}
+    {t:'Construção',c:[
+      {id:'a-paspct',l:'Passes em pressão (%)',tip:'% passes completados pressionado.'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Para volante de ligação.'},
+      {id:'a-paschv',l:'Passes chave',tip:'Passes que geram finalizações.'},
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'Box-to-box passam de 12km.'}
     ]}
-  ],obs:'Observe: posicionamento entre as linhas, velocidade de decisao, comportamento apos perda, lideranca organizando defensivamente.'},
+  ],obs:'Observe: posicionamento entre as linhas, velocidade de decisão, pressing após perda.'},
+
   'Meia central':{g:[
-    {t:'Criacao',c:[
-      {id:'a-paschv',l:'Passes chave / jogo',tip:'Principal metrica de criacao do armador.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de gol geradas.'},
-      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
-      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 89. Alto % mantem o ritmo do time.'},
-      {id:'a-pasprog',l:'Passes progressivos',tip:'Participacao na construcao ofensiva.'},
-      {id:'a-drok',l:'Dribles completados',tip:'Ferramenta de progressao e desequilibrio.'}
+    {t:'Criação',c:[
+      {id:'a-paschv',l:'Passes chave/jogo',tip:'Principal métrica do armador.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações de gol geradas.'},
+      {id:'a-assis',l:'Assistências',tip:'Passes para gol.'},
+      {id:'a-paspct',l:'Passes certos (%)',tip:'Ex: 89%'},
+      {id:'a-pasprog',l:'Passes progressivos',tip:'Participação na construção.'},
+      {id:'a-drok',l:'Dribles completados',tip:'Ferramenta de progressão.'}
     ]},
     {t:'Defesa',c:[
-      {id:'a-recup',l:'Recuperacoes',tip:'Mesmo o armador precisa recuperar.'},
-      {id:'a-duel',l:'Duelos ganhos (%)',tip:'Eficiencia nas disputas no meio.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Meias de alta intensidade passam de 11km.'}
+      {id:'a-recup',l:'Recuperações',tip:'Mesmo o armador precisa recuperar.'},
+      {id:'a-duel',l:'Duelos ganhos (%)',tip:'Eficiência nas disputas.'},
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'Alta intensidade passa de 11km.'}
     ]}
-  ],obs:'Observe: movimento sem bola, velocidade de leitura, qualidade do primeiro toque, pressing apos perda, relacao com o centroavante.'},
+  ],obs:'Observe: movimento sem bola, velocidade de leitura, qualidade do primeiro toque.'},
+
   'Meia-atacante':{g:[
-    {t:'Criacao e finalizacao',c:[
-      {id:'a-assis',l:'Assistencias',tip:'Metrica central do meia-atacante.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'},
+    {t:'Criação e finalização',c:[
+      {id:'a-assis',l:'Assistências',tip:'Métrica central do meia-atacante.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações geradas.'},
       {id:'a-drok',l:'Dribles completados',tip:'Arma fundamental do camisa 10.'},
-      {id:'a-drtent',l:'Dribles tentados',tip:'Total de tentativas. Compara com completados.'},
-      {id:'a-gols',l:'Gols',tip:'O meia-atacante tambem precisa finalizar.'},
-      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao geradas.'},
-      {id:'a-fintot',l:'Finalizacoes totais',tip:'Volume de chutes no periodo.'}
+      {id:'a-drtent',l:'Dribles tentados',tip:'Total de tentativas.'},
+      {id:'a-gols',l:'Gols',tip:'O meia-atacante também finaliza.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances geradas.'},
+      {id:'a-fintot',l:'Finalizações totais',tip:'Volume de chutes.'}
     ]},
     {t:'Defesa',c:[
-      {id:'a-recup',l:'Recuperacoes pelo pressing',tip:'Recuperacoes geradas pela pressao alta.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'O camisa 10 moderno trabalha defensivamente.'}
+      {id:'a-recup',l:'Recuperações pelo pressing',tip:'Pelo pressing alto.'},
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'Trabalha defensivamente.'}
     ]}
-  ],obs:'Observe: movimentacao entre as linhas, relacao com o centroavante, decisao entre finalizar ou assistir, pressing sem bola.'},
+  ],obs:'Observe: movimentação entre linhas, decisão entre finalizar ou assistir.'},
+
   'Ponta direita':{g:[
-    {t:'Desequilibrio',c:[
-      {id:'a-drok',l:'Dribles completados',tip:'Principal metrica de desequilibrio individual.'},
-      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiencia ideal acima de 45%.'},
-      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais. Ex: 32'},
-      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'}
+    {t:'Desequilíbrio',c:[
+      {id:'a-drok',l:'Dribles completados',tip:'Métrica de desequilíbrio individual.'},
+      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiência ideal acima de 45%.'},
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais.'},
+      {id:'a-assis',l:'Assistências',tip:'Passes para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações geradas.'}
     ]},
-    {t:'Finalizacao e fisico',c:[
+    {t:'Finalização e físico',c:[
       {id:'a-gols',l:'Gols',tip:'Mais relevante para pontas invertidos.'},
-      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao.'},
-      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Acima de 33 km/h e referencia no alto nivel.'},
-      {id:'a-spr',l:'Numero de sprints',tip:'Pontas de velocidade tem alto volume.'}
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances.'},
+      {id:'a-vel',l:'Vel. máxima (km/h)',s:'0.1',tip:'Acima de 33 km/h é referência.'},
+      {id:'a-spr',l:'Número de sprints',tip:'Pontas de velocidade têm alto volume.'}
     ]}
-  ],obs:'Observe: primeiro gesto no drible, movimento de ruptura nas costas do lateral, pressing sem bola, combinacao com o lateral do mesmo lado.'},
+  ],obs:'Observe: primeiro gesto no drible, movimento de ruptura, pressing sem bola.'},
+
   'Ponta esquerda':{g:[
-    {t:'Desequilibrio',c:[
-      {id:'a-drok',l:'Dribles completados',tip:'Principal metrica de impacto individual.'},
-      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiencia ideal acima de 45%.'},
-      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais pelo lado esquerdo.'},
-      {id:'a-assis',l:'Assistencias',tip:'Passes diretamente para gol.'},
-      {id:'a-chances',l:'Chances criadas',tip:'Situacoes de finalizacao geradas.'}
+    {t:'Desequilíbrio',c:[
+      {id:'a-drok',l:'Dribles completados',tip:'Métrica de impacto individual.'},
+      {id:'a-drtent',l:'Dribles tentados',tip:'Eficiência ideal acima de 45%.'},
+      {id:'a-cruz',l:'Cruzamentos certos (%)',tip:'Para pontas tradicionais.'},
+      {id:'a-assis',l:'Assistências',tip:'Passes para gol.'},
+      {id:'a-chances',l:'Chances criadas',tip:'Situações geradas.'}
     ]},
-    {t:'Finalizacao e fisico',c:[
+    {t:'Finalização e físico',c:[
       {id:'a-gols',l:'Gols',tip:'Relevante para pontas invertidos.'},
-      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances de finalizacao.'},
-      {id:'a-vel',l:'Vel. maxima (km/h)',s:'0.1',tip:'Essencial para pontas que exploram profundidade.'},
-      {id:'a-spr',l:'Numero de sprints',tip:'Volume de esforcos maximos.'}
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Qualidade das chances.'},
+      {id:'a-vel',l:'Vel. máxima (km/h)',s:'0.1',tip:'Essencial para pontas de velocidade.'},
+      {id:'a-spr',l:'Número de sprints',tip:'Volume de esforços máximos.'}
     ]}
-  ],obs:'Observe: primeiro gesto no drible, movimento de ruptura, pressing sem bola, decisao entre cruzar ou cortar para dentro.'},
+  ],obs:'Observe: primeiro gesto, movimento de ruptura, decisão entre cruzar ou cortar.'},
+
   'Centroavante':{g:[
-    {t:'Finalizacao',c:[
-      {id:'a-gols',l:'Gols',tip:'Sempre analisar em conjunto com xG.'},
-      {id:'a-xg',l:'xG',s:'0.01',tip:'Se gols > xG, esta finalizando acima do esperado.'},
-      {id:'a-fintot',l:'Finalizacoes totais',tip:'Volume de chutes.'},
-      {id:'a-finalv',l:'Finalizacoes no alvo',tip:'Eficiencia ideal acima de 40% do total.'},
-      {id:'a-golscab',l:'Gols de cabeca',tip:'Fundamental para referencia aerea.'}
+    {t:'Finalização',c:[
+      {id:'a-gols',l:'Gols',tip:'Sempre analisar com xG.'},
+      {id:'a-xg',l:'xG',s:'0.01',tip:'Se gols > xG está finalizando acima do esperado.'},
+      {id:'a-fintot',l:'Finalizações totais',tip:'Volume de chutes.'},
+      {id:'a-finalv',l:'Finalizações no alvo',tip:'Eficiência ideal acima de 40%.'},
+      {id:'a-golscab',l:'Gols de cabeça',tip:'Fundamental para referência aérea.'}
     ]},
-    {t:'Dominio e coletivo',c:[
-      {id:'a-aer',l:'Duelos aereos (%)',tip:'Essencial para o centroavante de referencia.'},
-      {id:'a-duel',l:'Duelos terrestres (%)',tip:'Inclui protecao de bola de costas para o gol.'},
-      {id:'a-assis',l:'Assistencias',tip:'O centroavante que combina cria para companheiros.'},
-      {id:'a-recup',l:'Recuperacoes pelo pressing',tip:'Geradas pela pressao na saida de bola adversaria.'},
-      {id:'a-dist',l:'Distancia total (km)',s:'0.1',tip:'Centroavantes modernos trabalham muito fora da area.'}
+    {t:'Domínio e coletivo',c:[
+      {id:'a-aer',l:'Duelos aéreos (%)',tip:'Essencial para referência aérea.'},
+      {id:'a-duel',l:'Duelos terrestres (%)',tip:'Inclui proteção de bola.'},
+      {id:'a-assis',l:'Assistências',tip:'O CA que combina também cria.'},
+      {id:'a-recup',l:'Recuperações pelo pressing',tip:'Pelo pressing na saída adversária.'},
+      {id:'a-dist',l:'Distância total (km)',s:'0.1',tip:'CA modernos trabalham fora da área.'}
     ]}
-  ],obs:'Observe: timing das corridas sem bola, posicionamento na area nos cruzamentos, protecao de bola de costas, reacao apos chances perdidas.'},
-};
+  ],obs:'Observe: timing das corridas, posicionamento nos cruzamentos, proteção de bola.'}
+};;
+
 
 function onPosA(){
-  try{
-    var pos=v('a-pos');
-    rPerfis('a-pos','a-pch','a-perf');
-    var label=document.getElementById('a-met-pos');
-    var cont=document.getElementById('a-met-campos');
-    var obs=document.getElementById('a-obs');
-    if(!pos||!METS[pos]){
-      if(label)label.textContent='';
-      if(cont)cont.innerHTML='<div class="ibanner">Selecione a <strong>posicao</strong> para carregar as metricas especificas.</div>';
-      if(obs)obs.placeholder='Selecione a posicao para ver sugestoes...';
-      return;
-    }
-    if(label)label.textContent=' - '+pos;
-    if(obs)obs.placeholder=METS[pos].obs||'';
-    var html='';
-    METS[pos].g.forEach(function(grp){
-      html+='<div style="margin-bottom:14px;"><p style="font-size:10px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1e1e1e;">'+grp.t+'</p><div class="fg3">';
-      grp.c.forEach(function(f){
-        var step=f.s?' step="'+f.s+'"':'';
-        html+='<div class="fgrp"><label class="flbl">'+f.l+'</label><input class="finp" id="'+f.id+'" type="number"'+step+' placeholder="0"></div>';
-      });
-      html+='</div></div>';
-    });
-    if(cont)cont.innerHTML=html;
-  }catch(err){
-    console.error('onPosA erro:',err);
+  var pos = document.getElementById('a-pos').value;
+  var cont = document.getElementById('a-met-campos');
+
+  if(!pos || !METS[pos]){
+    cont.innerHTML = '<p style="color:#444;font-size:13px;">Selecione a posição acima</p>';
+    return;
   }
+
+  var html = '';
+  METS[pos].g.forEach(function(grp){
+    html += '<div class="secao">'+grp.t+'</div><div class="fg3">';
+    grp.c.forEach(function(f){
+      var step = f.s ? ' step="'+f.s+'"' : '';
+      html += '<div class="fgrp"><label>'+f.l+'</label><input type="number"'+step+' placeholder="0" id="'+f.id+'"></div>';
+    });
+    html += '</div>';
+  });
+
+  cont.innerHTML = html;
 }
 
 function coletarMets(){
