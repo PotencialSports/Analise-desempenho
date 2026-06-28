@@ -651,13 +651,7 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
   </div>
 </div>
 <!-- SB FEEDBACK -->
-<div class="sidebar hidden" id="sb-feedback">
-  <div class="sbs">
-    <div class="sbl">Visão</div>
-    <button class="sbb active" onclick="gt('fb-resumo')"><span class="si">📊</span>Resumo</button>
-    <button class="sbb" onclick="gt('fb-lista')"><span class="si">📋</span>Todos os feedbacks</button>
-  </div>
-</div>
+<div class="sidebar hidden" id="sb-feedback"></div>
 
 <!-- ===== ABA ATLETA ===== -->
 <div class="mc" id="tab-atleta">
@@ -999,128 +993,87 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
 <!-- ===== ABA UPLOAD ===== -->
 
 <div class="mc hidden" id="tab-planos">
-  <div class="ph"><div class="pt">Planos e Assinatura</div><div class="ps">Escolha o plano ideal para o seu trabalho como analista.</div></div>
+  <div class="ph">
+    <div class="pt">Planos e Assinatura</div>
+    <div class="ps">A Potencial Sports é uma plataforma de assinatura mensal e anual.</div>
+  </div>
 
-  <!-- Banner beta -->
-  <div class="beta-banner" id="pl-beta-banner">
-    <div class="beta-icon">🚀</div>
-    <div class="beta-txt">
-      <strong>Você está no Programa Beta da Potencial Sports.</strong><br>
-      Durante a fase de testes, você tem acesso completo ao plano <strong>Pro</strong> gratuitamente.
-      Aproveite para explorar todas as funcionalidades e nos dar seu feedback.
-      A cobrança será ativada no lançamento oficial — e beta testers terão condições especiais.
+  <div style="background:var(--vd);border:0.5px solid var(--vb);border-radius:var(--r);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+    <img src="data:image/png;base64,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" alt="PS" style="width:44px;height:44px;border-radius:10px;object-fit:contain;flex-shrink:0;">
+    <div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--v);margin-bottom:3px;">Você está no Programa Beta da Potencial Sports</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.7;">Acesso completo ao plano <strong style="color:var(--t2);">Pro</strong> gratuitamente. Beta testers terão <strong style="color:var(--v);">condições especiais no lançamento.</strong></div>
     </div>
   </div>
 
-  <!-- Meu plano atual -->
-  <div class="sblk" id="pl-meu-plano">
-    <div class="stitle">👤 Meu plano atual</div>
-    <div id="pl-plano-atual"></div>
+  <div class="sblk" style="margin-bottom:16px;">
+    <div class="stitle"><i class="ti ti-chart-bar" aria-hidden="true"></i> Uso este mês</div>
+    <div id="pl-uso"></div>
   </div>
 
-  <!-- Uso do período -->
-  <div class="sblk" id="pl-uso">
-    <div class="stitle">📊 Uso neste período</div>
-    <div class="uso-stats" id="pl-uso-stats"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+    <div style="background:var(--bg-card);border:0.5px solid var(--b1);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div style="width:32px;height:32px;background:var(--vd);border:0.5px solid var(--vb);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ti ti-calendar" style="font-size:15px;color:var(--v);" aria-hidden="true"></i></div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--t1);">Mensal</div>
+      </div>
+      <div style="font-size:12px;color:var(--t4);line-height:1.6;">Pague mês a mês com flexibilidade total. Cancele quando quiser, sem multas.</div>
+      <div style="font-size:11px;color:var(--t4);padding-top:8px;border-top:0.5px solid var(--b1);">Valor em breve — aguarde o lançamento</div>
+    </div>
+    <div style="background:var(--bg-card);border:0.5px solid var(--v);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;">
+      <div style="position:absolute;top:-9px;left:16px;background:var(--v);color:#060606;font-size:8px;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:.3px;">MELHOR VALOR</div>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div style="width:32px;height:32px;background:var(--vd);border:0.5px solid var(--vb);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ti ti-calendar-stats" style="font-size:15px;color:var(--v);" aria-hidden="true"></i></div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--t1);">Anual</div>
+      </div>
+      <div style="font-size:12px;color:var(--t4);line-height:1.6;">Pague um ano adiantado e economize. Ideal para quem já usa no dia a dia.</div>
+      <div style="font-size:11px;color:var(--v);padding-top:8px;border-top:0.5px solid var(--b1);">Desconto exclusivo — valor em breve</div>
+    </div>
   </div>
 
-  <!-- Toggle mensal/anual -->
-  <div id="pl-comparar">
-    <div class="toggle-billing">
-      <span class="toggle-lbl active" id="lbl-mensal">Mensal</span>
-      <div class="toggle-track" id="billing-toggle" onclick="toggleBilling()">
-        <div class="toggle-thumb"></div>
-      </div>
-      <span class="toggle-lbl" id="lbl-anual">Anual <span class="desconto-badge">-20%</span></span>
-    </div>
+  <div class="sblk" style="margin-bottom:20px;">
+    <div class="stitle"><i class="ti ti-check" aria-hidden="true"></i> O que está incluído</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;"><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-user" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Análise de atleta</div><div style="font-size:11px;color:var(--t4);">Métricas por posição, radar e evolução</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-building-stadium" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Análise de clube</div><div style="font-size:11px;color:var(--t4);">Tática, adversário e pós-jogo</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-search" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Prospecção</div><div style="font-size:11px;color:var(--t4);">Parecer completo com score de adequação</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-video" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Análise de vídeo</div><div style="font-size:11px;color:var(--t4);">Timeline interativa e eventos da partida</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-sword" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Pré-jogo com IA</div><div style="font-size:11px;color:var(--t4);">Plano de jogo e análise do adversário</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-flag" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Bola parada</div><div style="font-size:11px;color:var(--t4);">Padrões de escanteios, faltas e laterais</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-layout-dashboard" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Dashboard do elenco</div><div style="font-size:11px;color:var(--t4);">Mapa de calor e monitoramento coletivo</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-shield-check" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Alerta de lesão</div><div style="font-size:11px;color:var(--t4);">Monitor de carga ACWR com índice de risco</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-history" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Histórico completo</div><div style="font-size:11px;color:var(--t4);">Todos os relatórios com evolução temporal</div></div>
+    </div><div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+      <i class="ti ti-file-pdf" style="font-size:14px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+      <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:1px;">Exportação PDF e TXT</div><div style="font-size:11px;color:var(--t4);">Relatórios com a logo Potencial Sports</div></div>
+    </div></div>
+  </div>
 
-    <!-- Cards de planos -->
-    <div class="planos-grid">
-
-      <!-- GRATUITO -->
-      <div class="plano-card">
-        <div class="plano-nome">Gratuito</div>
-        <div class="plano-desc">Para analistas que querem experimentar a ferramenta antes de assinar.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val">R$ 0</div>
-          <div class="plano-preco-per">para sempre</div>
-        </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>5 relatórios por mês</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Histórico dos últimos 30 dias</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Exportação em TXT</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Análise de atleta e clube</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Dashboard do elenco</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Evolução do atleta</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Alerta de lesão</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Análise de vídeo</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Pré-jogo com IA</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Exportação PDF com logo</div>
-        </div>
-        <button class="plano-btn plano-btn-atual" disabled>Plano atual (beta)</button>
-      </div>
-
-      <!-- PRO -->
-      <div class="plano-card destaque">
-        <div class="plano-badge">⭐ MAIS POPULAR</div>
-        <div class="plano-nome">Pro</div>
-        <div class="plano-desc">Para analistas profissionais e autônomos que precisam de tudo.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val" id="pr-preco-pro">R$ 49</div>
-          <div class="plano-preco-per" id="pr-per-pro">por mês</div>
-          <div class="plano-preco-anual" id="pr-anual-pro" style="display:none;">R$ 470/ano — economia de R$ 118</div>
-        </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Relatórios ilimitados</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Histórico completo</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Todas as abas desbloqueadas</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Exportação PDF com logo</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Dashboard do elenco</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Evolução do atleta</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Alerta de risco de lesão</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Análise de vídeo assistida</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Pré-jogo com IA</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Bola parada</div>
-        </div>
-        <button class="plano-btn plano-btn-atual" disabled>Incluído no beta ✓</button>
-      </div>
-
-      <!-- CLUBE -->
-      <div class="plano-card">
-        <div class="plano-nome">Clube</div>
-        <div class="plano-desc">Para departamentos de análise com múltiplos analistas.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val" id="pr-preco-clube">R$ 149</div>
-          <div class="plano-preco-per" id="pr-per-clube">por mês</div>
-          <div class="plano-preco-anual" id="pr-anual-clube" style="display:none;">R$ 1.430/ano — economia de R$ 358</div>
-        </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Tudo do plano Pro</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Até 5 usuários na conta</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Painel administrativo do clube</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Relatórios com identidade do clube</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Suporte prioritário</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Onboarding personalizado</div>
-        </div>
-        <button class="plano-btn plano-btn-clube" onclick="intClube()">Tenho interesse →</button>
-      </div>
-
-    </div>
-
-    <!-- Nota beta -->
-    <div style="text-align:center;padding:16px;background:#0f0f0f;border-radius:10px;border:1px solid #1e1e1e;">
-      <p style="font-size:13px;color:#888;line-height:1.7;">
-        🎁 <strong style="color:#39d41a;">Beta testers terão condições especiais no lançamento.</strong><br>
-        Quem participar da fase de testes receberá desconto exclusivo e acesso antecipado ao plano Pro.
-      </p>
-    </div>
+  <div style="background:#090909;border:0.5px solid var(--b2);border-radius:var(--r);padding:20px 24px;text-align:center;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--t1);margin-bottom:5px;">Preços em breve</div>
+    <div style="font-size:12px;color:var(--t4);line-height:1.7;max-width:440px;margin:0 auto 16px;">Finalizando os valores com condições especiais para quem participou do beta.</div>
+    <button class="btn bp" onclick="intClube()" style="margin:0 auto;">
+      <i class="ti ti-bell" aria-hidden="true"></i> Quero ser avisado no lançamento
+    </button>
   </div>
 </div>
-
-<!-- ===== ABA PRÉ-JOGO ===== -->
 <div class="mc hidden" id="tab-prejogo">
   <div class="ph"><div class="pt">Pré-jogo com IA</div><div class="ps">Análise completa do adversário e plano de jogo automático.</div></div>
 
@@ -1673,13 +1626,148 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
 <!-- ===== ABA FEEDBACK (só criador) ===== -->
 <div class="mc hidden" id="tab-feedback">
   <div class="ph">
-    <div class="pt">Painel de Feedback</div>
-    <div class="ps">Avaliações dos beta testers em tempo real.</div>
+    <div class="pt">Feedback</div>
+    <div class="ps">Sua opinião é essencial para melhorar a ferramenta antes do lançamento.</div>
   </div>
-  <div class="kgrid" id="fb-stats"></div>
-  <div style="margin-top:4px;">
-    <div class="stitle" style="margin-bottom:12px;"><i class="ti ti-message" aria-hidden="true"></i> Todos os feedbacks</div>
-    <div id="fb-rows"></div>
+
+  <div id="fb-form-wrap">
+    <div class="sblk" style="margin-bottom:12px;">
+      <div class="stitle"><i class="ti ti-user-circle" aria-hidden="true"></i> Seu perfil</div>
+      <div class="fg">
+        <div class="fgrp"><label class="flbl">Nome completo</label><input class="finp" id="fb-nome" placeholder="Como você se chama?"></div>
+        <div class="fgrp"><label class="flbl">Onde trabalha / estuda</label><input class="finp" id="fb-onde" placeholder="Ex: Clube X, Escola Y, Freelancer..."></div>
+        <div class="fgrp"><label class="flbl">Área de atuação</label>
+          <select class="fsel" id="fb-area">
+            <option value="">Selecione...</option>
+            <option>Analista de desempenho</option>
+            <option>Analista tático</option>
+            <option>Treinador</option>
+            <option>Preparador físico</option>
+            <option>Scout / Observador</option>
+            <option>Estudante de análise</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="fgrp"><label class="flbl">Trabalha com</label>
+          <select class="fsel" id="fb-contexto">
+            <option value="">Selecione...</option>
+            <option>Clube profissional</option>
+            <option>Clube de base</option>
+            <option>Atletas individuais</option>
+            <option>Múltiplos clientes</option>
+            <option>Ainda em formação</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sblk" style="margin-bottom:12px;">
+      <div class="stitle"><i class="ti ti-mood-happy" aria-hidden="true"></i> NPS — Você recomendaria a Potencial Sports?</div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t4);margin-bottom:8px;"><span>Jamais recomendaria</span><span>Com certeza recomendaria</span></div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button onclick="selNPS(this,0)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">0</button>
+        <button onclick="selNPS(this,1)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">1</button>
+        <button onclick="selNPS(this,2)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">2</button>
+        <button onclick="selNPS(this,3)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">3</button>
+        <button onclick="selNPS(this,4)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">4</button>
+        <button onclick="selNPS(this,5)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">5</button>
+        <button onclick="selNPS(this,6)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">6</button>
+        <button onclick="selNPS(this,7)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">7</button>
+        <button onclick="selNPS(this,8)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">8</button>
+        <button onclick="selNPS(this,9)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">9</button>
+        <button onclick="selNPS(this,10)" style="width:38px;height:38px;border-radius:6px;border:0.5px solid var(--b2);background:none;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="nps-btn">10</button>
+        
+      </div>
+      <input type="hidden" id="fb-nps" value="">
+    </div>
+
+    <div class="sblk" style="margin-bottom:12px;">
+      <div class="stitle"><i class="ti ti-star" aria-hidden="true"></i> Avalie cada área (1 a 5)</div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--b1);">
+          <div style="min-width:170px;font-size:12px;color:var(--t3);">Facilidade de uso</div>
+          <div style="display:flex;gap:5px;" id="cat-facilidade"><button onclick="selCat(this,'facilidade',1)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="facilidade">1</button>
+            <button onclick="selCat(this,'facilidade',2)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="facilidade">2</button>
+            <button onclick="selCat(this,'facilidade',3)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="facilidade">3</button>
+            <button onclick="selCat(this,'facilidade',4)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="facilidade">4</button>
+            <button onclick="selCat(this,'facilidade',5)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="facilidade">5</button>
+            </div>
+          <div style="font-size:10px;color:var(--t4);">1 ruim · 5 ótimo</div>
+          <input type="hidden" id="fb-cat-facilidade" value="">
+        </div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--b1);">
+          <div style="min-width:170px;font-size:12px;color:var(--t3);">Qualidade das análises</div>
+          <div style="display:flex;gap:5px;" id="cat-qualidade"><button onclick="selCat(this,'qualidade',1)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="qualidade">1</button>
+            <button onclick="selCat(this,'qualidade',2)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="qualidade">2</button>
+            <button onclick="selCat(this,'qualidade',3)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="qualidade">3</button>
+            <button onclick="selCat(this,'qualidade',4)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="qualidade">4</button>
+            <button onclick="selCat(this,'qualidade',5)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="qualidade">5</button>
+            </div>
+          <div style="font-size:10px;color:var(--t4);">1 ruim · 5 ótimo</div>
+          <input type="hidden" id="fb-cat-qualidade" value="">
+        </div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--b1);">
+          <div style="min-width:170px;font-size:12px;color:var(--t3);">Utilidade no dia a dia</div>
+          <div style="display:flex;gap:5px;" id="cat-utilidade"><button onclick="selCat(this,'utilidade',1)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="utilidade">1</button>
+            <button onclick="selCat(this,'utilidade',2)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="utilidade">2</button>
+            <button onclick="selCat(this,'utilidade',3)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="utilidade">3</button>
+            <button onclick="selCat(this,'utilidade',4)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="utilidade">4</button>
+            <button onclick="selCat(this,'utilidade',5)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="utilidade">5</button>
+            </div>
+          <div style="font-size:10px;color:var(--t4);">1 ruim · 5 ótimo</div>
+          <input type="hidden" id="fb-cat-utilidade" value="">
+        </div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--b1);">
+          <div style="min-width:170px;font-size:12px;color:var(--t3);">Design e visual</div>
+          <div style="display:flex;gap:5px;" id="cat-design"><button onclick="selCat(this,'design',1)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="design">1</button>
+            <button onclick="selCat(this,'design',2)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="design">2</button>
+            <button onclick="selCat(this,'design',3)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="design">3</button>
+            <button onclick="selCat(this,'design',4)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="design">4</button>
+            <button onclick="selCat(this,'design',5)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="design">5</button>
+            </div>
+          <div style="font-size:10px;color:var(--t4);">1 ruim · 5 ótimo</div>
+          <input type="hidden" id="fb-cat-design" value="">
+        </div>
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--b1);">
+          <div style="min-width:170px;font-size:12px;color:var(--t3);">Velocidade da ferramenta</div>
+          <div style="display:flex;gap:5px;" id="cat-velocidade"><button onclick="selCat(this,'velocidade',1)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="velocidade">1</button>
+            <button onclick="selCat(this,'velocidade',2)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="velocidade">2</button>
+            <button onclick="selCat(this,'velocidade',3)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="velocidade">3</button>
+            <button onclick="selCat(this,'velocidade',4)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="velocidade">4</button>
+            <button onclick="selCat(this,'velocidade',5)" style="width:30px;height:30px;border-radius:5px;border:0.5px solid var(--b2);background:none;color:var(--t4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;" class="cat-btn" data-cat="velocidade">5</button>
+            </div>
+          <div style="font-size:10px;color:var(--t4);">1 ruim · 5 ótimo</div>
+          <input type="hidden" id="fb-cat-velocidade" value="">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sblk" style="margin-bottom:12px;">
+      <div class="stitle"><i class="ti ti-message-dots" aria-hidden="true"></i> Suas respostas</div>
+      <div class="fg1">
+        <div class="fgrp"><label class="flbl">O que você mais gostou?</label><textarea class="ftxt" id="fb-gostou" style="min-height:70px;" placeholder="Conte o que chamou mais atenção de forma positiva..."></textarea></div>
+        <div class="fgrp"><label class="flbl">O que falta ou precisa melhorar?</label><textarea class="ftxt" id="fb-melhorar" style="min-height:70px;" placeholder="Seja honesto — críticas construtivas são ouro para nós..."></textarea></div>
+        <div class="fgrp"><label class="flbl">Feature que gostaria de ver</label><textarea class="ftxt" id="fb-feature" style="min-height:60px;" placeholder="Ex: comparativo entre atletas, relatório automático..."></textarea></div>
+        <div class="fgrp"><label class="flbl">Experiência geral (texto livre)</label><textarea class="ftxt" id="fb-geral" style="min-height:70px;" placeholder="Fique à vontade para escrever o que quiser..."></textarea></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <button class="btn bp" onclick="enviarFeedback()" id="fb-submit-btn">
+        <i class="ti ti-send" aria-hidden="true"></i> Enviar feedback
+      </button>
+      <div id="fb-submit-msg" style="font-size:12px;color:var(--v);display:none;">
+        <i class="ti ti-check" aria-hidden="true"></i> Feedback enviado! Muito obrigado.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAINEL ADMIN -->
+  <div id="fb-admin-wrap" style="display:none;padding-top:24px;border-top:0.5px solid var(--b1);">
+    <div class="stitle" style="margin-bottom:14px;"><i class="ti ti-chart-bar" aria-hidden="true"></i> Painel do administrador</div>
+    <div class="kgrid" id="fb-admin-stats" style="margin-bottom:16px;"></div>
+    <div id="fb-admin-lista"></div>
   </div>
 </div>
 
@@ -2813,6 +2901,121 @@ function renderTimeline() {
   cont.innerHTML = '<div style="position:relative;margin:16px 0;"><div class="timeline-track">'+evtsHtml+'</div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--t4);">0min<span>45min</span>'+maxMin+'min</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">'+resumoHtml+'</div>';
   var tw = document.getElementById('video-timeline-wrap');
   if(tw) tw.classList.remove('hidden');
+}
+
+
+// ===== FEEDBACK NOVO =====
+function selNPS(btn, val) {
+  document.querySelectorAll('.nps-btn').forEach(function(b) {
+    var n = parseInt(b.textContent);
+    b.style.background = 'none';
+    b.style.color = 'var(--t3)';
+    b.style.borderColor = 'var(--b2)';
+  });
+  // Colorir todos até o selecionado
+  document.querySelectorAll('.nps-btn').forEach(function(b) {
+    var n = parseInt(b.textContent);
+    if(n <= val) {
+      var cor = val <= 6 ? '#ef4444' : val <= 8 ? '#f59e0b' : '#39d41a';
+      b.style.background = cor + '20';
+      b.style.color = cor;
+      b.style.borderColor = cor + '40';
+    }
+  });
+  document.getElementById('fb-nps').value = val;
+}
+
+function selCat(btn, cid, val) {
+  document.querySelectorAll('.cat-btn[data-cat="'+cid+'"]').forEach(function(b) {
+    var n = parseInt(b.textContent);
+    if(n <= val) {
+      b.style.background = 'var(--vd)';
+      b.style.color = 'var(--v)';
+      b.style.borderColor = 'var(--vb)';
+    } else {
+      b.style.background = 'none';
+      b.style.color = 'var(--t4)';
+      b.style.borderColor = 'var(--b2)';
+    }
+  });
+  var inp = document.getElementById('fb-cat-'+cid);
+  if(inp) inp.value = val;
+}
+
+async function enviarFeedback() {
+  if(!cU) return;
+  var btn = document.getElementById('fb-submit-btn');
+  var msg = document.getElementById('fb-submit-msg');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i> Enviando...';
+
+  var dados = {
+    user_id: cU.id,
+    email: cU.email,
+    nome: document.getElementById('fb-nome') ? document.getElementById('fb-nome').value : '',
+    onde_trabalha: document.getElementById('fb-onde') ? document.getElementById('fb-onde').value : '',
+    area: document.getElementById('fb-area') ? document.getElementById('fb-area').value : '',
+    contexto: document.getElementById('fb-contexto') ? document.getElementById('fb-contexto').value : '',
+    nps: document.getElementById('fb-nps') ? parseInt(document.getElementById('fb-nps').value)||null : null,
+    cat_facilidade: parseInt(document.getElementById('fb-cat-facilidade') ? document.getElementById('fb-cat-facilidade').value : 0)||null,
+    cat_qualidade: parseInt(document.getElementById('fb-cat-qualidade') ? document.getElementById('fb-cat-qualidade').value : 0)||null,
+    cat_utilidade: parseInt(document.getElementById('fb-cat-utilidade') ? document.getElementById('fb-cat-utilidade').value : 0)||null,
+    cat_design: parseInt(document.getElementById('fb-cat-design') ? document.getElementById('fb-cat-design').value : 0)||null,
+    cat_velocidade: parseInt(document.getElementById('fb-cat-velocidade') ? document.getElementById('fb-cat-velocidade').value : 0)||null,
+    gostou: document.getElementById('fb-gostou') ? document.getElementById('fb-gostou').value : '',
+    melhorar: document.getElementById('fb-melhorar') ? document.getElementById('fb-melhorar').value : '',
+    feature: document.getElementById('fb-feature') ? document.getElementById('fb-feature').value : '',
+    geral: document.getElementById('fb-geral') ? document.getElementById('fb-geral').value : ''
+  };
+
+  try {
+    await supa.from('feedbacks_v2').insert(dados);
+    btn.style.display = 'none';
+    if(msg) msg.style.display = 'flex';
+    showToast('Feedback enviado! Obrigado.');
+  } catch(e) {
+    // Fallback: tentar tabela feedbacks original
+    try {
+      await supa.from('feedbacks').insert({user_id: cU.id, nota: dados.nps||5, dados_completos: JSON.stringify(dados)});
+      btn.style.display = 'none';
+      if(msg) msg.style.display = 'flex';
+      showToast('Feedback enviado! Obrigado.');
+    } catch(e2) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send" aria-hidden="true"></i> Enviar feedback';
+      showToast('Erro ao enviar. Tente novamente.');
+    }
+  }
+}
+
+async function loadFB() {
+  if(!cU) return;
+  // Mostrar painel admin se for admin
+  if(cU.email === ADMIN) {
+    var adminWrap = document.getElementById('fb-admin-wrap');
+    if(adminWrap) adminWrap.style.display = 'block';
+    var r = await supa.from('feedbacks').select('*').order('created_at', {ascending: false});
+    var fbs = r.data || [];
+    var stats = document.getElementById('fb-admin-stats');
+    var lista = document.getElementById('fb-admin-lista');
+    if(stats && fbs.length) {
+      var tot = fbs.length;
+      var npss = fbs.filter(function(f){return f.nps||f.nota;}).map(function(f){return f.nps||f.nota||0;});
+      var medNPS = npss.length ? (npss.reduce(function(a,b){return a+b;},0)/npss.length).toFixed(1) : '--';
+      stats.innerHTML = [
+        {n:tot, l:'Total feedbacks'},
+        {n:medNPS, l:'NPS médio'},
+        {n:fbs.filter(function(f){return (f.nps||f.nota||0)>=9;}).length, l:'Promotores (9-10)'},
+        {n:fbs.filter(function(f){return (f.nps||f.nota||0)<=6;}).length, l:'Detratores (0-6)'}
+      ].map(function(k){return '<div class="kcard"><div class="knum">'+k.n+'</div><div class="klbl">'+k.l+'</div></div>';}).join('');
+    }
+    if(lista && fbs.length) {
+      lista.innerHTML = fbs.map(function(f){
+        var d = f.dados_completos ? JSON.parse(f.dados_completos) : f;
+        return '<div class="sblk" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div><div style="font-size:13px;font-weight:600;color:var(--t1);">'+(d.nome||f.email||'Anônimo')+'</div><div style="font-size:11px;color:var(--t4);">'+(d.onde_trabalha||'')+(d.area?' · '+d.area:'')+'</div></div><div style="display:flex;align-items:center;gap:8px;"><span style="font-family:Space Grotesk,sans-serif;font-size:18px;font-weight:700;color:var(--v);">NPS '+(d.nps||f.nota||'--')+'</span><span style="font-size:10px;color:var(--t4);">'+new Date(f.created_at).toLocaleDateString('pt-BR')+'</span></div></div>'+(d.gostou?'<div style="font-size:12px;color:var(--t3);margin-bottom:4px;"><strong style="color:var(--v);">+</strong> '+d.gostou+'</div>':'')+(d.melhorar?'<div style="font-size:12px;color:var(--t3);margin-bottom:4px;"><strong style="color:var(--err);">-</strong> '+d.melhorar+'</div>':'')+(d.feature?'<div style="font-size:12px;color:var(--t3);"><strong style="color:var(--info);">*</strong> '+d.feature+'</div>':'')+'</div>';
+      }).join('');
+    }
+  }
 }
 
 window.addEventListener('DOMContentLoaded',function(){
