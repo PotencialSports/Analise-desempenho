@@ -2242,7 +2242,8 @@ function onPosA(){
     html += '<div class="secao">'+grp.t+'</div><div class="fg3">';
     grp.c.forEach(function(f){
       var step = f.s ? ' step="'+f.s+'"' : '';
-      html += '<div class="fgrp"><label>'+f.l+'</label><input type="number"'+step+' placeholder="0" id="'+f.id+'"></div>';
+      var tip = f.tip ? '<span class="tip-icon" style="margin-left:4px;">?<span class="tip-box">'+f.tip+'</span></span>' : '';
+      html += '<div class="fgrp"><label class="flbl">'+f.l+tip+'</label><input class="finp" type="number"'+step+' placeholder="0" id="'+f.id+'"></div>';
     });
     html += '</div>';
   });
