@@ -1118,700 +1118,113 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
 
 <!-- ===== ABA PLANOS ===== -->
 <div class="mc hidden" id="tab-planos">
-  <div class="ph"><div class="pt">Planos e Assinatura</div><div class="ps">Escolha o plano ideal para o seu trabalho como analista.</div></div>
-
-  <!-- Banner beta -->
-  <div class="beta-banner" id="pl-beta-banner">
-    <div class="beta-icon">🚀</div>
-    <div class="beta-txt">
-      <strong>Você está no Programa Beta da Potencial Sports.</strong><br>
-      Durante a fase de testes, você tem acesso completo ao plano <strong>Pro</strong> gratuitamente.
-      Aproveite para explorar todas as funcionalidades e nos dar seu feedback.
-      A cobrança será ativada no lançamento oficial — e beta testers terão condições especiais.
-    </div>
+  <div class="ph">
+    <div class="pt">Planos e Assinatura</div>
+    <div class="ps">A Potencial Sports é uma plataforma de assinatura. Escolha o plano ideal para o seu trabalho.</div>
   </div>
 
-  <!-- Meu plano atual -->
-  <div class="sblk" id="pl-meu-plano">
-    <div class="stitle">👤 Meu plano atual</div>
-    <div id="pl-plano-atual"></div>
+  <!-- Banner beta -->
+  <div style="background:var(--vd);border:0.5px solid var(--vb);border-radius:var(--r);padding:18px 22px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;">
+    <img src="data:image/png;base64,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" alt="Potencial Sports" style="width:40px;height:40px;border-radius:8px;object-fit:contain;flex-shrink:0;">
+    <div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--v);margin-bottom:4px;">Você está no Programa Beta da Potencial Sports</div>
+      <div style="font-size:12px;color:var(--t3);line-height:1.7;">Durante a fase de testes, você tem acesso completo ao plano <strong style="color:var(--t2);">Pro</strong> gratuitamente. Aproveite para explorar todas as funcionalidades e nos dar seu feedback. Beta testers terão <strong style="color:var(--v);">condições especiais no lançamento oficial.</strong></div>
+    </div>
   </div>
 
   <!-- Uso do período -->
-  <div class="sblk" id="pl-uso">
-    <div class="stitle">📊 Uso neste período</div>
-    <div class="uso-stats" id="pl-uso-stats"></div>
+  <div class="sblk" style="margin-bottom:24px;">
+    <div class="stitle"><i class="ti ti-chart-bar" aria-hidden="true"></i> Uso este mês</div>
+    <div id="pl-uso"></div>
   </div>
 
-  <!-- Toggle mensal/anual -->
-  <div id="pl-comparar">
-    <div class="toggle-billing">
-      <span class="toggle-lbl active" id="lbl-mensal">Mensal</span>
-      <div class="toggle-track" id="billing-toggle" onclick="toggleBilling()">
-        <div class="toggle-thumb"></div>
+  <!-- Modelo de assinatura -->
+  <div class="sblk" style="margin-bottom:24px;">
+    <div class="stitle"><i class="ti ti-info-circle" aria-hidden="true"></i> Modelo de assinatura</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:#090909;border:0.5px solid var(--b2);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:32px;height:32px;background:var(--vd);border:0.5px solid var(--vb);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="ti ti-calendar" style="font-size:15px;color:var(--v);" aria-hidden="true"></i>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--t1);">Mensal</div>
+        </div>
+        <div style="font-size:12px;color:var(--t4);line-height:1.6;">Pague mês a mês com flexibilidade total. Cancele quando quiser, sem multas ou burocracia.</div>
+        <div style="font-size:11px;color:var(--t4);padding-top:8px;border-top:0.5px solid var(--b1);">Valor em breve — aguarde o lançamento</div>
       </div>
-      <span class="toggle-lbl" id="lbl-anual">Anual <span class="desconto-badge">-20%</span></span>
-    </div>
-
-    <!-- Cards de planos -->
-    <div class="planos-grid">
-
-      <!-- GRATUITO -->
-      <div class="plano-card">
-        <div class="plano-nome">Gratuito</div>
-        <div class="plano-desc">Para analistas que querem experimentar a ferramenta antes de assinar.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val">R$ 0</div>
-          <div class="plano-preco-per">para sempre</div>
+      <div style="background:#090909;border:0.5px solid var(--v);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;position:relative;">
+        <div style="position:absolute;top:-9px;left:16px;background:var(--v);color:#060606;font-size:8px;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:.3px;">MELHOR VALOR</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:32px;height:32px;background:var(--vd);border:0.5px solid var(--vb);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="ti ti-calendar-stats" style="font-size:15px;color:var(--v);" aria-hidden="true"></i>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--t1);">Anual</div>
         </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>5 relatórios por mês</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Histórico dos últimos 30 dias</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Exportação em TXT</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Análise de atleta e clube</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Dashboard do elenco</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Evolução do atleta</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Alerta de lesão</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Análise de vídeo</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Pré-jogo com IA</div>
-          <div class="plano-item off"><span class="plano-item-no">✕</span>Exportação PDF com logo</div>
-        </div>
-        <button class="plano-btn plano-btn-atual" disabled>Plano atual (beta)</button>
-      </div>
-
-      <!-- PRO -->
-      <div class="plano-card destaque">
-        <div class="plano-badge">⭐ MAIS POPULAR</div>
-        <div class="plano-nome">Pro</div>
-        <div class="plano-desc">Para analistas profissionais e autônomos que precisam de tudo.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val" id="pr-preco-pro">R$ 49</div>
-          <div class="plano-preco-per" id="pr-per-pro">por mês</div>
-          <div class="plano-preco-anual" id="pr-anual-pro" style="display:none;">R$ 470/ano — economia de R$ 118</div>
-        </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Relatórios ilimitados</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Histórico completo</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Todas as abas desbloqueadas</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Exportação PDF com logo</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Dashboard do elenco</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Evolução do atleta</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Alerta de risco de lesão</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Análise de vídeo assistida</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Pré-jogo com IA</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Bola parada</div>
-        </div>
-        <button class="plano-btn plano-btn-atual" disabled>Incluído no beta ✓</button>
-      </div>
-
-      <!-- CLUBE -->
-      <div class="plano-card">
-        <div class="plano-nome">Clube</div>
-        <div class="plano-desc">Para departamentos de análise com múltiplos analistas.</div>
-        <div class="plano-preco">
-          <div class="plano-preco-val" id="pr-preco-clube">R$ 149</div>
-          <div class="plano-preco-per" id="pr-per-clube">por mês</div>
-          <div class="plano-preco-anual" id="pr-anual-clube" style="display:none;">R$ 1.430/ano — economia de R$ 358</div>
-        </div>
-        <hr class="plano-sep">
-        <div class="plano-items">
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Tudo do plano Pro</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Até 5 usuários na conta</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Painel administrativo do clube</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Relatórios com identidade do clube</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Suporte prioritário</div>
-          <div class="plano-item"><span class="plano-item-ok">✓</span>Onboarding personalizado</div>
-        </div>
-        <button class="plano-btn plano-btn-clube" onclick="intClube()">Tenho interesse →</button>
-      </div>
-
-    </div>
-
-    <!-- Nota beta -->
-    <div style="text-align:center;padding:16px;background:#0f0f0f;border-radius:10px;border:1px solid #1e1e1e;">
-      <p style="font-size:13px;color:#888;line-height:1.7;">
-        🎁 <strong style="color:#39d41a;">Beta testers terão condições especiais no lançamento.</strong><br>
-        Quem participar da fase de testes receberá desconto exclusivo e acesso antecipado ao plano Pro.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ABA PRÉ-JOGO ===== -->
-<div class="mc hidden" id="tab-prejogo">
-  <div class="ph"><div class="pt">Pré-jogo com IA</div><div class="ps">Análise completa do adversário e plano de jogo automático.</div></div>
-
-  <!-- Identificação -->
-  <div class="sblk" id="pj-id">
-    <div class="stitle">⚙️ Identificação da partida</div>
-    <div class="fg">
-      <div class="fgrp"><label class="flbl">Nosso time</label><input class="finp" id="pj-nos-time" placeholder="Nome do nosso time"></div>
-      <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="pj-adv-nome" placeholder="Nome do adversário"></div>
-      <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="pj-comp" placeholder="Ex: Brasileiro Série A"></div>
-      <div class="fgrp"><label class="flbl">Data da partida</label><input class="finp" id="pj-data" type="date"></div>
-      <div class="fgrp"><label class="flbl">Local</label>
-        <select class="fsel" id="pj-local">
-          <option value="">Selecione...</option>
-          <option>Casa</option><option>Fora</option><option>Neutro</option>
-        </select>
-      </div>
-      <div class="fgrp"><label class="flbl">Importância da partida</label>
-        <select class="fsel" id="pj-import">
-          <option value="">Selecione...</option>
-          <option>Decisiva (final/semifinal)</option><option>Alta (mata-mata)</option>
-          <option>Normal (fase de grupos)</option><option>Baixa (já classificado/eliminado)</option>
-        </select>
+        <div style="font-size:12px;color:var(--t4);line-height:1.6;">Pague um ano adiantado e economize. Ideal para analistas que já usam no dia a dia.</div>
+        <div style="font-size:11px;color:var(--v);padding-top:8px;border-top:0.5px solid var(--b1);">Desconto exclusivo — valor em breve</div>
       </div>
     </div>
   </div>
 
-  <!-- Dados do adversário -->
-  <div class="sblk" id="pj-dados">
-    <div class="stitle">📊 Dados do adversário</div>
-
-    <div class="pj-input-tabs">
-      <button class="pj-input-tab active" onclick="swPJInput('manual',this)">✏️ Preencher manualmente</button>
-      <button class="pj-input-tab" onclick="swPJInput('imagem',this)">📸 Upload de imagem</button>
-    </div>
-
-    <!-- Manual -->
-    <div class="pj-input-sec active" id="pj-sec-manual">
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Formação principal <i class="tip-icon">?<span class="tip-box">Formação mais usada pelo adversário nas últimas partidas.</span></i></label>
-          <select class="fsel" id="pj-adv-form">
-            <option value="">Selecione...</option>
-            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option>
-            <option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option><option>4-3-2-1</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Formação alternativa</label>
-          <select class="fsel" id="pj-adv-form2">
-            <option value="">Selecione...</option>
-            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option>
-            <option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Estilo de jogo ofensivo</label>
-          <select class="fsel" id="pj-adv-of">
-            <option value="">Selecione...</option>
-            <option>Posse e construção baixa</option><option>Jogo direto / longo</option>
-            <option>Contra-ataque veloz</option><option>Pressing alto ofensivo</option>
-            <option>Jogo pelas beiradas</option><option>Jogo pelo meio</option><option>Variado</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Estilo defensivo</label>
-          <select class="fsel" id="pj-adv-def">
-            <option value="">Selecione...</option>
-            <option>Bloco baixo compacto</option><option>Bloco médio</option>
-            <option>Pressing alto agressivo</option><option>Marcação por zona</option>
-            <option>Marcação individual</option><option>Linha alta</option><option>Variado</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Posse de bola média (%) <i class="tip-icon">?<span class="tip-box">Média das últimas partidas. Ex: 54</span></i></label>
-          <input class="finp" id="pj-adv-posse" type="number" placeholder="0">
-        </div>
-        <div class="fgrp"><label class="flbl">xG médio / jogo <i class="tip-icon">?<span class="tip-box">Qualidade média das chances criadas por jogo.</span></i></label>
-          <input class="finp" id="pj-adv-xg" type="number" step="0.01" placeholder="0.00">
-        </div>
-        <div class="fgrp"><label class="flbl">xGA médio / jogo <i class="tip-icon">?<span class="tip-box">Qualidade média das chances sofridas por jogo.</span></i></label>
-          <input class="finp" id="pj-adv-xga" type="number" step="0.01" placeholder="0.00">
-        </div>
-        <div class="fgrp"><label class="flbl">PPDA <i class="tip-icon">?<span class="tip-box">Passes permitidos por ação defensiva. Abaixo de 8 = pressing alto.</span></i></label>
-          <input class="finp" id="pj-adv-ppda" type="number" step="0.1" placeholder="0.0">
-        </div>
-        <div class="fgrp"><label class="flbl">Gols marcados (últimos 5 jogos)</label><input class="finp" id="pj-adv-gm" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Gols sofridos (últimos 5 jogos)</label><input class="finp" id="pj-adv-gs" type="number" placeholder="0"></div>
+  <!-- O que está incluído -->
+  <div class="sblk" style="margin-bottom:24px;">
+    <div class="stitle"><i class="ti ti-check" aria-hidden="true"></i> O que está incluído</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-user" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Análise de atleta</div><div style="font-size:11px;color:var(--t4);">Métricas específicas por posição, radar de performance e evolução histórica</div></div>
       </div>
-      <div class="fg1">
-        <div class="fgrp"><label class="flbl">Padrões ofensivos identificados <i class="tip-icon">?<span class="tip-box">Como o adversário constrói e finaliza as jogadas. Descreva padrões recorrentes.</span></i></label>
-          <textarea class="ftxt" id="pj-adv-pad-of" style="min-height:90px;" placeholder="Ex: Saída de bola pelo lateral direito, que combina com o meia e inverte para o ponta esquerdo invertido. Frequente uso de bola longa para o centroavante de referência..."></textarea>
-        </div>
-        <div class="fgrp"><label class="flbl">Vulnerabilidades identificadas <i class="tip-icon">?<span class="tip-box">Pontos fracos que podem ser explorados. Seja específico: qual zona, qual jogador, qual situação.</span></i></label>
-          <textarea class="ftxt" id="pj-adv-vuln" style="min-height:90px;" placeholder="Ex: Lateral esquerdo lento na transição defensiva — explorar com contra-ataque pelo lado direito. Zagueiro direito perde duelos aéreos com frequência..."></textarea>
-        </div>
-        <div class="fgrp"><label class="flbl">Bola parada do adversário <i class="tip-icon">?<span class="tip-box">Padrões de escanteio, falta e lateral do adversário. O que eles repetem?</span></i></label>
-          <textarea class="ftxt" id="pj-adv-bp" style="min-height:80px;" placeholder="Ex: Escanteio sempre no segundo pau com bloqueio do 9 para o 5 chegar de trás. Cobrador de falta é o camisa 10 sempre no canto esquerdo do goleiro..."></textarea>
-        </div>
-        <div class="fgrp"><label class="flbl">Momento atual do adversário</label>
-          <textarea class="ftxt" id="pj-adv-momento" style="min-height:70px;" placeholder="Ex: Vem de 3 vitórias consecutivas. Titular do meio-campo suspenso. Jogaram há 3 dias (fadiga acumulada)..."></textarea>
-        </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-building-stadium" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Análise de clube</div><div style="font-size:11px;color:var(--t4);">Dados coletivos, análise tática, adversário e relatório pós-jogo</div></div>
       </div>
-    </div>
-
-    <!-- Upload imagem -->
-    <div class="pj-input-sec" id="pj-sec-imagem">
-      <div class="ibanner" style="margin-bottom:16px;">
-        📸 Faça upload de prints do <strong>Sofascore</strong>, <strong>Wyscout</strong>, <strong>InStat</strong> ou qualquer plataforma de dados. A IA vai ler e extrair as informações automaticamente.
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-search" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Prospecção</div><div style="font-size:11px;color:var(--t4);">Parecer completo de atleta com adequação ao sistema e recomendação</div></div>
       </div>
-      <div class="upload-area" id="pj-upload-area" onclick="document.getElementById('pj-file-input').click()" ondragover="dragOver(event,'pj-upload-area')" ondragleave="dragLeave('pj-upload-area')" ondrop="dropFile(event)">
-        <div class="upload-icon">📊</div>
-        <div class="upload-txt">Clique para selecionar ou arraste a imagem aqui</div>
-        <div class="upload-sub">PNG, JPG, JPEG — Print de plataformas de dados esportivos</div>
-        <input type="file" id="pj-file-input" accept="image/*" style="display:none;" onchange="previewImagem(this)">
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-video" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Análise de vídeo</div><div style="font-size:11px;color:var(--t4);">Registro de eventos, timeline interativa e análise assistida por IA</div></div>
       </div>
-      <div class="upload-preview" id="pj-preview">
-        <img id="pj-preview-img" src="" alt="Preview">
-        <div style="display:flex;gap:8px;margin-top:10px;">
-          <button class="btn bs" style="font-size:12px;padding:7px 14px;" onclick="document.getElementById('pj-file-input').click()">🔄 Trocar imagem</button>
-          <button class="btn bd" style="font-size:12px;padding:7px 14px;" onclick="removerImagem()">🗑 Remover</button>
-        </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-sword" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Pré-jogo com IA</div><div style="font-size:11px;color:var(--t4);">Plano de jogo completo com análise do adversário e jogadores perigosos</div></div>
       </div>
-      <div class="fgrp" style="margin-top:14px;">
-        <label class="flbl">Observações adicionais sobre a imagem</label>
-        <textarea class="ftxt" id="pj-img-obs" placeholder="Explique o que está na imagem e o que quer que a IA analise. Ex: 'Esta é a tabela de métricas ofensivas do adversário nas últimas 5 partidas. Quero entender os padrões de criação de chances.'"></textarea>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-flag" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Bola parada</div><div style="font-size:11px;color:var(--t4);">Padrões ofensivos e defensivos em escanteios, faltas e laterais</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-layout-dashboard" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Dashboard do elenco</div><div style="font-size:11px;color:var(--t4);">Mapa de calor, scores e monitoramento coletivo de todos os atletas</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-shield-check" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Alerta de lesão</div><div style="font-size:11px;color:var(--t4);">Monitor de carga ACWR com índice de risco baseado em dados GPS e PSE</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-history" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Histórico completo</div><div style="font-size:11px;color:var(--t4);">Todos os relatórios salvos com evolução temporal e comparativo de períodos</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#090909;border:0.5px solid var(--b1);border-radius:6px;">
+        <i class="ti ti-file-pdf" style="font-size:15px;color:var(--v);flex-shrink:0;margin-top:1px;" aria-hidden="true"></i>
+        <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;">Exportação PDF e TXT</div><div style="font-size:11px;color:var(--t4);">Relatórios com a logo da Potencial Sports prontos para enviar</div></div>
       </div>
     </div>
   </div>
 
-  <!-- Jogadores perigosos -->
-  <div class="sblk" id="pj-jogadores">
-    <div class="stitle">👤 Jogadores perigosos</div>
-    <p style="color:#888;font-size:13px;margin-bottom:14px;">Cadastre os jogadores que mais ameaçam. A IA vai sugerir como neutralizá-los individualmente.</p>
-    <div id="pj-jogadores-lista"></div>
-    <button class="add-evento-btn" onclick="addJog()">+ Adicionar jogador perigoso</button>
-  </div>
-
-  <!-- Nosso time -->
-  <div class="sblk" id="pj-nosso">
-    <div class="stitle">🏟️ Nosso time</div>
-    <div class="fg">
-      <div class="fgrp"><label class="flbl">Formação prevista</label>
-        <select class="fsel" id="pj-nos-form">
-          <option value="">Selecione...</option>
-          <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option>
-          <option>3-4-3</option><option>5-3-2</option><option>4-1-4-1</option>
-        </select>
-      </div>
-      <div class="fgrp"><label class="flbl">Desfalques / Lesionados</label>
-        <input class="finp" id="pj-nos-desf" placeholder="Nomes dos jogadores indisponíveis">
-      </div>
-      <div class="fgrp"><label class="flbl">Dúvidas para o jogo</label>
-        <input class="finp" id="pj-nos-duvidas" placeholder="Ex: Lateral direito em dúvida, volante no limite de cartões">
-      </div>
-      <div class="fgrp"><label class="flbl">Momento do nosso time</label>
-        <textarea class="ftxt" id="pj-nos-momento" placeholder="Ex: Vem de derrota, precisa vencer para não ser rebaixado. 3 jogos sem sofrer gols..."></textarea>
-      </div>
-      <div class="fgrp ff"><label class="flbl">Estilo de jogo que queremos impor</label>
-        <textarea class="ftxt" id="pj-nos-estilo" placeholder="Ex: Queremos pressionar alto nos primeiros 20 minutos, depois segurar o resultado com posse de bola..."></textarea>
-      </div>
-      <div class="fgrp ff"><label class="flbl">Objetivos táticos específicos</label>
-        <textarea class="ftxt" id="pj-nos-obj" placeholder="Ex: Explorar o espaço atrás do lateral esquerdo adversário com o ponta direito. Neutralizar o camisa 10 com marcação por zona..."></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Gerar -->
-  <div class="sblk" id="pj-prob-cards" style="display:none;margin-bottom:10px;">
-    <div class="sblk" style="background:var(--bg-card);border:0.5px solid var(--b1);border-radius:var(--r);padding:14px 16px;">
-      <div class="stitle"><i class="ti ti-chart-pie" aria-hidden="true"></i> Probabilidades estimadas</div>
-      <div id="prob-cards"></div>
-    </div>
-  </div>
-  <div id="pj-gerar">
-    <div class="stitle">⚡ Gerar plano de jogo</div>
-    <p style="color:#888;font-size:13px;margin-bottom:16px;">A IA vai gerar um documento completo de pré-jogo com análise do adversário, neutralização dos jogadores perigosos e plano de jogo tático.</p>
-    <div class="br"><button class="btn bp" onclick="gerarPJ()">⚡ Gerar plano de jogo</button></div>
-    <div class="pj-out-box hidden" id="pj-output">
-      <div class="pj-out-title">⚔️ Plano de Jogo — Potencial Sports</div>
-      <div class="pj-out-text" id="pj-texto"></div>
-      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid #1e1e1e;">
-        <div style="display:flex;gap:8px;margin-left:auto;">
-          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('pj-texto',(v('pj-nos-time')||'time')+'-vs-'+(v('pj-adv-nome')||'adv'))">⬇ TXT</button>
-          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expPDFs('pj-texto',(v('pj-nos-time')||'Time')+' x '+(v('pj-adv-nome')||'Adversário'),'prejogo')">⬇ PDF</button>
-          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('pj-texto')">📋 Copiar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ABA BOLA PARADA ===== -->
-<div class="mc hidden" id="tab-bolaparada">
-  <div class="ph"><div class="pt">Análise de Bola Parada</div><div class="ps">Escanteios, faltas e laterais — padrões ofensivos e defensivos.</div></div>
-
-  <!-- Config -->
-  <div class="sblk" id="bp-config">
-    <div class="stitle">⚙️ Configuração</div>
-    <div class="bp-foco-sel">
-      <button class="bp-foco-btn active" id="bp-foco-proprio" onclick="setBPFoco('proprio')">🏟️ Próprio time</button>
-      <button class="bp-foco-btn" id="bp-foco-adv" onclick="setBPFoco('adversario')">🆚 Adversário</button>
-    </div>
-    <div class="fg">
-      <div class="fgrp"><label class="flbl">Nome do time</label><input class="finp" id="bp-time" placeholder="Nome do time analisado"></div>
-      <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="bp-adv" placeholder="Nome do adversário"></div>
-      <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="bp-comp" placeholder="Ex: Brasileiro Série A"></div>
-      <div class="fgrp"><label class="flbl">Data / Rodada</label><input class="finp" id="bp-data" type="date"></div>
-      <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="bp-res" placeholder="Ex: 2 x 1"></div>
-      <div class="fgrp"><label class="flbl">Minutos analisados</label><input class="finp" id="bp-min" type="number" placeholder="90"></div>
-    </div>
-    <div class="ibanner">
-      💡 Preencha as estatísticas e padrões de cada situação. Quanto mais detalhes nos padrões, mais rica será a análise gerada pela IA.
-    </div>
-  </div>
-
-  <!-- TABS das situações -->
-  <div class="bp-sit-tabs">
-    <button class="bp-sit-tab active" onclick="swBP('escanteios',this)">⛳ Escanteios</button>
-    <button class="bp-sit-tab" onclick="swBP('faltas',this)">🦵 Faltas</button>
-    <button class="bp-sit-tab" onclick="swBP('laterais',this)">📐 Laterais</button>
-  </div>
-
-  <!-- ESCANTEIOS -->
-  <div class="bp-sit-sec active" id="bp-sit-escanteios">
-    <div class="sblk" id="bp-escanteios">
-      <div class="stitle">⛳ Escanteios</div>
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Total de escanteios <i class="tip-icon">?<span class="tip-box">Número total de escanteios cobrados no jogo ou período analisado.</span></i></label><input class="finp" id="e-total" type="number" placeholder="0" oninput="calcEficEsc()"></div>
-        <div class="fgrp"><label class="flbl">Escanteios que geraram chute <i class="tip-icon">?<span class="tip-box">Quantos escanteios resultaram diretamente em finalização.</span></i></label><input class="finp" id="e-chutes" type="number" placeholder="0" oninput="calcEficEsc()"></div>
-        <div class="fgrp"><label class="flbl">Gols de escanteio</label><input class="finp" id="e-gols" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Cobrador principal</label><input class="finp" id="e-cobrador" placeholder="Nome e pé dominante"></div>
-        <div class="fgrp"><label class="flbl">Zona preferida <i class="tip-icon">?<span class="tip-box">Onde a maioria dos escanteios são direcionados: primeiro pau, segundo pau, área do goleiro, curto...</span></i></label>
-          <select class="fsel" id="e-zona">
-            <option value="">Selecione...</option>
-            <option>Primeiro pau</option><option>Segundo pau</option><option>Área do goleiro</option>
-            <option>Curto (para o companheiro)</option><option>Variado</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Tipo de cobrança preferida</label>
-          <select class="fsel" id="e-tipo">
-            <option value="">Selecione...</option>
-            <option>Aberto (com efeito para fora)</option><option>Fechado (com efeito para dentro)</option>
-            <option>Cobrança curta</option><option>Lançamento direto</option><option>Variado</option>
-          </select>
-        </div>
-      </div>
-      <div class="fgrp" style="margin-bottom:14px;">
-        <label class="flbl">Eficiência <i class="tip-icon">?<span class="tip-box">% de escanteios que geraram chute. Calculado automaticamente.</span></i></label>
-        <div class="bp-efic">
-          <div class="bp-efic-bar"><div class="bp-efic-fill" id="e-efic-bar" style="width:0%"></div></div>
-          <span class="bp-efic-pct" id="e-efic-pct">0%</span>
-        </div>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;margin-bottom:12px;">
-        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
-        <div id="e-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('e-pad-of')">+ Adicionar padrão ofensivo</button>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;">
-        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
-        <div id="e-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('e-pad-def')">+ Adicionar padrão defensivo</button>
-      </div>
-      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="e-obs" placeholder="Outras observações sobre os escanteios..."></textarea></div>
-    </div>
-  </div>
-
-  <!-- FALTAS -->
-  <div class="bp-sit-sec" id="bp-sit-faltas">
-    <div class="sblk" id="bp-faltas">
-      <div class="stitle">🦵 Faltas</div>
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Total de faltas cobradas</label><input class="finp" id="f-total" type="number" placeholder="0" oninput="calcEficFal()"></div>
-        <div class="fgrp"><label class="flbl">Faltas na área de finalização <i class="tip-icon">?<span class="tip-box">Faltas cobradas dentro do raio de finalização (até 30m do gol).</span></i></label><input class="finp" id="f-perig" type="number" placeholder="0" oninput="calcEficFal()"></div>
-        <div class="fgrp"><label class="flbl">Gols de falta direta</label><input class="finp" id="f-gols-dir" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Gols de falta indireta</label><input class="finp" id="f-gols-ind" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Cobrador principal</label><input class="finp" id="f-cobrador" placeholder="Nome e pé dominante"></div>
-        <div class="fgrp"><label class="flbl">Cobrador secundário</label><input class="finp" id="f-cobrador2" placeholder="Nome e pé dominante"></div>
-        <div class="fgrp"><label class="flbl">Estratégia de barreira <i class="tip-icon">?<span class="tip-box">Como a barreira é formada defensivamente: número de jogadores, posicionamento, etc.</span></i></label>
-          <select class="fsel" id="f-barreira">
-            <option value="">Selecione...</option>
-            <option>Barreira simples (linha reta)</option><option>Barreira dupla (dois blocos)</option>
-            <option>Barreira com corredor</option><option>Barreira com jogador deitado</option><option>Variado</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Referência na barreira</label><input class="finp" id="f-ref-barreira" placeholder="Jogador que organiza a barreira"></div>
-      </div>
-      <div class="fgrp" style="margin-bottom:14px;">
-        <label class="flbl">% Faltas perigosas</label>
-        <div class="bp-efic">
-          <div class="bp-efic-bar"><div class="bp-efic-fill" id="f-efic-bar" style="width:0%"></div></div>
-          <span class="bp-efic-pct" id="f-efic-pct">0%</span>
-        </div>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;margin-bottom:12px;">
-        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
-        <div id="f-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('f-pad-of')">+ Adicionar padrão ofensivo</button>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;">
-        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
-        <div id="f-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('f-pad-def')">+ Adicionar padrão defensivo</button>
-      </div>
-      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="f-obs" placeholder="Outras observações sobre as faltas..."></textarea></div>
-    </div>
-  </div>
-
-  <!-- LATERAIS -->
-  <div class="bp-sit-sec" id="bp-sit-laterais">
-    <div class="sblk" id="bp-laterais">
-      <div class="stitle">📐 Laterais</div>
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Total de laterais cobrados</label><input class="finp" id="l-total" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Laterais no terço ofensivo <i class="tip-icon">?<span class="tip-box">Laterais cobrados no terço final do campo, onde o time tem mais opções táticas.</span></i></label><input class="finp" id="l-of" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Gols originados de lateral</label><input class="finp" id="l-gols" type="number" placeholder="0"></div>
-        <div class="fgrp"><label class="flbl">Estratégia principal</label>
-          <select class="fsel" id="l-estrat">
-            <option value="">Selecione...</option>
-            <option>Jogo curto (manutenção de posse)</option><option>Lançamento longo</option>
-            <option>Reposição para o lateral</option><option>Armadilha (simulação de ataque)</option><option>Variado</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Execução principal</label><input class="finp" id="l-exec" placeholder="Jogador que cobra a maioria"></div>
-        <div class="fgrp"><label class="flbl">Zona de maior uso</label>
-          <select class="fsel" id="l-zona">
-            <option value="">Selecione...</option>
-            <option>Terço defensivo</option><option>Terço médio</option><option>Terço ofensivo</option><option>Distribuído</option>
-          </select>
-        </div>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;margin-bottom:12px;">
-        <div class="stitle" style="font-size:12px;">🟢 Padrões ofensivos identificados</div>
-        <div id="l-pad-of-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('l-pad-of')">+ Adicionar padrão ofensivo</button>
-      </div>
-      <div class="sblk" style="background:#0c0c0c;">
-        <div class="stitle" style="font-size:12px;">🔴 Padrões defensivos identificados</div>
-        <div id="l-pad-def-lista"></div>
-        <button class="add-padrao-btn" onclick="addPad('l-pad-def')">+ Adicionar padrão defensivo</button>
-      </div>
-      <div class="fgrp" style="margin-top:14px;"><label class="flbl">Observações livres</label><textarea class="ftxt" id="l-obs" placeholder="Outras observações sobre os laterais..."></textarea></div>
-    </div>
-  </div>
-
-  <!-- GERAR -->
-  <div class="sblk" id="bp-gerar">
-    <div class="stitle">⚡ Gerar análise</div>
-    <p style="color:#888;font-size:13px;margin-bottom:16px;">O texto combina estatísticas, padrões e observações de todas as situações — pronto para colar no Claude.</p>
-    <div class="br"><button class="btn bp" onclick="gerarBP()">⚡ Gerar texto para IA</button></div>
-    <div class="vid-output-box hidden" id="bp-output">
-      <div class="vid-output-title">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
-      <div class="vid-output-text" id="bp-texto"></div>
-      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid #1e1e1e;">
-        <div style="display:flex;gap:8px;margin-left:auto;">
-          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('bp-texto',v('bp-time')||'bola-parada')">⬇ TXT</button>
-          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('bp-texto')">📋 Copiar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ABA DASHBOARD ===== -->
-<div class="mc hidden" id="tab-dashboard">
-  <div class="ph"><div class="pt">Dashboard do Elenco</div><div class="ps">Visão geral de todos os atletas registrados com métricas e status de risco.</div></div>
-
-  <!-- Filtros -->
-  <div class="dash-filtros">
-    <select class="fsel" id="dash-periodo" onchange="carregarDash()" style="max-width:200px;">
-      <option value="0">Todos os períodos</option>
-      <option value="7">Últimos 7 dias</option>
-      <option value="30">Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
-      <option value="180">Últimos 180 dias</option>
-    </select>
-    <input class="finp" id="dash-busca" placeholder="🔍 Buscar atleta..." style="max-width:220px;" oninput="renderDash()">
-    <button class="btn bp" style="padding:9px 16px;font-size:12px;" onclick="carregarDash()">🔄 Atualizar</button>
-  </div>
-
-  <!-- Stats resumo -->
-  <div class="dash-stat-row" id="dash-stats"></div>
-
-  <!-- Filtro de posição -->
-  <div class="pos-filter" id="dash-pos-filter"></div>
-
-  <!-- Cards do elenco -->
-  <div id="dash-elenco">
-    <div class="dash-section-title">👥 Elenco</div>
-    <div class="dash-cards" id="dash-cards-grid"></div>
-  </div>
-
-  <!-- Mapa de calor -->
-  <div class="sblk" id="heat-map-wrap" style="display:none;margin-top:14px;">
-    <div class="stitle"><i class="ti ti-layout-grid" aria-hidden="true"></i> Mapa de calor — elenco</div>
-    <div style="display:flex;gap:12px;margin-bottom:8px;font-size:11px;color:var(--t4);">
-      <span style="display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--v);display:inline-block;"></span>OK</span>
-      <span style="display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>Atenção</span>
-      <span style="display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;"></span>Crítico</span>
-    </div>
-    <div class="heat-grid" id="heat-map"></div>
-  </div>
-
-  <!-- Comparativo por posição -->
-  <div id="dash-comparativo">
-    <div class="dash-section-title">📈 Comparativo por posição</div>
-    <div id="dash-charts-pos"></div>
-  </div>
-</div>
-
-<!-- ===== ABA VÍDEO ===== -->
-<div class="mc hidden" id="tab-video">
-  <div class="ph">
-    <div class="pt">Análise de Vídeo Assistida</div>
-    <div class="ps">Anote os eventos da partida e gere o texto estruturado para análise com IA.</div>
-  </div>
-
-  <!-- Foco: atleta ou time -->
-  <div class="sblk" id="sv-config">
-    <div class="stitle">🎯 Foco da análise</div>
-    <div class="foco-sel">
-      <button class="foco-btn active" id="foco-atleta" onclick="setVFoco('atleta')">⚽ Atleta individual</button>
-      <button class="foco-btn" id="foco-time" onclick="setVFoco('time')">🏟️ Time / Coletivo</button>
-    </div>
-
-    <!-- Config atleta -->
-    <div id="cfg-atleta">
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Nome do atleta</label><input class="finp" id="v-nome" placeholder="Nome do atleta analisado"></div>
-        <div class="fgrp"><label class="flbl">Posição</label>
-          <select class="fsel" id="v-pos">
-            <option value="">Selecione...</option>
-            <option>Goleiro</option><option>Zagueiro</option><option>Lateral direito</option><option>Lateral esquerdo</option>
-            <option>Volante</option><option>Meia central</option><option>Meia-atacante</option>
-            <option>Ponta direita</option><option>Ponta esquerda</option><option>Centroavante</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Clube</label><input class="finp" id="v-clube" placeholder="Clube do atleta"></div>
-        <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="v-adv" placeholder="Time adversário"></div>
-        <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="v-comp" placeholder="Ex: Campeonato Paulista"></div>
-        <div class="fgrp"><label class="flbl">Data da partida</label><input class="finp" id="v-data" type="date"></div>
-        <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="v-res" placeholder="Ex: 2 x 1"></div>
-        <div class="fgrp"><label class="flbl">Minutos jogados</label><input class="finp" id="v-min" type="number" placeholder="90"></div>
-      </div>
-    </div>
-
-    <!-- Config time -->
-    <div id="cfg-time" style="display:none;">
-      <div class="fg">
-        <div class="fgrp"><label class="flbl">Nome do time</label><input class="finp" id="v-time" placeholder="Nome do time analisado"></div>
-        <div class="fgrp"><label class="flbl">Formação</label>
-          <select class="fsel" id="v-form">
-            <option value="">Selecione...</option>
-            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Adversário</label><input class="finp" id="v-adv-t" placeholder="Time adversário"></div>
-        <div class="fgrp"><label class="flbl">Formação adversária</label>
-          <select class="fsel" id="v-form-adv">
-            <option value="">Selecione...</option>
-            <option>4-3-3</option><option>4-4-2</option><option>4-2-3-1</option><option>3-5-2</option><option>3-4-3</option><option>5-3-2</option>
-          </select>
-        </div>
-        <div class="fgrp"><label class="flbl">Competição</label><input class="finp" id="v-comp-t" placeholder="Ex: Brasileiro Série A"></div>
-        <div class="fgrp"><label class="flbl">Data</label><input class="finp" id="v-data-t" type="date"></div>
-        <div class="fgrp"><label class="flbl">Resultado</label><input class="finp" id="v-res-t" placeholder="Ex: 1 x 0"></div>
-        <div class="fgrp"><label class="flbl">Local</label>
-          <select class="fsel" id="v-local-t">
-            <option value="">Selecione...</option><option>Casa</option><option>Fora</option><option>Neutro</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Eventos estruturados -->
-  <div class="sblk" id="sv-eventos">
-    <div class="stitle">📋 Eventos da partida <span style="color:#555;font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;">anote o que viu no vídeo</span></div>
-
-    <div class="ibanner" style="margin-bottom:16px;">
-      💡 Anote cada momento relevante: minuto, tipo de ação e descrição. Quanto mais detalhe, mais rica a análise. Não precisa anotar tudo — foque no que foi decisivo.
-    </div>
-
-    <div class="eventos-header">
-      <div class="eventos-hlbl">Minuto</div>
-      <div class="eventos-hlbl">Tipo de ação</div>
-      <div class="eventos-hlbl">Descrição</div>
-      <div class="eventos-hlbl"></div>
-    </div>
-
-    <div id="eventos-lista"></div>
-
-    <div class="sblk hidden" id="video-timeline-wrap" style="margin-top:10px;">
-      <div class="stitle"><i class="ti ti-timeline" aria-hidden="true"></i> Timeline da partida</div>
-      <div id="video-timeline"></div>
-    </div>
-
-    <button class="add-evento-btn" onclick="addEv()">
-      + Adicionar evento
+  <!-- CTA -->
+  <div style="background:#090909;border:0.5px solid var(--b2);border-radius:var(--r);padding:22px 24px;text-align:center;margin-bottom:20px;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--t1);margin-bottom:6px;">Preços em breve</div>
+    <div style="font-size:12px;color:var(--t4);line-height:1.7;max-width:480px;margin:0 auto 18px;">Estamos finalizando os valores com condições especiais para quem participou do beta. Quer ser avisado no lançamento?</div>
+    <button class="btn bp" onclick="intClube()" style="margin:0 auto;">
+      <i class="ti ti-bell" aria-hidden="true"></i>
+      Quero ser avisado no lançamento
     </button>
-
-    <div class="contador-eventos" id="eventos-count" style="margin-top:10px;"></div>
   </div>
 
-  <!-- Texto livre -->
-  <div class="sblk" id="sv-livre">
-    <div class="stitle">📝 Observações livres</div>
-    <div class="fg1">
-      <div class="fgrp">
-        <label class="flbl">Impressão geral da partida / atleta <i class="tip-icon">?<span class="tip-box">Descreva livremente o que mais chamou atenção. Padrões táticos, comportamento físico, momentos decisivos, posicionamento.</span></i></label>
-        <textarea class="ftxt" id="v-geral" style="min-height:100px;" placeholder="Ex: O atleta demonstrou excelente leitura defensiva na primeira etapa, mas perdeu intensidade após os 65 minutos. Participou ativamente da saída de bola..."></textarea>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Pontos fortes observados</label>
-        <textarea class="ftxt" id="v-pontos-pos" style="min-height:80px;" placeholder="Ex: Boa cobertura defensiva, liderança verbal, passes progressivos com qualidade..."></textarea>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Pontos de atenção observados</label>
-        <textarea class="ftxt" id="v-pontos-neg" style="min-height:80px;" placeholder="Ex: Dificuldade no 1x1 defensivo pelo lado esquerdo, tendência a avançar sem cobertura..."></textarea>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Situações de bola parada relevantes</label>
-        <textarea class="ftxt" id="v-bola-parada" style="min-height:70px;" placeholder="Ex: Escanteio cobrado sempre no primeiro pau, falta ofensiva com bloqueio no segundo andar..."></textarea>
-      </div>
-      <div class="fgrp">
-        <label class="flbl">Contexto adicional</label>
-        <textarea class="ftxt" id="v-contexto" style="min-height:70px;" placeholder="Ex: Partida jogada em campo pesado após chuva. Atleta vinha de 3 jogos em 7 dias..."></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Gerar -->
-  <div class="sblk" id="sv-gerar">
-    <div class="stitle">⚡ Gerar análise</div>
-    <p style="color:#888;font-size:13px;margin-bottom:16px;">O texto estruturado vai combinar todos os eventos anotados com as observações livres — pronto para colar no Claude e receber a análise completa.</p>
-    <div class="br" style="margin-bottom:0;">
-      <button class="btn bp" onclick="gerarV()">⚡ Gerar texto para IA</button>
-    </div>
-    <div class="vid-output-box hidden" id="video-output">
-      <div class="vid-output-title">📋 Texto pronto — copie e cole no Claude ou ChatGPT</div>
-      <div class="vid-output-text" id="vid-texto"></div>
-      <div class="fbbar" style="margin-top:12px;padding-top:12px;border-top:1px solid #1e1e1e;">
-        <div style="display:flex;gap:8px;margin-left:auto;">
-          <button class="btn bs" style="padding:7px 14px;font-size:12px;" onclick="expTXT('vid-texto',document.getElementById('v-nome')?.value||'video')">⬇ TXT</button>
-          <button class="btn bg" style="padding:7px 14px;font-size:12px;" onclick="cpIA('vid-texto')">📋 Copiar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- ===== ABA LESÃO ===== -->
-<div class="mc hidden" id="tab-lesao">
-  <div class="ph"><div class="pt">Monitor de Risco de Lesão</div><div class="ps">Visão coletiva do risco físico de todos os atletas registrados.</div></div>
-
-  <div class="sblk" id="lesao-config">
-    <div class="stitle">⚙️ Limiares de alerta</div>
-    <p style="color:#888;font-size:13px;margin-bottom:16px;">Configure os limites que disparam os alertas. Baseados em referências da literatura científica de ciência do esporte.</p>
-    <div class="fg3">
-      <div class="fgrp"><label class="flbl">PSE máximo (semana) <i class="tip-icon">?<span class="tip-box">Acima deste valor, o sistema sinaliza sobrecarga. Referência: 3500 UA/semana para atletas profissionais.</span></i></label><input class="finp" id="lim-pse" type="number" value="3500" placeholder="3500"></div>
-      <div class="fgrp"><label class="flbl">Variação de carga máx (%) <i class="tip-icon">?<span class="tip-box">Aumento acima deste % em relação à semana anterior indica risco. Referência: 15% (modelo ACWR).</span></i></label><input class="finp" id="lim-var" type="number" value="15" placeholder="15"></div>
-      <div class="fgrp"><label class="flbl">Dist. alta intens. máx (km) <i class="tip-icon">?<span class="tip-box">Acima deste volume em alta intensidade por semana, o risco aumenta.</span></i></label><input class="finp" id="lim-ai" type="number" value="4" placeholder="4"></div>
-      <div class="fgrp"><label class="flbl">Acelerações máx/jogo <i class="tip-icon">?<span class="tip-box">Número de acelerações acima do qual o sistema sinaliza sobrecarga neuromuscular.</span></i></label><input class="finp" id="lim-acel" type="number" value="80" placeholder="80"></div>
-      <div class="fgrp"><label class="flbl">Sprints máx/jogo <i class="tip-icon">?<span class="tip-box">Volume de sprints por partida acima do qual o sistema emite alerta.</span></i></label><input class="finp" id="lim-spr" type="number" value="30" placeholder="30"></div>
-    </div>
-    <button class="btn bp" style="font-size:12px;padding:8px 16px;" onclick="carregarPainelLesao()">✓ Aplicar e recalcular</button>
-  </div>
-
-  <div id="lesao-painel" style="margin-top:20px;">
-    <div class="stitle" style="margin-bottom:16px;">📋 Status atual de todos os atletas</div>
-    <div id="lesao-lista"><div class="hemp"><div style="font-size:48px;margin-bottom:12px;">🏃</div><div>Clique em "Calcular" para carregar o painel.</div></div></div>
-    <div style="margin-top:16px;"><button class="btn bp" onclick="carregarPainelLesao()">🔄 Calcular risco de todos os atletas</button></div>
-  </div>
-</div>
-
-<!-- ===== ABA FEEDBACK (só criador) ===== -->
 <div class="mc hidden" id="tab-feedback">
   <div class="ph"><div class="pt">Painel de Feedback</div><div class="ps">Avaliações dos beta testers em tempo real.</div></div>
   <div id="fb-resumo">
