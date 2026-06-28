@@ -512,7 +512,6 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
   <button class="mtab active" onclick="swTab('atleta',this)">⚽ Atleta</button>
   <button class="mtab" onclick="swTab('clube',this)">🏟️ Clube</button>
   <button class="mtab" onclick="swTab('prosp',this)">🔍 Prospecção <span class="tbdg">IA</span></button>
-  <button class="mtab" onclick="swTab('upload',this)"><i class="ti ti-upload" aria-hidden="true"></i> Upload de Dados</button>
   <button class="mtab" onclick="swTab('hist',this)">📂 Histórico</button>
   <button class="mtab" onclick="swTab('dashboard',this)">📊 Dashboard</button>
   <button class="mtab" onclick="swTab('prejogo',this)">⚔️ Pré-jogo</button>
@@ -589,9 +588,6 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
 
 
 <!-- SB UPLOAD -->
-<div class="sidebar hidden" id="sb-upload"></div>
-
-
 <!-- SB PLANOS -->
 <div class="sidebar hidden" id="sb-planos">
   <div class="sbs">
@@ -1001,39 +997,7 @@ input[type=range]{flex:1;accent-color:var(--v);height:3px;}
 
 
 <!-- ===== ABA UPLOAD ===== -->
-<div class="mc hidden" id="tab-upload">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:40px 20px;">
 
-    <div style="width:80px;height:80px;background:var(--vd);border:0.5px solid var(--vb);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-      <i class="ti ti-upload" style="font-size:36px;color:var(--v);" aria-hidden="true"></i>
-    </div>
-
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--v);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">Em breve</div>
-
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--t1);letter-spacing:-.3px;margin-bottom:12px;">Upload de Dados com IA</div>
-
-    <div style="font-size:13px;color:var(--t4);line-height:1.8;max-width:480px;margin-bottom:32px;">Faça upload de um print de qualquer plataforma — Sofascore, Wyscout, InStat, FlashScore ou planilha Excel — e a IA extrai e preenche os campos automaticamente para você.</div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;max-width:360px;width:100%;margin-bottom:32px;">
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-card);border:0.5px solid var(--b1);border-radius:8px;text-align:left;">
-        <i class="ti ti-photo" style="font-size:18px;color:var(--v);flex-shrink:0;" aria-hidden="true"></i>
-        <div><div style="font-size:12px;font-weight:500;color:var(--t2);">Print de qualquer plataforma</div><div style="font-size:11px;color:var(--t4);">Sofascore, Wyscout, InStat, FlashScore</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-card);border:0.5px solid var(--b1);border-radius:8px;text-align:left;">
-        <i class="ti ti-table" style="font-size:18px;color:var(--v);flex-shrink:0;" aria-hidden="true"></i>
-        <div><div style="font-size:12px;font-weight:500;color:var(--t2);">Planilhas Excel e CSV</div><div style="font-size:11px;color:var(--t4);">A IA lê, interpreta e organiza os dados</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-card);border:0.5px solid var(--b1);border-radius:8px;text-align:left;">
-        <i class="ti ti-bolt" style="font-size:18px;color:var(--v);flex-shrink:0;" aria-hidden="true"></i>
-        <div><div style="font-size:12px;font-weight:500;color:var(--t2);">Preenchimento automático</div><div style="font-size:11px;color:var(--t4);">Campos preenchidos em segundos, prontos para análise</div></div>
-      </div>
-    </div>
-
-    <div style="background:var(--vd);border:0.5px solid var(--vb);border-radius:8px;padding:12px 20px;font-size:12px;color:var(--v);">
-      Esta funcionalidade requer integração com IA — disponível em breve após a configuração do Cloudflare Workers.
-    </div>
-  </div>
-</div>
 <div class="mc hidden" id="tab-planos">
   <div class="ph"><div class="pt">Planos e Assinatura</div><div class="ps">Escolha o plano ideal para o seu trabalho como analista.</div></div>
 
